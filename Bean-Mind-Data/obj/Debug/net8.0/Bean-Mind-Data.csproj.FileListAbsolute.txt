@@ -1,0 +1,14 @@
+D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind-Data\bin\Debug\net8.0\Bean-Mind-Data.deps.json
+D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind-Data\bin\Debug\net8.0\Bean-Mind-Data.dll
+D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind-Data\bin\Debug\net8.0\Bean-Mind-Data.pdb
+D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind-Data\obj\Debug\net8.0\Bean-Mind-Data.GeneratedMSBuildEditorConfig.editorconfig
+D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind-Data\obj\Debug\net8.0\Bean-Mind-Data.AssemblyInfoInputs.cache
+D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind-Data\obj\Debug\net8.0\Bean-Mind-Data.AssemblyInfo.cs
+D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind-Data\obj\Debug\net8.0\Bean-Mind-Data.csproj.CoreCompileInputs.cache
+D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind-Data\obj\Debug\net8.0\Bean-Mind-Data.dll
+D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind-Data\obj\Debug\net8.0\refint\Bean-Mind-Data.dll
+D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind-Data\obj\Debug\net8.0\Bean-Mind-Data.pdb
+D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind-Data\obj\Debug\net8.0\ref\Bean-Mind-Data.dll
+D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind-Data\bin\Debug\net8.0\Bean-Mind-Data.runtimeconfig.json
+D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind-Data\obj\Debug\net8.0\Bean-Mind-Data.csproj.AssemblyReference.cache
+D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind-Data\obj\Debug\net8.0\Bean-Mind-Data.genruntimeconfig.cache

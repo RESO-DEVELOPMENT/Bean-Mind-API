@@ -1,0 +1,113 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\OJT\\Bean-Mind\\Bean-Mind\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E482E852-6791-4A19-9C6D-87A0DF919529}|Bean-Mind-Data\\Bean-Mind-Data.csproj|d:\\ojt\\bean-mind\\bean-mind\\bean-mind-data\\models\\beanmindcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E482E852-6791-4A19-9C6D-87A0DF919529}|Bean-Mind-Data\\Bean-Mind-Data.csproj|solutionrelative:bean-mind-data\\models\\beanmindcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37AD2F63-16B9-48F8-A653-91BBF00B3F93}|Bean-Mind.API\\Bean-Mind.API.csproj|d:\\ojt\\bean-mind\\bean-mind\\bean-mind.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{37AD2F63-16B9-48F8-A653-91BBF00B3F93}|Bean-Mind.API\\Bean-Mind.API.csproj|solutionrelative:bean-mind.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E482E852-6791-4A19-9C6D-87A0DF919529}|Bean-Mind-Data\\Bean-Mind-Data.csproj|d:\\ojt\\bean-mind\\bean-mind\\bean-mind-data\\bean-mind-data.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{E482E852-6791-4A19-9C6D-87A0DF919529}|Bean-Mind-Data\\Bean-Mind-Data.csproj|solutionrelative:bean-mind-data\\bean-mind-data.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4D26898A-DFC2-4B7C-93B3-B652CE5D0239}|Bean-Mind_Business\\Bean-Mind_Business.csproj|D:\\OJT\\Bean-Mind\\Bean-Mind\\bean-mind_business\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4D26898A-DFC2-4B7C-93B3-B652CE5D0239}|Bean-Mind_Business\\Bean-Mind_Business.csproj|solutionrelative:bean-mind_business\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E482E852-6791-4A19-9C6D-87A0DF919529}|Bean-Mind-Data\\Bean-Mind-Data.csproj|D:\\OJT\\Bean-Mind\\Bean-Mind\\bean-mind-data\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E482E852-6791-4A19-9C6D-87A0DF919529}|Bean-Mind-Data\\Bean-Mind-Data.csproj|solutionrelative:bean-mind-data\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BeanMindContext.cs",
+              "DocumentMoniker": "D:\\OJT\\Bean-Mind\\Bean-Mind\\Bean-Mind-Data\\Models\\BeanMindContext.cs",
+              "RelativeDocumentMoniker": "Bean-Mind-Data\\Models\\BeanMindContext.cs",
+              "ToolTip": "D:\\OJT\\Bean-Mind\\Bean-Mind\\Bean-Mind-Data\\Models\\BeanMindContext.cs",
+              "RelativeToolTip": "Bean-Mind-Data\\Models\\BeanMindContext.cs",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAYwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-17T06:50:54.744Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Bean-Mind-Data",
+              "DocumentMoniker": "D:\\OJT\\Bean-Mind\\Bean-Mind\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
+              "RelativeDocumentMoniker": "Bean-Mind-Data\\Bean-Mind-Data.csproj",
+              "ToolTip": "D:\\OJT\\Bean-Mind\\Bean-Mind\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
+              "RelativeToolTip": "Bean-Mind-Data\\Bean-Mind-Data.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-05-17T06:39:16.429Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\OJT\\Bean-Mind\\Bean-Mind\\Bean-Mind.API\\appsettings.json",
+              "RelativeDocumentMoniker": "Bean-Mind.API\\appsettings.json",
+              "ToolTip": "D:\\OJT\\Bean-Mind\\Bean-Mind\\Bean-Mind.API\\appsettings.json",
+              "RelativeToolTip": "Bean-Mind.API\\appsettings.json",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAwAgAAACPAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-05-17T06:32:23.916Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "D:\\OJT\\Bean-Mind\\Bean-Mind\\Bean-Mind_Business\\Class1.cs",
+              "RelativeDocumentMoniker": "Bean-Mind_Business\\Class1.cs",
+              "ToolTip": "D:\\OJT\\Bean-Mind\\Bean-Mind\\Bean-Mind_Business\\Class1.cs",
+              "RelativeToolTip": "Bean-Mind_Business\\Class1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-17T06:32:24.065Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "D:\\OJT\\Bean-Mind\\Bean-Mind\\Bean-Mind-Data\\Class1.cs",
+              "RelativeDocumentMoniker": "Bean-Mind-Data\\Class1.cs",
+              "ToolTip": "D:\\OJT\\Bean-Mind\\Bean-Mind\\Bean-Mind-Data\\Class1.cs",
+              "RelativeToolTip": "Bean-Mind-Data\\Class1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-17T06:32:24.068Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

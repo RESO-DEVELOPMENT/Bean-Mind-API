@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Bean-Mind.API.props" />
+</Project>
