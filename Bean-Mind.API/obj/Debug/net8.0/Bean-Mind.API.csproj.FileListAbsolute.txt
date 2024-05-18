@@ -62,3 +62,11 @@ D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind.API\obj\Debug\net8.0\refint\Bean-Mind.API.d
 D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind.API\obj\Debug\net8.0\Bean-Mind.API.pdb
 D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind.API\obj\Debug\net8.0\Bean-Mind.API.genruntimeconfig.cache
 D:\OJT\Bean-Mind\Bean-Mind\Bean-Mind.API\obj\Debug\net8.0\ref\Bean-Mind.API.dll
+C:\Users\Newgear\OneDrive\Máy tính\OJT\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\Bean-Mind.API.csproj.AssemblyReference.cache
+C:\Users\Newgear\OneDrive\Máy tính\OJT\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\Bean-Mind.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Newgear\OneDrive\Máy tính\OJT\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\Bean-Mind.API.AssemblyInfoInputs.cache
+C:\Users\Newgear\OneDrive\Máy tính\OJT\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\Bean-Mind.API.AssemblyInfo.cs
+C:\Users\Newgear\OneDrive\Máy tính\OJT\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\Bean-Mind.API.csproj.CoreCompileInputs.cache
+C:\Users\Newgear\OneDrive\Máy tính\OJT\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\Bean-Mind.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Newgear\OneDrive\Máy tính\OJT\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\Bean-Mind.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Newgear\OneDrive\Máy tính\OJT\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\Bean-Mind.API.sourcelink.json
