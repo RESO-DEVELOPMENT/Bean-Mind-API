@@ -24,6 +24,15 @@ namespace Bean_Mind_Business.Repository.Implement
 
         #region Gett Async
 
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await _dbSet.ToListAsync();
+        }
+
+        public async Task<T> GetByIdAsync(Guid id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
         public virtual async Task<T> SingleOrDefaultAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             IQueryable<T> query = _dbSet;
@@ -131,16 +140,6 @@ namespace Bean_Mind_Business.Repository.Implement
         public void DeleteRangeAsync(IEnumerable<T> entities)
         {
             _dbSet.RemoveRange(entities);
-        }
-
-        Task<IPaginate<T>> IGenericRepository<T>.GetPagingListAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, Func<IQueryable<T>, IIncludableQueryable<T, object>> include, int page, int size)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IPaginate<TResult>> IGenericRepository<T>.GetPagingListAsync<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, Func<IQueryable<T>, IIncludableQueryable<T, object>> include, int page, int size)
-        {
-            throw new NotImplementedException();
         }
         #endregion
     }

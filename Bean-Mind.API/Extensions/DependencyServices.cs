@@ -44,6 +44,7 @@ namespace Bean_Mind.API.Extensions
             // }, "[DEFAULT]");
             //Account
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<ITeacherService, TeacherService>();
 
             return services;
         }

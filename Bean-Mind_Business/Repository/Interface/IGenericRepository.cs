@@ -7,7 +7,7 @@ namespace Bean_Mind_Business.Repository.Interface
     public interface IGenericRepository<T> : IDisposable where T : class
     {
         #region Get Async
-
+        
         Task<T> SingleOrDefaultAsync(
             Expression<Func<T, bool>> predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,

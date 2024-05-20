@@ -23,5 +23,14 @@ namespace Bean_Mind.API.Constants
             public const string AccountEndpoint = ApiEndpoint + "/account";
             public const string Register = AccountEndpoint + "/sys-admin";
         }
+        public static class Teacher
+        {
+            public const string TeacherEndpoint = ApiEndpoint + "/teacher";
+            public const string Create = TeacherEndpoint + "/create";
+            public const string GetAll = TeacherEndpoint + "/get-all";
+            public const string GetById = TeacherEndpoint + "/{teacherId}";
+            public const string DeleteTeacher = TeacherEndpoint + "/{teacherId}/delete";
+            public const string UpdateTeacher = TeacherEndpoint + "/{teacherId}/update";
+        }
     }
 }

@@ -44,6 +44,15 @@
             public const string UpdatePin = "Vui lòng tạo mã pin để đăng nhập và hệ thống nhé";
             public const string InputPin = "Nhập mã pin để đăng nhập";
         }
+        public static class Teacher
+        {
+            public const string EmptyCategoryIdMessage = "The category ID cannot be empty.";
+            public const string InvalidTeacherData = "Invalid teacher data provided.";
+            public const string TeacherNotFound = "Teacher not found.";
+            public const string UpdateTeacherFailedMessage = "Failed to update teacher information.";
+            public const string UpdateTeacherSuccessfulMessage = "Teacher information updated successfully.";
+            // Thêm các thông điệp khác liên quan đến Teacher tại đây
+        }
     }
 
 
