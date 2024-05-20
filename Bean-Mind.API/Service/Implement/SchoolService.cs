@@ -74,13 +74,29 @@ namespace Bean_Mind.API.Service.Implement
         {
             var school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(
                 selector: s => new GetSchoolResponse(s.Id, s.Name, s.Address, s.Phone, s.Email, s.Logo, s.Description),
-                predicate: s => s.Id.Equals(id)
+                predicate: s => s.Id.Equals(id) && s.DelFlg != true
         );
             return school;
-
         }
 
+        public async Task<bool> updateSchool(CreateNewSchoolRequest createNewSchoolRequest, Guid Id)
+        {
+            var school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
+            if (school == null)
+            {
+                return false;
+            }
+            school.Name = string.IsNullOrEmpty(createNewSchoolRequest.Name) ? school.Name : createNewSchoolRequest.Name;
+            school.Address = string.IsNullOrEmpty(createNewSchoolRequest.Address) ? school.Address : createNewSchoolRequest.Address;
+            school.Phone = string.IsNullOrEmpty(createNewSchoolRequest.Phone) ? school.Phone : createNewSchoolRequest.Phone;
+            school.Logo = string.IsNullOrEmpty(createNewSchoolRequest.Logo) ? school.Logo : createNewSchoolRequest.Logo;
+            school.Description = string.IsNullOrEmpty(createNewSchoolRequest.Description) ? school.Description : createNewSchoolRequest.Description;
+            school.Email = string.IsNullOrEmpty(createNewSchoolRequest.Email) ? school.Email : createNewSchoolRequest.Email;
+            school.UpdDate = TimeUtils.GetCurrentSEATime();
 
+            _unitOfWork.GetRepository<School>().UpdateAsync(school);
+            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+            return isSuccessful;
+        }
     }
-
 }
