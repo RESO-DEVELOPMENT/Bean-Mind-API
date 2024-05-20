@@ -44,6 +44,11 @@
             public const string UpdatePin = "Vui lòng tạo mã pin để đăng nhập và hệ thống nhé";
             public const string InputPin = "Nhập mã pin để đăng nhập";
         }
+
+        public static class School
+        {
+            public const string CreateNewSchoolFailedMessage = "Tạo mới trường học thất bại";
+        }
     }
 
 

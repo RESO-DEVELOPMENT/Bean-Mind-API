@@ -132,16 +132,6 @@ namespace Bean_Mind_Business.Repository.Implement
         {
             _dbSet.RemoveRange(entities);
         }
-
-        Task<IPaginate<T>> IGenericRepository<T>.GetPagingListAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, Func<IQueryable<T>, IIncludableQueryable<T, object>> include, int page, int size)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IPaginate<TResult>> IGenericRepository<T>.GetPagingListAsync<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, Func<IQueryable<T>, IIncludableQueryable<T, object>> include, int page, int size)
-        {
-            throw new NotImplementedException();
-        }
         #endregion
     }
 }

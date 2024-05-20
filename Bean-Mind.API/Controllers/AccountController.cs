@@ -1,8 +1,9 @@
 ﻿using Bean_Mind.API.Constants;
-using Bean_Mind.API.Payload.Request;
-using Bean_Mind.API.Payload.Response;
 using Microsoft.AspNetCore.Mvc;
 using Bean_Mind.API.Service.Interface;
+
+using Bean_Mind.API.Payload.Response;
+using Bean_Mind.API.Payload.Request;
 
 namespace Bean_Mind.API.Controllers
 {
