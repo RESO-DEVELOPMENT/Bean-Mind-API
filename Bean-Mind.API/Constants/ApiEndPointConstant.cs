@@ -31,6 +31,7 @@ namespace Bean_Mind.API.Constants
             public const string GetListSchool = SchoolEndpoint + "/get-list-school";
             public const string GetSchool = SchoolEndpoint + "/{id}";
             public const string DeleteSchool = SchoolEndpoint + "/{id}/delete";
+            public const string UpdateSchool = SchoolEndpoint + "/{id}/update";
         }
 
 

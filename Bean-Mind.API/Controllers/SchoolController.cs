@@ -83,5 +83,20 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
 
         }
+
+        [HttpPatch(ApiEndPointConstant.School.UpdateSchool)]
+        [ProducesResponseType(typeof(GetSchoolResponse), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> UpdateSchool([FromBody] CreateNewSchoolRequest createNewSchoolRequest, [FromRoute] Guid id)
+        {
+
+            var response = await _schoolService.updateSchool(createNewSchoolRequest, id);
+            if (response == false)
+            {
+                return Problem(MessageConstant.School.CreateNewSchoolFailedMessage);
+            }
+
+            return Ok(response);
+        }
     }
 }

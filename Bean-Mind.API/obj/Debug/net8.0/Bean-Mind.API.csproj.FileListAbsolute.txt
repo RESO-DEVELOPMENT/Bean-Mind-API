@@ -147,7 +147,6 @@ C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\staticwebas
 C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.Bean-Mind.API.props
 C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\staticwebassets.pack.json
 C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\scopedcss\bundle\Bean-Mind.API.styles.css
-C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\Bean-Mind.API.csproj.CopyComplete
 C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\Bean-Mind.API.dll
 C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\refint\Bean-Mind.API.dll
 C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\Bean-Mind.API.pdb
@@ -319,3 +318,4 @@ C:\Users\THY\OneDrive\Desktop\OJT\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\r
 C:\Users\THY\OneDrive\Desktop\OJT\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\Bean-Mind.API.pdb
 C:\Users\THY\OneDrive\Desktop\OJT\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\Bean-Mind.API.genruntimeconfig.cache
 C:\Users\THY\OneDrive\Desktop\OJT\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\ref\Bean-Mind.API.dll
+C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind.API\obj\Debug\net8.0\Bean-Min.5BF5F1C6.Up2Date

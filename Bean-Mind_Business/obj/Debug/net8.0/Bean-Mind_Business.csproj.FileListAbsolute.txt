@@ -20,7 +20,6 @@ C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind_Business\obj\Debug\net8.0\Bean-M
 C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind_Business\obj\Debug\net8.0\Bean-Mind_Business.AssemblyInfo.cs
 C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind_Business\obj\Debug\net8.0\Bean-Mind_Business.csproj.CoreCompileInputs.cache
 C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind_Business\obj\Debug\net8.0\Bean-Mind_Business.sourcelink.json
-C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind_Business\obj\Debug\net8.0\Bean-Mind_Business.csproj.CopyComplete
 C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind_Business\obj\Debug\net8.0\Bean-Mind_Business.dll
 C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind_Business\obj\Debug\net8.0\refint\Bean-Mind_Business.dll
 C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind_Business\obj\Debug\net8.0\Bean-Mind_Business.pdb
@@ -57,3 +56,4 @@ C:\Users\THY\OneDrive\Desktop\OJT\Bean-Mind-API\Bean-Mind_Business\obj\Debug\net
 C:\Users\THY\OneDrive\Desktop\OJT\Bean-Mind-API\Bean-Mind_Business\obj\Debug\net8.0\refint\Bean-Mind_Business.dll
 C:\Users\THY\OneDrive\Desktop\OJT\Bean-Mind-API\Bean-Mind_Business\obj\Debug\net8.0\Bean-Mind_Business.pdb
 C:\Users\THY\OneDrive\Desktop\OJT\Bean-Mind-API\Bean-Mind_Business\obj\Debug\net8.0\ref\Bean-Mind_Business.dll
+C:\Users\Lenovo\Desktop\Bean-Mind-API\Bean-Mind_Business\obj\Debug\net8.0\Bean-Min.FA8898E1.Up2Date
