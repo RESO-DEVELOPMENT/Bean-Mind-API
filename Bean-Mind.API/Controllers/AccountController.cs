@@ -1,8 +1,8 @@
 ﻿using Bean_Mind.API.Constants;
-using Bean_Mind.API.Enums;
 using Bean_Mind.API.Payload.Request;
 using Bean_Mind.API.Payload.Response;
 using Microsoft.AspNetCore.Mvc;
+using Bean_Mind.API.Service.Interface;
 
 namespace Bean_Mind.API.Controllers
 {
@@ -10,15 +10,17 @@ namespace Bean_Mind.API.Controllers
     public class AccountController : BaseController<AccountController>
     {
         private readonly IAccountService _accountService;
-        public AccountController(ILogger<AccountController> logger) : base(logger)
+        public AccountController(ILogger<AccountController> logger, IAccountService accountService) : base(logger)
         {
+            _accountService = accountService;
         }
 
         [HttpPost(ApiEndPointConstant.Account.Register)]
         [ProducesResponseType(typeof(CreateNewAccountResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> CreateAccount(CreateNewAccountRequest createNewAccountRequest)
+        public async Task<IActionResult> CreateAccount([FromBody] CreateNewAccountRequest createNewAccountRequest)
         {
+            
             CreateNewAccountResponse response =
                 await _accountService.CreateNewAccount(createNewAccountRequest);
             if (response == null)
@@ -28,6 +30,5 @@ namespace Bean_Mind.API.Controllers
 
             return CreatedAtAction(nameof(CreateAccount), response);
         }
-
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Bean_Mind.API.Enums
+﻿namespace Bean_Mind_Data.Enums
 {
     public enum RoleEnum
     {

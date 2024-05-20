@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Newgear\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj": {}
+    "C:\\Users\\Lenovo\\Desktop\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Newgear\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind.API\\Bean-Mind.API.csproj": {
+    "C:\\Users\\Lenovo\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Newgear\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind.API\\Bean-Mind.API.csproj",
-        "projectName": "Bean-Mind.API",
-        "projectPath": "C:\\Users\\Newgear\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind.API\\Bean-Mind.API.csproj",
-        "packagesPath": "C:\\Users\\Newgear\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Newgear\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind.API\\obj\\",
+        "projectUniqueName": "C:\\Users\\Lenovo\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
+        "projectName": "Bean-Mind-Data",
+        "projectPath": "C:\\Users\\Lenovo\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
+        "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Lenovo\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Newgear\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -34,20 +34,35 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "Swashbuckle.AspNetCore": {
+            "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[6.4.0, )"
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
             }
           },
           "imports": [
@@ -62,28 +77,25 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Newgear\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj": {
+    "C:\\Users\\Lenovo\\Desktop\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Newgear\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj",
+        "projectUniqueName": "C:\\Users\\Lenovo\\Desktop\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj",
         "projectName": "Bean-Mind_Business",
-        "projectPath": "C:\\Users\\Newgear\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj",
-        "packagesPath": "C:\\Users\\Newgear\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Newgear\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\obj\\",
+        "projectPath": "C:\\Users\\Lenovo\\Desktop\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj",
+        "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Lenovo\\Desktop\\Bean-Mind-API\\Bean-Mind_Business\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Newgear\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -97,8 +109,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Newgear\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind.API\\Bean-Mind.API.csproj": {
-                "projectPath": "C:\\Users\\Newgear\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind.API\\Bean-Mind.API.csproj"
+              "C:\\Users\\Lenovo\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj": {
+                "projectPath": "C:\\Users\\Lenovo\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj"
               }
             }
           }
@@ -107,11 +119,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -139,7 +146,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,4 +1,4 @@
-﻿using Bean_Mind.API.Enums;
+﻿using Bean_Mind_Data.Enums;
 using Bean_Mind.API.Utils;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;

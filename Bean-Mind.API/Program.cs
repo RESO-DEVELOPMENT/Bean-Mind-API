@@ -1,36 +1,61 @@
+using System.Text.Json.Serialization;
+using NLog.Web;
+using Bean_Mind.API.Constants;
+using Bean_Mind.API.Converter;
+using Bean_Mind.API.Extensions;
+using Bean_Mind.API.Middlewares;
+using Bean_Mind.API.Service;
 
-namespace Bean_Mind.API
+var logger = NLog.LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"))
+    .GetCurrentClassLogger();
+
+try
 {
-    public class Program
+    var builder = WebApplication.CreateBuilder(args);
+
+
+    builder.Logging.ClearProviders();
+    builder.Host.UseNLog();
+    // Add services to the container.
+    builder.Services.AddCors(options =>
     {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+        options.AddPolicy(name: CorsConstant.PolicyName,
+            policy => { policy.WithOrigins("*").AllowAnyHeader().AllowAnyMethod(); });
+    });
+    builder.Services.AddControllers().AddJsonOptions(x =>
+    {
+        x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        x.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+    });
+    builder.Services.AddDatabase();
+    builder.Services.AddUnitOfWork();
+    builder.Services.AddServices(builder.Configuration);
+    builder.Services.AddJwtValidation();
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddConfigSwagger();
+    var app = builder.Build();
 
-            // Add services to the container.
+    // Configure the HTTP request pipeline.
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+    //app.UseHttpsRedirection();
+    app.UseCors(CorsConstant.PolicyName);
+    app.UseAuthentication();
+    app.UseAuthorization();
 
-            var app = builder.Build();
+    app.MapControllers();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
-            app.MapControllers();
-
-            app.Run();
-        }
-    }
+    app.Run();
+}
+catch (Exception exception)
+{
+    logger.Error(exception, "Stop program because of exception");
+}
+finally
+{
+    NLog.LogManager.Shutdown();
 }

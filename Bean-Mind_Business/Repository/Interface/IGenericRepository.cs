@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Bean_Mind_Data.Paginate;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bean_Mind_Business.Repository.Interface
 {

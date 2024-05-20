@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bean_Mind_Business.Business.Interface
+namespace Bean_Mind.API.Service.Interface
 {
     public interface IAccountService
     {
-        public Task<CreateNewAccountResponse> CreateNewBrand(CreateNewAccountRequest createNewAccountRequest);
+        public Task<CreateNewAccountResponse> CreateNewAccount(CreateNewAccountRequest createNewAccountRequest);
 
     }
 }

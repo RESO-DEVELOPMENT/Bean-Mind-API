@@ -8,13 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bean-Mind.API\Bean-Mind.API.csproj">
-      <Private>True</Private>
-    </ProjectReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+    <ProjectReference Include="..\Bean-Mind-Data\Bean-Mind-Data.csproj" />
   </ItemGroup>
 
 </Project>

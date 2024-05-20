@@ -1,11 +1,6 @@
 ﻿using Bean_Mind_Business.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bean_Mind_Business.Repository.Implement
 {

@@ -1,16 +1,20 @@
-﻿using System.Security.Claims;
+﻿using AutoMapper;
+using Bean_Mind.API.Service.Implement;
+using Bean_Mind_Business.Repository.Interface;
+using Bean_Mind_Data.Models;
+using System.Security.Claims;
 
 
-namespace Bean_Mind_Business.Business.Implement
+namespace Bean_Mind.API.Service
 {
     public abstract class BaseService<T> where T : class
     {
-        protected IUnitOfWork<PosSystemProductionContext> _unitOfWork;
+        protected IUnitOfWork<BeanMindContext> _unitOfWork;
         protected ILogger<T> _logger;
         protected IMapper _mapper;
         protected IHttpContextAccessor _httpContextAccessor;
 
-        public BaseService(IUnitOfWork<PosSystemProductionContext> unitOfWork, ILogger<T> logger, IMapper mapper,
+        public BaseService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<T> logger, IMapper mapper,
             IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
@@ -32,21 +36,17 @@ namespace Bean_Mind_Business.Business.Implement
         }
 
         //Use for employee and store manager
-        protected async Task<bool> CheckIsUserInStore(Account account, Store store)
+        protected async Task<bool> CheckIsAccount(Account account)
         {
-            ICollection<StoreAccount> storeAccount = await _unitOfWork.GetRepository<StoreAccount>()
-                .GetListAsync(predicate: s => s.StoreId.Equals(store.Id));
-            return storeAccount.Select(x => x.AccountId).Contains(account.Id);
+            ICollection<Account> listAccount = await _unitOfWork.GetRepository<Account>().GetListAsync(
+                predicate: s => s.DelFlg == false);
+
+            return listAccount.Select(x => x.Id).Contains(account.Id);
         }
 
-        protected string GetBrandIdFromJwt()
+        protected string GetAcountIdFromJwt()
         {
-            return _httpContextAccessor?.HttpContext?.User?.FindFirstValue("brandId");
-        }
-
-        protected string GetStoreIdFromJwt()
-        {
-            return _httpContextAccessor?.HttpContext?.User?.FindFirstValue("storeId");
+            return _httpContextAccessor?.HttpContext?.User?.FindFirstValue("Id");
         }
     }
 }

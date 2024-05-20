@@ -1,12 +1,8 @@
 ﻿using Bean_Mind_Business.Repository.Interface;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using Bean_Mind_Data.Paginate;
 
 namespace Bean_Mind_Business.Repository.Implement
 {
@@ -137,6 +133,15 @@ namespace Bean_Mind_Business.Repository.Implement
             _dbSet.RemoveRange(entities);
         }
 
+        Task<IPaginate<T>> IGenericRepository<T>.GetPagingListAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, Func<IQueryable<T>, IIncludableQueryable<T, object>> include, int page, int size)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<IPaginate<TResult>> IGenericRepository<T>.GetPagingListAsync<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, Func<IQueryable<T>, IIncludableQueryable<T, object>> include, int page, int size)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }
