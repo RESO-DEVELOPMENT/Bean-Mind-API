@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind.API\\Bean-Mind.API.csproj": {}
+    "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind.API\\Bean-Mind.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj": {
+    "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
+        "projectUniqueName": "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
         "projectName": "Bean-Mind-Data",
-        "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
+        "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
         "packagesPath": "C:\\Users\\THY\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\obj\\",
+        "outputPath": "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -94,14 +94,14 @@
         }
       }
     },
-    "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind.API\\Bean-Mind.API.csproj": {
+    "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind.API\\Bean-Mind.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind.API\\Bean-Mind.API.csproj",
+        "projectUniqueName": "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind.API\\Bean-Mind.API.csproj",
         "projectName": "Bean-Mind.API",
-        "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind.API\\Bean-Mind.API.csproj",
+        "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind.API\\Bean-Mind.API.csproj",
         "packagesPath": "C:\\Users\\THY\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind.API\\obj\\",
+        "outputPath": "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -122,11 +122,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj": {
-                "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj"
+              "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj": {
+                "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj"
               },
-              "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj": {
-                "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj"
+              "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj": {
+                "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj"
               }
             }
           }
@@ -194,14 +194,14 @@
         }
       }
     },
-    "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj": {
+    "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj",
+        "projectUniqueName": "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj",
         "projectName": "Bean-Mind_Business",
-        "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj",
+        "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj",
         "packagesPath": "C:\\Users\\THY\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\obj\\",
+        "outputPath": "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind_Business\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -222,8 +222,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj": {
-                "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj"
+              "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj": {
+                "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj"
               }
             }
           }

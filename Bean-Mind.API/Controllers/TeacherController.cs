@@ -1,18 +1,17 @@
 ﻿using Bean_Mind.API.Constants;
-using Bean_Mind.API.Payload.Response.Teacher;
-using Bean_Mind.API.Payload;
 using Microsoft.AspNetCore.Mvc;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Payload.Request.Teacher;
-using Bean_Mind.API.Service.Implement;
+using Bean_Mind.API.Payload.Response.Teacher;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
+using Bean_Mind.API.Payload;
 
 namespace Bean_Mind.API.Controllers
 {
-    
 
-        [Route(ApiEndPointConstant.Teacher.TeacherEndpoint)]
+
+    [Route(ApiEndPointConstant.Teacher.TeacherEndpoint)]
         [ApiController]
     public class TeacherController : BaseController<TeacherController>
     {

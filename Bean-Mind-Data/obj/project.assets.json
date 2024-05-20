@@ -4067,11 +4067,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
+      "projectUniqueName": "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
       "projectName": "Bean-Mind-Data",
-      "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
+      "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
       "packagesPath": "C:\\Users\\THY\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\obj\\",
+      "outputPath": "C:\\Users\\THY\\OneDrive\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
