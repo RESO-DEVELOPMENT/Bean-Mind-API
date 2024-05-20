@@ -30,7 +30,7 @@ namespace Bean_Mind.API.Extensions
 
         private static string CreateConnectionString(IConfiguration configuration)
         {
-            var connectionString = configuration.GetValue<string>("ConnectionStrings:PosSystemDatabase");
+            var connectionString = configuration.GetValue<string>("ConnectionStrings:MyConnectionString");
             return connectionString;
         }
 
@@ -61,13 +61,13 @@ namespace Bean_Mind.API.Extensions
             {
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidIssuer = "PosSystem",
+                    ValidIssuer = "BeanMindSystem",
                     ValidateIssuer = true,
                     ValidateAudience = false,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey =
                         new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes("PosSystemNumberOne"))
+                            Encoding.UTF8.GetBytes("0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"))
                 };
             });
             return services;
@@ -77,7 +77,7 @@ namespace Bean_Mind.API.Extensions
         {
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo() { Title = "Pos System", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo() { Title = "BeanMind System", Version = "v1" });
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     In = ParameterLocation.Header,
@@ -88,7 +88,7 @@ namespace Bean_Mind.API.Extensions
                     Scheme = "Bearer"
                 });
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
+                {
                 {
                     new OpenApiSecurityScheme
                     {
@@ -100,7 +100,7 @@ namespace Bean_Mind.API.Extensions
                     },
                     new string[] { }
                 }
-            });
+                });
                 options.MapType<TimeOnly>(() => new OpenApiSchema
                 {
                     Type = "string",

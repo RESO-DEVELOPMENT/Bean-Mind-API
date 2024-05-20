@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Bean-Mind-Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+078917d012245172bb4722d27b483de5723f0f37")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9b49c3fdd0b7bcfced0c62c01fd8d34edefd7c74")]
 [assembly: System.Reflection.AssemblyProductAttribute("Bean-Mind-Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Bean-Mind-Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
