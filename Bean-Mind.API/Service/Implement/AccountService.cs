@@ -4,10 +4,11 @@ using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Enums;
 using Bean_Mind.API.Utils;
-using Bean_Mind.API.PayLoad.Response;
+using Bean_Mind.API.Payload.Response;
 using Bean_Mind.API.Payload;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Bean_Mind.API.Payload.Request;
 
 namespace Bean_Mind.API.Service.Implement
 {
