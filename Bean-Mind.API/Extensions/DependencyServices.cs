@@ -47,6 +47,9 @@ namespace Bean_Mind.API.Extensions
             services.AddScoped<IAccountService, AccountService>();
             //School
             services.AddScoped<ISchoolService, SchoolService>();
+            //Teacher
+            services.AddScoped<ITeacherService, TeacherService>();
+
 
             return services;
         }
