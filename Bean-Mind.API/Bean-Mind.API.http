@@ -1,0 +1,6 @@
+@Bean_Mind.API_HostAddress = http://localhost:5258
+
+GET {{Bean_Mind.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
