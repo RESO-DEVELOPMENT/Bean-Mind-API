@@ -1,7 +1,11 @@
 ﻿using Bean_Mind.API.Payload;
 using Bean_Mind_Data.Enums;
 
+<<<<<<< HEAD
 namespace Bean_Mind.API.Payload.Response
+=======
+namespace Bean_Mind.API.PayLoad.Response
+>>>>>>> f6ca0e51d9563f5628c3cafe5b811e5d48100f5c
 {
     public class AccountResponse : LoginResponse
     {
