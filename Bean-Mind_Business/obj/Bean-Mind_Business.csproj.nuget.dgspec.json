@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj": {}
+    "C:\\Users\\id\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj": {}
   },
   "projects": {
-    "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj": {
+    "C:\\Users\\id\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
+        "projectUniqueName": "C:\\Users\\id\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
         "projectName": "Bean-Mind-Data",
-        "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
-        "packagesPath": "C:\\Users\\THY\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\obj\\",
+        "projectPath": "C:\\Users\\id\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
+        "packagesPath": "C:\\Users\\id\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\id\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\THY\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\id\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -90,25 +86,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj": {
+    "C:\\Users\\id\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj",
+        "projectUniqueName": "C:\\Users\\id\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj",
         "projectName": "Bean-Mind_Business",
-        "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj",
-        "packagesPath": "C:\\Users\\THY\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\obj\\",
+        "projectPath": "C:\\Users\\id\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\Bean-Mind_Business.csproj",
+        "packagesPath": "C:\\Users\\id\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\id\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind_Business\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\THY\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\id\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -122,8 +114,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj": {
-                "projectPath": "C:\\Users\\THY\\OneDrive\\Desktop\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj"
+              "C:\\Users\\id\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj": {
+                "projectPath": "C:\\Users\\id\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj"
               }
             }
           }
@@ -164,7 +156,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
