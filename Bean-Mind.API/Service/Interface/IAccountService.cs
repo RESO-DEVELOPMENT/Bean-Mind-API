@@ -1,4 +1,5 @@
-﻿using Bean_Mind.API.Payload.Request;
+﻿using Bean_Mind.API.Payload;
+using Bean_Mind.API.Payload.Request;
 using Bean_Mind.API.Payload.Response;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,6 @@ namespace Bean_Mind.API.Service.Interface
     {
         public Task<CreateNewAccountResponse> CreateNewAccount(CreateNewAccountRequest createNewAccountRequest);
 
+        Task<LoginResponse> Login(LoginRequest loginRequest);
     }
 }
