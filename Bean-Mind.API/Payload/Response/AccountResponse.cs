@@ -1,7 +1,7 @@
 ﻿using Bean_Mind.API.Payload;
 using Bean_Mind_Data.Enums;
 
-namespace Bean_Mind.API.PayLoad.Response
+namespace Bean_Mind.API.Payload.Response
 {
     public class AccountResponse : LoginResponse
     {

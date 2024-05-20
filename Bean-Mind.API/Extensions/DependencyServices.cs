@@ -42,9 +42,11 @@ namespace Bean_Mind.API.Extensions
             // {
             //     Credential = GoogleCredential.FromJson(firebaseCred)
             // }, "[DEFAULT]");
+
             //Account
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITeacherService, TeacherService>();
+            services.AddScoped<ISchoolService, SchoolService>();
 
             return services;
         }

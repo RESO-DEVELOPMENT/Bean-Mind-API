@@ -52,6 +52,10 @@
             public const string UpdateTeacherFailedMessage = "Failed to update teacher information.";
             public const string UpdateTeacherSuccessfulMessage = "Teacher information updated successfully.";
             // Thêm các thông điệp khác liên quan đến Teacher tại đây
+        } 
+        public static class School
+        {
+            public const string CreateNewSchoolFailedMessage = "Tạo mới trường học thất bại";
         }
     }
 
