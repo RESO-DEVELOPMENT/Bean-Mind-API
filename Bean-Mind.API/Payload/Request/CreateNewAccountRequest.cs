@@ -9,9 +9,6 @@ namespace Bean_Mind.API.Payload.Request
         public string UserName { get; set; }
         [Required(ErrorMessage = "Name is missing")]
         public string Password { get; set; }
-        [Required(ErrorMessage = "Role is missing")]
-        public RoleEnum Role { get; set; }
-
         public CreateNewAccountRequest()
         {
 

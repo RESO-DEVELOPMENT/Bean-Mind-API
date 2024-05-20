@@ -19,22 +19,26 @@ namespace Bean_Mind.API.Service.Implement
         {
             _logger.LogInformation($"Create new account with {createNewAccountRequest.UserName}");
             //Account newAccount = _mapper.Map<Account>(createNewAccountRequest);
-            Account newAccount = new Account();
-            newAccount.Id = Guid.NewGuid();
-            newAccount.SchoolId = Guid.NewGuid();
-            newAccount.UserName = createNewAccountRequest.UserName;
-            newAccount.Password = PasswordUtil.HashPassword(createNewAccountRequest.Password);
-            newAccount.InsDate = TimeUtils.GetCurrentSEATime();
-            newAccount.UpdDate = TimeUtils.GetCurrentSEATime();
-            newAccount.DelFlg = false;
+            Account newAccount = new Account()
+            {
+                Id = Guid.NewGuid(),
+                UserName = createNewAccountRequest.UserName,
+                Password = PasswordUtil.HashPassword(createNewAccountRequest.Password),
+                InsDate = TimeUtils.GetCurrentSEATime(),
+                UpdDate = TimeUtils.GetCurrentSEATime(),
+                DelFlg = false,
+                Role = RoleEnum.SysAdmin.GetDescriptionFromEnum()
+            };
             await _unitOfWork.GetRepository<Account>().InsertAsync(newAccount);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
-            CreateNewAccountResponse createNewAccountResponse = new CreateNewAccountResponse();
-            createNewAccountResponse.Username = newAccount.UserName;
-            createNewAccountResponse.Password = newAccount.Password;
+            CreateNewAccountResponse createNewAccountResponse = null;
             if (isSuccessful)
             {
-                createNewAccountResponse = _mapper.Map<CreateNewAccountResponse>(newAccount);
+                createNewAccountResponse = new CreateNewAccountResponse()
+                {
+                    Username = newAccount.UserName,
+                    Password = newAccount.Password
+                };
             }
 
             return createNewAccountResponse;

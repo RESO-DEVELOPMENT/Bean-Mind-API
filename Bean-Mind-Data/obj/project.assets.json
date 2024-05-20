@@ -4061,19 +4061,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Lenovo\\.nuget\\packages\\": {}
+    "C:\\Users\\id\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Lenovo\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
+      "projectUniqueName": "C:\\Users\\id\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
       "projectName": "Bean-Mind-Data",
-      "projectPath": "C:\\Users\\Lenovo\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
-      "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Lenovo\\Desktop\\Bean-Mind-API\\Bean-Mind-Data\\obj\\",
+      "projectPath": "C:\\Users\\id\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\Bean-Mind-Data.csproj",
+      "packagesPath": "C:\\Users\\id\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\id\\OneDrive\\Máy tính\\OJT\\Bean-Mind-API\\Bean-Mind-Data\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\id\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4093,6 +4093,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -4140,7 +4145,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
