@@ -43,5 +43,13 @@ namespace Bean_Mind.API.Constants
             public const string DeleteTeacher = TeacherEndpoint + "/{teacherId}";
             public const string UpdateTeacher = TeacherEndpoint + "/{teacherId}";
         }
+
+        public static class Student
+        {
+            public const string StudentEndpoint = ApiEndpoint + "/student";
+            public const string Create = StudentEndpoint + "/create";
+            public const string GetAll = StudentEndpoint + "/get-all";
+            public const string GetById = StudentEndpoint + "/{id}";
+        }
     }
 }
