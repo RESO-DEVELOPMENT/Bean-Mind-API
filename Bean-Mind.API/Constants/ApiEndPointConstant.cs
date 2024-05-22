@@ -50,6 +50,8 @@ namespace Bean_Mind.API.Constants
             public const string Create = StudentEndpoint + "/create";
             public const string GetAll = StudentEndpoint + "/get-all";
             public const string GetById = StudentEndpoint + "/{id}";
+            public const string DeleteStudent = StudentEndpoint + "/{id}";
+            public const string UpdateStudent = StudentEndpoint + "/{id}";
         }
     }
 }

@@ -53,5 +53,23 @@ namespace Bean_Mind.API.Controllers
             var response = await _studentService.getStudentById(id);
             return Ok(response);
         }
+
+        [HttpDelete(ApiEndPointConstant.Student.DeleteStudent)]
+        [ProducesResponseType(typeof(GetStudentResponse), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> DeleteStudent([FromRoute] Guid id)
+        {
+            var response = await _studentService.RemoveStudent(id);
+            return Ok(response);
+        }
+
+        [HttpPatch(ApiEndPointConstant.Student.GetById)]
+        [ProducesResponseType(typeof(GetStudentResponse), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> UpdateStudent([FromRoute] Guid id, [FromBody] CreateNewStudentRequest createNewStudentRequest, [FromQuery] Guid schoolId, [FromQuery] Guid parentId)
+        {
+            var response = await _studentService.UpdateStudent(id, createNewStudentRequest, schoolId, parentId);
+            return Ok(response);
+        }
     }
 }

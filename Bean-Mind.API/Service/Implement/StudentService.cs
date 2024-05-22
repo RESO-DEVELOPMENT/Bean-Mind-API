@@ -91,5 +91,64 @@ namespace Bean_Mind.API.Service.Implement
                 include: s => s.Include(s => s.Parent));
             return student;
         }
+
+        public async Task<bool> RemoveStudent(Guid studentId)
+        {
+            if (studentId == Guid.Empty)
+            {
+                throw new BadHttpRequestException(MessageConstant.Student.StudentNotFound);
+            }
+            var student = await _unitOfWork.GetRepository<Student>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(studentId));
+            if (student == null)
+            {
+
+                throw new BadHttpRequestException(MessageConstant.Student.StudentNotFound);
+            }
+            student.DelFlg = true;
+            _unitOfWork.GetRepository<Student>().UpdateAsync(student);
+            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+            return isSuccessful;
+        }
+
+        public async Task<bool> UpdateStudent(Guid Id, CreateNewStudentRequest request, Guid schoolId, Guid parentId)
+        {
+            if (Id == Guid.Empty)
+            {
+                throw new BadHttpRequestException(MessageConstant.Student.StudentNotFound);
+            }
+            var student = await _unitOfWork.GetRepository<Student>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
+            if (student == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.Student.StudentNotFound);
+            }
+            if (schoolId != Guid.Empty)
+            {
+                School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(schoolId));
+                if (school == null)
+                {
+                    throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
+                }
+                student.SchoolId = schoolId;
+            }
+            if (parentId != Guid.Empty)
+            {
+                Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Id == parentId);
+                if (parent == null)
+                {
+                    throw new BadHttpRequestException("Không tìm thấy dữ liệu của phụ huynh");
+                }
+                student.ParentId = parentId;
+            }
+            
+            student.DateOfBirth = string.IsNullOrEmpty(request.DateOfBirth.ToString()) ? student.DateOfBirth : request.DateOfBirth;
+            student.FirstName = string.IsNullOrEmpty(request.FirstName) ? student.FirstName : request.FirstName;
+            student.LastName = string.IsNullOrEmpty(request.LastName) ? student.LastName : request.LastName;
+            student.ImgUrl = string.IsNullOrEmpty(request.ImgUrl) ? student.ImgUrl : request.ImgUrl;
+            student.UpdDate = TimeUtils.GetCurrentSEATime();
+
+            _unitOfWork.GetRepository<Student>().UpdateAsync(student);
+            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+            return isSuccessful;
+        }
     }
 }
