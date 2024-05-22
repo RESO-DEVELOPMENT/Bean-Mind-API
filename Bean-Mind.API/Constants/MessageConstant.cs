@@ -48,6 +48,10 @@
         public static class School
         {
             public const string CreateNewSchoolFailedMessage = "Tạo mới trường học thất bại";
+            public const string SchoolNotFound = "Không tìm thấy trường.";
+            public const string SchoolIdEmpty = "School Id bị trống o.";
+            public const string UpdateSchoolFailedMessage = "Update trường học thất bại";
+
         }
 
         public static class Teacher

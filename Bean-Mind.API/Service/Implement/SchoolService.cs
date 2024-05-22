@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.School;
 using Bean_Mind.API.Payload.Response.School;
 using Bean_Mind.API.Service.Interface;
@@ -52,7 +53,16 @@ namespace Bean_Mind.API.Service.Implement
 
         public async Task<bool> deleteSchool(Guid Id)
         {
+            if(Id == Guid.Empty)
+            {
+                throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
+            }
             var school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
+            if(school == null)
+            {
+                
+                throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
+            }
             school.DelFlg = true;
             _unitOfWork.GetRepository<School>().UpdateAsync(school);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
@@ -72,19 +82,31 @@ namespace Bean_Mind.API.Service.Implement
 
         public async Task<GetSchoolResponse> getSchoolById(Guid id)
         {
+            if (id == Guid.Empty)
+            {
+                throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
+            }
             var school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(
                 selector: s => new GetSchoolResponse(s.Id, s.Name, s.Address, s.Phone, s.Email, s.Logo, s.Description),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true
         );
+            if (school == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
+            }
             return school;
         }
 
         public async Task<bool> updateSchool(CreateNewSchoolRequest createNewSchoolRequest, Guid Id)
         {
+            if (Id == Guid.Empty)
+            {
+                throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
+            }
             var school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
             if (school == null)
             {
-                return false;
+                throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
             }
             school.Name = string.IsNullOrEmpty(createNewSchoolRequest.Name) ? school.Name : createNewSchoolRequest.Name;
             school.Address = string.IsNullOrEmpty(createNewSchoolRequest.Address) ? school.Address : createNewSchoolRequest.Address;
