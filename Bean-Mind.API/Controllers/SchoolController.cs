@@ -1,4 +1,5 @@
 ﻿using Bean_Mind.API.Constants;
+using Bean_Mind.API.Payload;
 using Bean_Mind.API.Payload.Request;
 using Bean_Mind.API.Payload.Request.School;
 using Bean_Mind.API.Payload.Response;
@@ -59,10 +60,6 @@ namespace Bean_Mind.API.Controllers
         {
 
             var response = await _schoolService.getSchoolById(id);
-            if (response == null)
-            {
-                return Problem(MessageConstant.School.CreateNewSchoolFailedMessage);
-            }
 
             return Ok(response);
 
@@ -75,10 +72,6 @@ namespace Bean_Mind.API.Controllers
         {
 
             var response = await _schoolService.deleteSchool(id);
-            if (response == false)
-            {
-                return Problem(MessageConstant.School.CreateNewSchoolFailedMessage);
-            }
 
             return Ok(response);
 
@@ -93,7 +86,7 @@ namespace Bean_Mind.API.Controllers
             var response = await _schoolService.updateSchool(createNewSchoolRequest, id);
             if (response == false)
             {
-                return Problem(MessageConstant.School.CreateNewSchoolFailedMessage);
+                return Problem(MessageConstant.School.UpdateSchoolFailedMessage);
             }
 
             return Ok(response);

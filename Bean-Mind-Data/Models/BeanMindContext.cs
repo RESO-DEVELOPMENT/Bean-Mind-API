@@ -35,111 +35,54 @@ public partial class BeanMindContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.ToTable("Account ");
-
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.DelFlg).HasDefaultValue(false);
-            entity.Property(e => e.InsDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.Password).HasMaxLength(500);
-            entity.Property(e => e.Role).HasMaxLength(50);
-            entity.Property(e => e.UpdDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.UserName).HasMaxLength(50);
+            entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
 
-            entity.HasOne(d => d.School).WithMany(p => p.Accounts)
-                .HasForeignKey(d => d.SchoolId)
-                .HasConstraintName("FK_Account _School");
+            entity.HasOne(d => d.School).WithMany(p => p.Accounts).HasConstraintName("FK_Account _School");
         });
 
         modelBuilder.Entity<Parent>(entity =>
         {
-            entity.ToTable("Parent");
-
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.DelFlg).HasDefaultValue(false);
-            entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.FirstName).HasMaxLength(50);
-            entity.Property(e => e.InsDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.LastName).HasMaxLength(50);
-            entity.Property(e => e.Phone).HasMaxLength(50);
-            entity.Property(e => e.UpdDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+            entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
         });
 
         modelBuilder.Entity<School>(entity =>
         {
-            entity.ToTable("School");
-
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.InsDate).HasColumnType("datetime");
-            entity.Property(e => e.Name)
-                .HasMaxLength(50)
-                .HasColumnName("Name ");
-            entity.Property(e => e.Phone)
-                .HasMaxLength(50)
-                .HasColumnName("Phone ");
-            entity.Property(e => e.UpdDate).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Student>(entity =>
         {
-            entity.ToTable("Student ");
-
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.DateOfBirth).HasColumnType("datetime");
-            entity.Property(e => e.FirstName).HasMaxLength(50);
-            entity.Property(e => e.InsDate).HasColumnType("datetime");
-            entity.Property(e => e.LastName).HasMaxLength(50);
-            entity.Property(e => e.UpdDate).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Parent).WithMany(p => p.Students).HasConstraintName("FK_Student _Parent");
 
             entity.HasOne(d => d.School).WithMany(p => p.Students)
-                .HasForeignKey(d => d.SchoolId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Student _School");
         });
 
         modelBuilder.Entity<Teacher>(entity =>
         {
-            entity.ToTable("Teacher ");
-
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.DateOfBirth).HasColumnType("datetime");
             entity.Property(e => e.DelFlg).HasDefaultValue(false);
-            entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.FirstName).HasMaxLength(50);
-            entity.Property(e => e.InsDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.LastName).HasMaxLength(50);
-            entity.Property(e => e.Phone).HasMaxLength(50);
-            entity.Property(e => e.UpdDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+            entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
 
             entity.HasOne(d => d.School).WithMany(p => p.Teachers)
-                .HasForeignKey(d => d.SchoolId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("School_Id");
+                .HasConstraintName("FK_Teacher _School");
         });
 
         modelBuilder.Entity<Video>(entity =>
         {
-            entity.ToTable("Video ");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.UploadDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.VideoUrl).HasMaxLength(50);
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.UploadDate).HasDefaultValueSql("(getdate())");
         });
 
         OnModelCreatingPartial(modelBuilder);
