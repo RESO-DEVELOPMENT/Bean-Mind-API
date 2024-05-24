@@ -26,9 +26,9 @@ namespace Bean_Mind.API.Constants
 
         public static class School
         {
-            public const string SchoolEndpoint = ApiEndpoint + "/school";
-            public const string CreateSchool = SchoolEndpoint + "/create-school";
-            public const string GetListSchool = SchoolEndpoint + "/get-list-school";
+            public const string SchoolEndpoint = ApiEndpoint + "/schools";
+            public const string CreateSchool = SchoolEndpoint;
+            public const string GetListSchool = SchoolEndpoint;
             public const string GetSchool = SchoolEndpoint + "/{id}";
             public const string DeleteSchool = SchoolEndpoint + "/{id}";
             public const string UpdateSchool = SchoolEndpoint + "/{id}";
@@ -36,12 +36,22 @@ namespace Bean_Mind.API.Constants
 
         public static class Teacher
         {
-            public const string TeacherEndpoint = ApiEndpoint + "/teacher";
-            public const string Create = TeacherEndpoint + "/create";
-            public const string GetAll = TeacherEndpoint + "/get-all";
-            public const string GetById = TeacherEndpoint + "/{teacherId}";
-            public const string DeleteTeacher = TeacherEndpoint + "/{teacherId}";
-            public const string UpdateTeacher = TeacherEndpoint + "/{teacherId}";
+            public const string TeacherEndpoint = ApiEndpoint + "/teachers";
+            public const string Create = TeacherEndpoint;
+            public const string GetAll = TeacherEndpoint;
+            public const string GetById = TeacherEndpoint + "/{id}";
+            public const string DeleteTeacher = TeacherEndpoint + "/{id}";
+            public const string UpdateTeacher = TeacherEndpoint + "/{id}";
+        }
+
+        public static class Student
+        {
+            public const string StudentEndpoint = ApiEndpoint + "/students";
+            public const string Create = StudentEndpoint;
+            public const string GetAll = StudentEndpoint;
+            public const string GetById = StudentEndpoint + "/{id}";
+            public const string DeleteStudent = StudentEndpoint + "/{id}";
+            public const string UpdateStudent = StudentEndpoint + "/{id}";
         }
         public static class Parent
         {

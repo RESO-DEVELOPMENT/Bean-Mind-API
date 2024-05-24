@@ -6,7 +6,9 @@ using Bean_Mind.API.Payload.Request.Teacher;
 
 using Bean_Mind.API.Payload.Response.Teacher;
 using Bean_Mind.API.Service.Interface;
+using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
+using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
 using System.Drawing;
@@ -23,6 +25,26 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<CreateNewTeacherResponse> CreateTeacher(CreateNewTeacherResquest newTeacherRequest, Guid schoolId)
         {
             _logger.LogInformation($"Create new teacher with {newTeacherRequest.FirstName} {newTeacherRequest.LastName}");
+
+            Account account = new Account() 
+            { 
+                Id = Guid.NewGuid(),
+                UserName = newTeacherRequest.UserName,
+                Password = PasswordUtil.HashPassword(newTeacherRequest.Password),
+                InsDate = DateTime.UtcNow,
+                UpdDate = DateTime.UtcNow,
+                DelFlg = false,
+                Role = RoleEnum.Teacher.GetDescriptionFromEnum(),
+                SchoolId = schoolId
+            };
+
+            await _unitOfWork.GetRepository<Account>().InsertAsync(account);
+            var successAccount = await _unitOfWork.CommitAsync() > 0;
+            if (!successAccount)
+            {
+                return null; // Hoặc trả về phản hồi lỗi phù hợp
+            }
+
 
             Teacher newTeacher = new Teacher()
             {
@@ -41,8 +63,8 @@ namespace Bean_Mind.API.Service.Implement
 
             await _unitOfWork.GetRepository<Teacher>().InsertAsync(newTeacher);
 
-            var success = await _unitOfWork.CommitAsync() > 0;
-            if (!success)
+            var successTeacher = await _unitOfWork.CommitAsync() > 0;
+            if (!successTeacher)
             {
                 return null; // Hoặc trả về phản hồi lỗi phù hợp
             }

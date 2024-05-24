@@ -17,7 +17,7 @@
 
 
         //public int NumberOfSchools { get; set; } = 0;
-
+        
         public GetSchoolResponse(Guid id, string name, string address, string phone, string email, string logo, string description)
         {
             Id = id;

@@ -3,6 +3,8 @@
     public enum RoleEnum
     {
         SysAdmin,
-        Teacher
+        Teacher, 
+        Student,
+        Parent
     }
 }
