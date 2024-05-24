@@ -1,7 +1,7 @@
 ﻿using Bean_Mind.API.Constants;
-using Bean_Mind.API.Payload.Request.School;
-using Bean_Mind.API.Payload.Request.Student;
-using Bean_Mind.API.Payload.Response.Student;
+using Bean_Mind.API.Payload.Request.Schools;
+using Bean_Mind.API.Payload.Request.Students;
+using Bean_Mind.API.Payload.Response.Students;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +51,7 @@ namespace Bean_Mind.API.Controllers
         public async Task<IActionResult> GetStudent([FromRoute] Guid id)
         {
             var response = await _studentService.getStudentById(id);
+            
             return Ok(response);
         }
 
@@ -66,9 +67,9 @@ namespace Bean_Mind.API.Controllers
         [HttpPatch(ApiEndPointConstant.Student.GetById)]
         [ProducesResponseType(typeof(GetStudentResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> UpdateStudent([FromRoute] Guid id, [FromBody] CreateNewStudentRequest createNewStudentRequest, [FromQuery] Guid schoolId, [FromQuery] Guid parentId)
+        public async Task<IActionResult> UpdateStudent([FromRoute] Guid id, [FromBody] UpdateStudentRequest request, [FromQuery] Guid schoolId, [FromQuery] Guid parentId)
         {
-            var response = await _studentService.UpdateStudent(id, createNewStudentRequest, schoolId, parentId);
+            var response = await _studentService.UpdateStudent(id, request, schoolId, parentId);
             return Ok(response);
         }
     }

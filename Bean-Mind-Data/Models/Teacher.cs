@@ -31,6 +31,8 @@ public partial class Teacher
 
     public Guid SchoolId { get; set; }
 
+    public Guid? AccountId { get; set; }
+
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
 
@@ -38,6 +40,10 @@ public partial class Teacher
     public DateTime? UpdDate { get; set; }
 
     public bool? DelFlg { get; set; }
+
+    [ForeignKey("AccountId")]
+    [InverseProperty("Teachers")]
+    public virtual Account? Account { get; set; }
 
     [ForeignKey("SchoolId")]
     [InverseProperty("Teachers")]

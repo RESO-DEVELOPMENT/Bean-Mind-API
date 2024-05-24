@@ -31,7 +31,16 @@ public partial class Account
     [StringLength(20)]
     public string Role { get; set; } = null!;
 
+    [InverseProperty("Account")]
+    public virtual ICollection<Parent> Parents { get; set; } = new List<Parent>();
+
     [ForeignKey("SchoolId")]
     [InverseProperty("Accounts")]
     public virtual School? School { get; set; }
+
+    [InverseProperty("Account")]
+    public virtual ICollection<Student> Students { get; set; } = new List<Student>();
+
+    [InverseProperty("Account")]
+    public virtual ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
 }

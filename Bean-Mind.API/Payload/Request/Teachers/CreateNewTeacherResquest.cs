@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Bean_Mind.API.Payload.Request.Teacher
+namespace Bean_Mind.API.Payload.Request.Teachers
 {
     public class CreateNewTeacherResquest
     {

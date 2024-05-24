@@ -1,7 +1,7 @@
 ﻿
 
-using Bean_Mind.API.Payload.Request.School;
-using Bean_Mind.API.Payload.Response.School;
+using Bean_Mind.API.Payload.Request.Schools;
+using Bean_Mind.API.Payload.Response.Schools;
 using Bean_Mind_Data.Paginate;
 
 namespace Bean_Mind.API.Service.Interface

@@ -1,17 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace Bean_Mind.API.Payload.Response.Student
+namespace Bean_Mind.API.Payload.Request.Students
 {
-    public class CreateNewStudentResponse
+    public class CreateNewStudentRequest
     {
-        public Guid Id { get; set; }
         public string? FirstName { get; set; }
+
         public string? LastName { get; set; }
+
         public DateTime? DateOfBirth { get; set; }
+
         public string? ImgUrl { get; set; }
-        public bool? DelFlg { get; set; }
-        public DateTime? InsDate { get; set; }
-        public DateTime? UpdDate { get; set; }
+        [Required(ErrorMessage = "Username is missing")]
+        public string UserName { get; set; }
+        [Required(ErrorMessage = "Name is missing")]
+        public string Password { get; set; }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using Bean_Mind.API.Constants;
 using Microsoft.AspNetCore.Mvc;
 using Bean_Mind.API.Service.Interface;
-using Bean_Mind.API.Payload.Request.Teacher;
-using Bean_Mind.API.Payload.Response.Teacher;
+using Bean_Mind.API.Payload.Request.Teachers;
+using Bean_Mind.API.Payload.Response.Teachers;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
 using Bean_Mind.API.Payload;
+using Bean_Mind.API.Utils;
 
 namespace Bean_Mind.API.Controllers
 {
@@ -35,7 +36,7 @@ namespace Bean_Mind.API.Controllers
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Error = "Invalid input data",
-                    TimeStamp = DateTime.Now
+                    TimeStamp = TimeUtils.GetCurrentSEATime()
                 });
             }
 
@@ -46,14 +47,14 @@ namespace Bean_Mind.API.Controllers
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Error = "Failed to create teacher",
-                    TimeStamp = DateTime.Now
+                    TimeStamp = TimeUtils.GetCurrentSEATime()
                 });
             }
 
             return Ok(response);
         }
         [HttpGet(ApiEndPointConstant.Teacher.GetAll)]
-        [ProducesResponseType(typeof(IPaginate<TeacherResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IPaginate<GetTeacherResponse>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllTeachers([FromQuery] int page, [FromQuery] int size)
         {
             var teachers = await _teacherService.GetAllTeachers(page, size);
@@ -72,7 +73,7 @@ namespace Bean_Mind.API.Controllers
                 {
                     StatusCode = StatusCodes.Status404NotFound,
                     Error = "Teacher not found",
-                    TimeStamp = DateTime.Now
+                    TimeStamp = TimeUtils.GetCurrentSEATime()
                 });
             }
 
@@ -91,7 +92,7 @@ namespace Bean_Mind.API.Controllers
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Error = MessageConstant.Teacher.InvalidTeacherData,
-                    TimeStamp = DateTime.Now
+                    TimeStamp = TimeUtils.GetCurrentSEATime()
                 });
             }
 
@@ -104,7 +105,7 @@ namespace Bean_Mind.API.Controllers
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
                         Error = MessageConstant.Teacher.UpdateTeacherFailedMessage,
-                        TimeStamp = DateTime.Now
+                        TimeStamp = TimeUtils.GetCurrentSEATime()
                     });
                 }
 
@@ -116,7 +117,7 @@ namespace Bean_Mind.API.Controllers
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Error = ex.Message,
-                    TimeStamp = DateTime.Now
+                    TimeStamp = TimeUtils.GetCurrentSEATime()
                 });
             }
             catch (KeyNotFoundException ex)
@@ -125,7 +126,7 @@ namespace Bean_Mind.API.Controllers
                 {
                     StatusCode = StatusCodes.Status404NotFound,
                     Error = ex.Message,
-                    TimeStamp = DateTime.Now
+                    TimeStamp = TimeUtils.GetCurrentSEATime()
                 });
             }
 
@@ -143,7 +144,7 @@ namespace Bean_Mind.API.Controllers
                 {
                     StatusCode = StatusCodes.Status404NotFound,
                     Error = "Teacher not found",
-                    TimeStamp = DateTime.Now
+                    TimeStamp = TimeUtils.GetCurrentSEATime()
                 });
             }
 
