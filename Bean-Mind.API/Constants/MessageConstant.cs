@@ -63,6 +63,14 @@
             public const string UpdateTeacherSuccessfulMessage = "Teacher information updated successfully.";
             // Thêm các thông điệp khác liên quan đến Teacher tại đây
         }
+        public static class Parent
+        {
+            public const string CreateNewParentFailedMessage = "Tạo mới phụ huynh thất bại";
+            public const string ParentNotFound = "Không tìm thấy phụ huynh.";
+            public const string ParentIdEmpty = "Parent Id bị trống.";
+            public const string UpdateParentFailedMessage = "Update thông tin phụ huynh thất bại";
+
+            // Thêm các thông điệp khác liên quan đến phụ huynh tại đây
 
         public static class Student
         {
