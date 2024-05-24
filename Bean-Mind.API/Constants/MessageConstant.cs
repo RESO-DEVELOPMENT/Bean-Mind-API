@@ -12,9 +12,11 @@
         {
             public const string UsernameExisted = "Tài khoản đã tồn tại";
             public const string CreateAccountWithWrongRoleMessage = "Please create with acceptent role";
-            public const string CreateBrandAccountFailMessage = "Tạo tài khoản mới cho nhãn hiệu thất bại";
-            public const string CreateStaffAccountFailMessage = "Tạo tài khoản nhân viên thất bại";
+            public const string CreateStudentAccountFailMessage = "Tạo tài khoản học sinh thất bại";
+            public const string CreateParentAccountFailMessage = "Tạo tài khoản phụ huynh thất bại";
+            public const string CreateTeacherAccountFailMessage = "Tạo tài khoản giáo viên thất bại";
             public const string UserUnauthorizedMessage = "Bạn không được phép cập nhật status cho tài khoản này";
+            public const string SchoolAccountFailMessage = "Tạo tài khoản trường học thất bại";
 
             public const string UpdateAccountStatusRequestWrongFormatMessage =
                 "Cập nhật status tài khoản request sai format";

@@ -3,7 +3,9 @@ using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Parents;
 using Bean_Mind.API.Payload.Response.Parents;
 using Bean_Mind.API.Service.Interface;
+using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
+using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
 
@@ -18,9 +20,35 @@ namespace Bean_Mind.API.Service.Implement
 
             public async Task<CreateNewParentResponse> AddParent(CreateNewParentResquest newParentRequest)
             {
-                _logger.LogInformation($"Creating new parent with {newParentRequest.FirstName} {newParentRequest.LastName}");
+            _logger.LogInformation($"Creating new parent with {newParentRequest.FirstName} {newParentRequest.LastName}");
+            var accounts = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(predicate : account => account.UserName.Equals(newParentRequest.UserName));
+            if (accounts != null ) 
+            {
+                throw new BadHttpRequestException(MessageConstant.Account.UsernameExisted);
+            }
 
-                Parent newParent = new Parent()
+
+            Account account = new Account()
+            {
+                Id = Guid.NewGuid(),
+                UserName = newParentRequest.UserName,
+                Password = PasswordUtil.HashPassword(newParentRequest.Password),
+                InsDate = TimeUtils.GetCurrentSEATime(),
+                UpdDate = TimeUtils.GetCurrentSEATime(),
+                DelFlg = false,
+                Role = RoleEnum.Parent.GetDescriptionFromEnum(),
+
+            };
+
+            await _unitOfWork.GetRepository<Account>().InsertAsync(account);
+            var successAccount = await _unitOfWork.CommitAsync() > 0;
+            if (!successAccount)
+            {
+                return null; // Hoặc trả về phản hồi lỗi phù hợp
+            }
+
+
+            Parent newParent = new Parent()
                 {
                     Id = Guid.NewGuid(),
                     FirstName = newParentRequest.FirstName,
@@ -28,9 +56,10 @@ namespace Bean_Mind.API.Service.Implement
                     Phone = newParentRequest.Phone,
                     Email = newParentRequest.Email,
                     Address = newParentRequest.Address,
-                    InsDate = DateTime.UtcNow,
-                    UpdDate = DateTime.UtcNow,
-                    DelFlg = false
+                    InsDate = TimeUtils.GetCurrentSEATime(),
+                    UpdDate = TimeUtils.GetCurrentSEATime(),
+                    DelFlg = false,
+                    AccountId = account.Id,
                 };
 
                 await _unitOfWork.GetRepository<Parent>().InsertAsync(newParent);
@@ -48,6 +77,7 @@ namespace Bean_Mind.API.Service.Implement
                     LastName = newParent.LastName,
                     Email = newParent.Email,
                     Phone = newParent.Phone,
+                    InsDate =newParent.InsDate,
                     Message = "Parent created successfully"
                 };
             }

@@ -14,7 +14,7 @@ namespace Bean_Mind.API.Payload.Response
         }
 
         // Constructor với tham số để khởi tạo các thuộc tính
-        public AccountResponse(string userName, RoleEnum roleName)
+        public AccountResponse(string userName, RoleEnum  roleName)
         {
             UserName = userName;
             RoleName = roleName;
