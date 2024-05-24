@@ -42,8 +42,8 @@ namespace Bean_Mind.API.Service.Implement
                 DelFlg = false,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
-                SchoolId = schoolId,
                 ParentId = parentId,
+                SchoolId = schoolId,
             };
             await _unitOfWork.GetRepository<Student>().InsertAsync(newStudent);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;

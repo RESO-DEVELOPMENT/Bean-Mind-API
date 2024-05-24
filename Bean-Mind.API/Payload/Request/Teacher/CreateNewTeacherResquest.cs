@@ -1,4 +1,6 @@
-﻿namespace Bean_Mind.API.Payload.Request.Teacher
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Bean_Mind.API.Payload.Request.Teacher
 {
     public class CreateNewTeacherResquest
     {
@@ -8,5 +10,10 @@
         public string? ImgUrl { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
+
+        [Required(ErrorMessage = "Username is missing")]
+        public string UserName { get; set; }
+        [Required(ErrorMessage = "Name is missing")]
+        public string Password { get; set; }
     }
 }
