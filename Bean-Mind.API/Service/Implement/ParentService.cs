@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Bean_Mind.API.Constants;
-using Bean_Mind.API.Payload.Request.Parent;
-using Bean_Mind.API.Payload.Request.Teacher;
-using Bean_Mind.API.Payload.Response.Parent;
-using Bean_Mind.API.Payload.Response.Teacher;
+using Bean_Mind.API.Payload.Request.Parents;
+using Bean_Mind.API.Payload.Response.Parents;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Models;

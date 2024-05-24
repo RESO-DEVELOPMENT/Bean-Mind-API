@@ -25,7 +25,9 @@ public partial class Student
 
     public Guid SchoolId { get; set; }
 
-    public Guid? ParentId { get; set; }
+    public Guid ParentId { get; set; }
+
+    public Guid? AccountId { get; set; }
 
     public bool? DelFlg { get; set; }
 
@@ -35,9 +37,13 @@ public partial class Student
     [Column(TypeName = "datetime")]
     public DateTime? UpdDate { get; set; }
 
+    [ForeignKey("AccountId")]
+    [InverseProperty("Students")]
+    public virtual Account? Account { get; set; }
+
     [ForeignKey("ParentId")]
     [InverseProperty("Students")]
-    public virtual Parent? Parent { get; set; }
+    public virtual Parent Parent { get; set; } = null!;
 
     [ForeignKey("SchoolId")]
     [InverseProperty("Students")]

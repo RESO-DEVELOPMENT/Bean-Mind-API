@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
 using Bean_Mind.API.Constants;
-using Bean_Mind.API.Payload.Request.School;
-using Bean_Mind.API.Payload.Request.Student;
-using Bean_Mind.API.Payload.Response.School;
-using Bean_Mind.API.Payload.Response.Student;
+using Bean_Mind.API.Payload;
+using Bean_Mind.API.Payload.Request.Schools;
+using Bean_Mind.API.Payload.Request.Students;
+using Bean_Mind.API.Payload.Response.Schools;
+using Bean_Mind.API.Payload.Response.Students;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
+using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind.API.Service.Implement
@@ -22,6 +25,31 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<CreateNewStudentResponse> CreateNewStudent(CreateNewStudentRequest request, Guid schoolId, Guid parentId)
         {
             _logger.LogInformation($"Create new Student with {request.FirstName}  {request.LastName}");
+
+            var accountS = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: account => account.UserName.Equals(request.UserName)
+                );
+            if( accountS != null ) {
+                throw new BadHttpRequestException(MessageConstant.Account.UsernameExisted);
+            }
+            Account account = new Account()
+            {
+                Id = Guid.NewGuid(),
+                UserName = request.UserName,
+                Password = PasswordUtil.HashPassword(request.Password),
+                InsDate = DateTime.UtcNow,
+                UpdDate = DateTime.UtcNow,
+                DelFlg = false,
+                Role = RoleEnum.Student.GetDescriptionFromEnum(),
+                SchoolId = schoolId
+            };
+            await _unitOfWork.GetRepository<Account>().InsertAsync(account);
+            var successAccount = await _unitOfWork.CommitAsync() > 0;
+            if (!successAccount)
+            {
+                return null;
+            }
+
             School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(schoolId));
             if (school == null)
             {

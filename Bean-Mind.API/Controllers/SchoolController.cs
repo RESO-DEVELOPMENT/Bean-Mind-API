@@ -1,10 +1,7 @@
 ﻿using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload;
-using Bean_Mind.API.Payload.Request;
-using Bean_Mind.API.Payload.Request.School;
-using Bean_Mind.API.Payload.Response;
-using Bean_Mind.API.Payload.Response.School;
-using Bean_Mind.API.Service.Implement;
+using Bean_Mind.API.Payload.Request.Schools;
+using Bean_Mind.API.Payload.Response.Schools;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
 using Microsoft.AspNetCore.Mvc;

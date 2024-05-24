@@ -10,6 +10,7 @@
 
         public static class Account
         {
+            public const string UsernameExisted = "Tài khoản đã tồn tại";
             public const string CreateAccountWithWrongRoleMessage = "Please create with acceptent role";
             public const string CreateBrandAccountFailMessage = "Tạo tài khoản mới cho nhãn hiệu thất bại";
             public const string CreateStaffAccountFailMessage = "Tạo tài khoản nhân viên thất bại";
@@ -71,7 +72,7 @@
             public const string UpdateParentFailedMessage = "Update thông tin phụ huynh thất bại";
 
             // Thêm các thông điệp khác liên quan đến phụ huynh tại đây
-
+        }
         public static class Student
         {
             public const string CreateNewStudentFailedMessage = "Thêm học sinh mới thất bại";

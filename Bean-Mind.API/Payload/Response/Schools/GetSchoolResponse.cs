@@ -1,4 +1,4 @@
-﻿namespace Bean_Mind.API.Payload.Response.School
+﻿namespace Bean_Mind.API.Payload.Response.Schools
 {
     public class GetSchoolResponse
     {

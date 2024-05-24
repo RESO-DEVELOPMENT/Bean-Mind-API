@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Bean_Mind.API.Payload.Request.Parent
+namespace Bean_Mind.API.Payload.Request.Parents
 {
     public class CreateNewParentResquest
     {

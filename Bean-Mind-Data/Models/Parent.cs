@@ -26,6 +26,8 @@ public partial class Parent
 
     public string? Address { get; set; }
 
+    public Guid? AccountId { get; set; }
+
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
 
@@ -33,6 +35,10 @@ public partial class Parent
     public DateTime? UpdDate { get; set; }
 
     public bool? DelFlg { get; set; }
+
+    [ForeignKey("AccountId")]
+    [InverseProperty("Parents")]
+    public virtual Account? Account { get; set; }
 
     [InverseProperty("Parent")]
     public virtual ICollection<Student> Students { get; set; } = new List<Student>();

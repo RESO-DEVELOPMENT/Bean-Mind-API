@@ -1,7 +1,7 @@
 ﻿using Bean_Mind_Data.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Bean_Mind.API.Payload.Response.Parent
+namespace Bean_Mind.API.Payload.Response.Parents
 {
     public class CreateNewParentResponse
     {

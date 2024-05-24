@@ -1,6 +1,6 @@
-﻿namespace Bean_Mind.API.Payload.Response.School
+﻿namespace Bean_Mind.API.Payload.Request.Schools
 {
-    public class CreateNewSchoolResponse
+    public class CreateNewSchoolRequest
     {
         public string? Name { get; set; }
 

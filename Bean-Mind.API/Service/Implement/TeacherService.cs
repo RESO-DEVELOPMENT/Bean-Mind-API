@@ -2,9 +2,9 @@
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload;
 using Bean_Mind.API.Payload.Request;
-using Bean_Mind.API.Payload.Request.Teacher;
+using Bean_Mind.API.Payload.Request.Teachers;
 
-using Bean_Mind.API.Payload.Response.Teacher;
+using Bean_Mind.API.Payload.Response.Teachers;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;

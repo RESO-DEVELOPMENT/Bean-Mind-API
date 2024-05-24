@@ -17,11 +17,15 @@ public partial class BeanMindContext : DbContext
 
     public virtual DbSet<Account> Accounts { get; set; }
 
+    public virtual DbSet<Course> Courses { get; set; }
+
     public virtual DbSet<Parent> Parents { get; set; }
 
     public virtual DbSet<School> Schools { get; set; }
 
     public virtual DbSet<Student> Students { get; set; }
+
+    public virtual DbSet<Subject> Subjects { get; set; }
 
     public virtual DbSet<Teacher> Teachers { get; set; }
 
@@ -43,12 +47,18 @@ public partial class BeanMindContext : DbContext
             entity.HasOne(d => d.School).WithMany(p => p.Accounts).HasConstraintName("FK_Account _School");
         });
 
+        modelBuilder.Entity<Course>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+        });
+
         modelBuilder.Entity<Parent>(entity =>
         {
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.DelFlg).HasDefaultValue(false);
             entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.Account).WithMany(p => p.Parents).HasConstraintName("FK_Parent_Account ");
         });
 
         modelBuilder.Entity<School>(entity =>
@@ -60,11 +70,22 @@ public partial class BeanMindContext : DbContext
         {
             entity.Property(e => e.Id).ValueGeneratedNever();
 
-            entity.HasOne(d => d.Parent).WithMany(p => p.Students).HasConstraintName("FK_Student _Parent");
+            entity.HasOne(d => d.Account).WithMany(p => p.Students).HasConstraintName("FK_Student _Account ");
+
+            entity.HasOne(d => d.Parent).WithMany(p => p.Students)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Student _Parent");
 
             entity.HasOne(d => d.School).WithMany(p => p.Students)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Student _School");
+        });
+
+        modelBuilder.Entity<Subject>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_Subjects");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<Teacher>(entity =>
@@ -73,6 +94,8 @@ public partial class BeanMindContext : DbContext
             entity.Property(e => e.DelFlg).HasDefaultValue(false);
             entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.Account).WithMany(p => p.Teachers).HasConstraintName("FK_Teacher _Account ");
 
             entity.HasOne(d => d.School).WithMany(p => p.Teachers)
                 .OnDelete(DeleteBehavior.ClientSetNull)

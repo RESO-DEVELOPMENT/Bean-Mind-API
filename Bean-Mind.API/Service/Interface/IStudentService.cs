@@ -1,6 +1,6 @@
-﻿using Bean_Mind.API.Payload.Request.Student;
-using Bean_Mind.API.Payload.Request.Teacher;
-using Bean_Mind.API.Payload.Response.Student;
+﻿using Bean_Mind.API.Payload.Request.Students;
+using Bean_Mind.API.Payload.Request.Teachers;
+using Bean_Mind.API.Payload.Response.Students;
 using Bean_Mind_Data.Paginate;
 
 namespace Bean_Mind.API.Service.Interface

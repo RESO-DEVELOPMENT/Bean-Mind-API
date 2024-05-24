@@ -1,5 +1,5 @@
-﻿using Bean_Mind.API.Payload.Request.Teacher;
-using Bean_Mind.API.Payload.Response.Teacher;
+﻿using Bean_Mind.API.Payload.Request.Teachers;
+using Bean_Mind.API.Payload.Response.Teachers;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
 
