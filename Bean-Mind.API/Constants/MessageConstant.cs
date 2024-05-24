@@ -63,6 +63,13 @@
             public const string UpdateTeacherSuccessfulMessage = "Teacher information updated successfully.";
             // Thêm các thông điệp khác liên quan đến Teacher tại đây
         }
+
+        public static class Student
+        {
+            public const string CreateNewStudentFailedMessage = "Thêm học sinh mới thất bại";
+            public const string StudentsIsEmpty = "Không có học sinh nào.";
+            public const string StudentNotFound = "Không tìm thấy học sinh";
+        }
     }
 
 
