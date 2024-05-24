@@ -8,8 +8,8 @@ namespace Bean_Mind.API.Service.Interface
     public interface ITeacherService
     {
         public Task<CreateNewTeacherResponse> CreateTeacher(CreateNewTeacherResquest createNewTeacherRequest, Guid schoolId);
-        Task<IPaginate<TeacherResponse>> GetAllTeachers(int page, int size);
-        Task<TeacherResponse> GetTeacherById(Guid teacherId);
+        Task<IPaginate<GetTeacherResponse>> GetAllTeachers(int page, int size);
+        Task<GetTeacherResponse> GetTeacherById(Guid teacherId);
         Task<bool> UpdateTeacher(Guid id, UpdateTecherRequest  request);
         Task<bool> RemoveTeacher(Guid teacherId);
     }

@@ -16,7 +16,7 @@
             public const string CreateParentAccountFailMessage = "Tạo tài khoản phụ huynh thất bại";
             public const string CreateTeacherAccountFailMessage = "Tạo tài khoản giáo viên thất bại";
             public const string UserUnauthorizedMessage = "Bạn không được phép cập nhật status cho tài khoản này";
-            public const string SchoolAccountFailMessage = "Tạo tài khoản trường học thất bại";
+            public const string CreateSchoolAccountFailMessage = "Tạo tài khoản trường học thất bại";
 
             public const string UpdateAccountStatusRequestWrongFormatMessage =
                 "Cập nhật status tài khoản request sai format";

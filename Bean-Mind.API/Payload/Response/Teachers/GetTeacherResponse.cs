@@ -1,6 +1,8 @@
-﻿namespace Bean_Mind.API.Payload.Response.Teachers
+﻿using Bean_Mind_Data.Models;
+
+namespace Bean_Mind.API.Payload.Response.Teachers
 {
-    public class TeacherResponse
+    public class GetTeacherResponse
     {
         public Guid Id { get; set; }
 
@@ -16,7 +18,6 @@
 
         public string? Phone { get; set; }
 
-        public Guid SchoolId { get; set; }
-
+        public School School { get; set; }
     }
 }
