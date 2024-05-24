@@ -37,8 +37,8 @@ namespace Bean_Mind.API.Service.Implement
                 Id = Guid.NewGuid(),
                 UserName = request.UserName,
                 Password = PasswordUtil.HashPassword(request.Password),
-                InsDate = DateTime.UtcNow,
-                UpdDate = DateTime.UtcNow,
+                InsDate = TimeUtils.GetCurrentSEATime(),
+                UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false,
                 Role = RoleEnum.Student.GetDescriptionFromEnum(),
                 SchoolId = schoolId
@@ -47,7 +47,7 @@ namespace Bean_Mind.API.Service.Implement
             var successAccount = await _unitOfWork.CommitAsync() > 0;
             if (!successAccount)
             {
-                return null;
+                throw new BadHttpRequestException(MessageConstant.Account.CreateStudentAccountFailMessage);
             }
 
             School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(schoolId));
@@ -72,6 +72,7 @@ namespace Bean_Mind.API.Service.Implement
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 ParentId = parentId,
                 SchoolId = schoolId,
+                AccountId = account.Id,
             };
             await _unitOfWork.GetRepository<Student>().InsertAsync(newStudent);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
@@ -98,7 +99,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<IPaginate<GetStudentResponse>> getListStudent(int page, int size)
         {
             var students = await _unitOfWork.GetRepository<Student>().GetPagingListAsync(
-                selector: s => new GetStudentResponse(s.Id, s.FirstName, s.LastName, s.DateOfBirth, s.Parent),
+                selector: s => new GetStudentResponse(s.Id, s.FirstName, s.LastName, s.DateOfBirth, s.ImgUrl, s.Parent, s.School),
                 predicate: s => s.DelFlg != true,
                 include: s => s.Include(s => s.Parent),
                 page : page,
@@ -114,9 +115,13 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.Student.StudentNotFound);
             }
             var student = await _unitOfWork.GetRepository<Student>().SingleOrDefaultAsync(
-                selector: s => new GetStudentResponse(s.Id, s.FirstName, s.LastName, s.DateOfBirth, s.Parent),
+                selector: s => new GetStudentResponse(s.Id, s.FirstName, s.LastName, s.DateOfBirth, s.ImgUrl, s.Parent, s.School),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true,
                 include: s => s.Include(s => s.Parent));
+            if(student == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.Student.StudentNotFound);
+            }
             return student;
         }
 
@@ -138,7 +143,7 @@ namespace Bean_Mind.API.Service.Implement
             return isSuccessful;
         }
 
-        public async Task<bool> UpdateStudent(Guid Id, CreateNewStudentRequest request, Guid schoolId, Guid parentId)
+        public async Task<bool> UpdateStudent(Guid Id, UpdateStudentRequest request, Guid schoolId, Guid parentId)
         {
             if (Id == Guid.Empty)
             {
