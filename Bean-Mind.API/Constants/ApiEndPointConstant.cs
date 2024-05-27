@@ -72,5 +72,34 @@ namespace Bean_Mind.API.Constants
             public const string UpdateChapter = ChapterEndpoint + "/{id}";
             public const string DeleteChapter = ChapterEndpoint + "/{id}";
         }
+
+        public static class Topic
+        {
+            public const string TopicEndpoint = ApiEndpoint + "/topics";
+            public const string Create = TopicEndpoint;
+            public const string GetAll = TopicEndpoint;
+            public const string GetById = TopicEndpoint + "/{id}";
+            public const string UpdateTopic = TopicEndpoint + "/{id}";
+            public const string DeleteTopic = TopicEndpoint + "/{id}";
+       
+          public static class Course
+        {
+            public const string CourseEndpoint = ApiEndpoint + "/courses";
+            public const string Create = CourseEndpoint;
+            public const string GetAll = CourseEndpoint;
+            public const string GetById = CourseEndpoint + "/{id}";
+            public const string UpdateCourse = CourseEndpoint + "/{id}";
+            public const string DeleteCourse = CourseEndpoint + "/{id}";
+        }
+
+        public static class Curriculum
+        {
+            public const string CurriculumEndpoint = ApiEndpoint + "/curriculums";
+            public const string Create = CurriculumEndpoint;
+            public const string GetAll = CurriculumEndpoint;
+            public const string GetById = CurriculumEndpoint + "/{id}";
+            public const string DeleteCurriculum = CurriculumEndpoint + "/{id}";
+            public const string UpdateCurriculum = CurriculumEndpoint + "/{id}";
+        }
     }
 }
