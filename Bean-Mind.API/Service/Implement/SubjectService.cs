@@ -26,7 +26,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
             }
-            Course course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(courseId));
+            Course course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(courseId) && s.DelFlg != true);
             if (course == null)
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
@@ -98,7 +98,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
-            var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id));
+            var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (subject == null)
             {
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
@@ -108,7 +108,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
             }
-            var course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(courseId));
+            var course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(courseId) && c.DelFlg != true);
             if (course == null)
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
@@ -130,7 +130,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
-            var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id));
+            var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (subject == null)
             {
 
