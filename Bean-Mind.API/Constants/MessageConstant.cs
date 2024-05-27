@@ -81,6 +81,19 @@
             public const string StudentsIsEmpty = "Không có học sinh nào.";
             public const string StudentNotFound = "Không tìm thấy học sinh";
         }
+
+        public static class Topic
+        {
+            public const string CreateNewTopicFailedMessage = "Tạo mới Chương thất bại";
+            public const string UpdateTopicFailedMessage = "Cập nhật thất bại";
+            public const string ListIsEmpty = "Không có gì cả";
+            public const string TopicNotFound = "Không tìm thấy topic nào";
+        }
+
+        public static class Chapter
+        {
+            public const string ChapterNotFound = "Không tìm thấy chương";
+        }
     }
 
 
