@@ -14,20 +14,20 @@ public partial class School
 
     [Column("Name ")]
     [StringLength(50)]
-    public string? Name { get; set; }
+    public string Name { get; set; } = null!;
 
-    public string? Address { get; set; }
+    public string Address { get; set; } = null!;
 
     [Column("Phone ")]
     [StringLength(50)]
-    public string? Phone { get; set; }
+    public string Phone { get; set; } = null!;
 
-    public string? Logo { get; set; }
+    public string Logo { get; set; } = null!;
 
-    public string? Description { get; set; }
+    public string Description { get; set; } = null!;
 
     [StringLength(50)]
-    public string? Email { get; set; }
+    public string Email { get; set; } = null!;
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
@@ -39,6 +39,9 @@ public partial class School
 
     [InverseProperty("School")]
     public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
+
+    [InverseProperty("School")]
+    public virtual ICollection<Curriculum> Curricula { get; set; } = new List<Curriculum>();
 
     [InverseProperty("School")]
     public virtual ICollection<Student> Students { get; set; } = new List<Student>();

@@ -6,32 +6,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind_Data.Models;
 
-[Table("Teacher")]
-public partial class Teacher
+[Table("Curriculum")]
+public partial class Curriculum
 {
     [Key]
     public Guid Id { get; set; }
 
     [StringLength(50)]
-    public string FirstName { get; set; } = null!;
+    public string Title { get; set; } = null!;
 
-    [StringLength(50)]
-    public string LastName { get; set; } = null!;
+    public string Description { get; set; } = null!;
 
     [Column(TypeName = "datetime")]
-    public DateTime DateOfBirth { get; set; }
+    public DateTime StartDate { get; set; }
 
-    public string ImgUrl { get; set; } = null!;
-
-    [StringLength(50)]
-    public string Email { get; set; } = null!;
-
-    [StringLength(50)]
-    public string Phone { get; set; } = null!;
+    [Column(TypeName = "datetime")]
+    public DateTime EndDate { get; set; }
 
     public Guid SchoolId { get; set; }
-
-    public Guid AccountId { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
@@ -41,11 +33,10 @@ public partial class Teacher
 
     public bool? DelFlg { get; set; }
 
-    [ForeignKey("AccountId")]
-    [InverseProperty("Teachers")]
-    public virtual Account Account { get; set; } = null!;
+    [InverseProperty("Curriculum")]
+    public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
 
     [ForeignKey("SchoolId")]
-    [InverseProperty("Teachers")]
+    [InverseProperty("Curricula")]
     public virtual School School { get; set; } = null!;
 }

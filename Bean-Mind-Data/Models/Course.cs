@@ -13,10 +13,18 @@ public partial class Course
     public Guid Id { get; set; }
 
     [StringLength(50)]
-    public string? Title { get; set; }
+    public string Title { get; set; } = null!;
 
     [StringLength(50)]
-    public string? Description { get; set; }
+    public string Description { get; set; } = null!;
+
+    [Column(TypeName = "datetime")]
+    public DateTime StartDate { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime EndDate { get; set; }
+
+    public Guid CurriculumId { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
@@ -25,4 +33,11 @@ public partial class Course
     public DateTime? UpdDate { get; set; }
 
     public bool? DelFlg { get; set; }
+
+    [ForeignKey("CurriculumId")]
+    [InverseProperty("Courses")]
+    public virtual Curriculum Curriculum { get; set; } = null!;
+
+    [InverseProperty("Course")]
+    public virtual ICollection<Subject> Subjects { get; set; } = new List<Subject>();
 }

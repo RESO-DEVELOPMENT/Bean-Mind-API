@@ -13,12 +13,15 @@ public partial class Account
     public Guid Id { get; set; }
 
     [StringLength(50)]
-    public string? UserName { get; set; }
+    public string UserName { get; set; } = null!;
 
     [StringLength(500)]
-    public string? Password { get; set; }
+    public string Password { get; set; } = null!;
 
     public Guid? SchoolId { get; set; }
+
+    [StringLength(20)]
+    public string Role { get; set; } = null!;
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
@@ -27,9 +30,6 @@ public partial class Account
     public DateTime? UpdDate { get; set; }
 
     public bool? DelFlg { get; set; }
-
-    [StringLength(20)]
-    public string Role { get; set; } = null!;
 
     [InverseProperty("Account")]
     public virtual ICollection<Parent> Parents { get; set; } = new List<Parent>();

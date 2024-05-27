@@ -6,18 +6,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind_Data.Models;
 
-[Table("Subject")]
-public partial class Subject
+[Table("Topic")]
+public partial class Topic
 {
     [Key]
     public Guid Id { get; set; }
 
     [StringLength(50)]
-    public string Name { get; set; } = null!;
+    public string Title { get; set; } = null!;
 
     public string Description { get; set; } = null!;
 
-    public Guid CourseId { get; set; }
+    public Guid ChapterId { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
@@ -27,10 +27,7 @@ public partial class Subject
 
     public bool? DelFlg { get; set; }
 
-    [InverseProperty("Subject")]
-    public virtual ICollection<Chapter> Chapters { get; set; } = new List<Chapter>();
-
-    [ForeignKey("CourseId")]
-    [InverseProperty("Subjects")]
-    public virtual Course Course { get; set; } = null!;
+    [ForeignKey("ChapterId")]
+    [InverseProperty("Topics")]
+    public virtual Chapter Chapter { get; set; } = null!;
 }

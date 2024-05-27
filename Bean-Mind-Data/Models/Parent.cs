@@ -13,20 +13,20 @@ public partial class Parent
     public Guid Id { get; set; }
 
     [StringLength(50)]
-    public string? FirstName { get; set; }
+    public string FirstName { get; set; } = null!;
 
     [StringLength(50)]
-    public string? LastName { get; set; }
+    public string LastName { get; set; } = null!;
 
     [StringLength(50)]
-    public string? Phone { get; set; }
+    public string Phone { get; set; } = null!;
 
     [StringLength(50)]
     public string? Email { get; set; }
 
     public string? Address { get; set; }
 
-    public Guid? AccountId { get; set; }
+    public Guid AccountId { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
@@ -38,7 +38,7 @@ public partial class Parent
 
     [ForeignKey("AccountId")]
     [InverseProperty("Parents")]
-    public virtual Account? Account { get; set; }
+    public virtual Account Account { get; set; } = null!;
 
     [InverseProperty("Parent")]
     public virtual ICollection<Student> Students { get; set; } = new List<Student>();
