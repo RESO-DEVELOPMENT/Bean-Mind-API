@@ -27,7 +27,7 @@ namespace Bean_Mind.API.Controllers
                 await _schoolService.CreateNewSchool(createNewSchoolRequest);
             if (response == null)
             {
-                return Problem(MessageConstant.School.CreateNewSchoolFailedMessage);
+                return Problem(MessageConstant.SchoolMessage.CreateNewSchoolFailedMessage);
             }
 
             return CreatedAtAction(nameof(CreateSchool), response);
@@ -43,7 +43,7 @@ namespace Bean_Mind.API.Controllers
             var response = await _schoolService.getListSchool(page, size);
             if (response == null)
             {
-                return Problem(MessageConstant.School.CreateNewSchoolFailedMessage);
+                return Problem(MessageConstant.SchoolMessage.CreateNewSchoolFailedMessage);
             }
 
             return Ok(response);
@@ -63,7 +63,7 @@ namespace Bean_Mind.API.Controllers
         }
 
         [HttpDelete(ApiEndPointConstant.School.DeleteSchool)]
-        [ProducesResponseType(typeof(GetSchoolResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<IActionResult> DeleteSchool([FromRoute] Guid id)
         {
@@ -75,7 +75,7 @@ namespace Bean_Mind.API.Controllers
         }
 
         [HttpPatch(ApiEndPointConstant.School.UpdateSchool)]
-        [ProducesResponseType(typeof(GetSchoolResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<IActionResult> UpdateSchool([FromBody] CreateNewSchoolRequest createNewSchoolRequest, [FromRoute] Guid id)
         {
@@ -83,7 +83,7 @@ namespace Bean_Mind.API.Controllers
             var response = await _schoolService.updateSchool(createNewSchoolRequest, id);
             if (response == false)
             {
-                return Problem(MessageConstant.School.UpdateSchoolFailedMessage);
+                return Problem(MessageConstant.SchoolMessage.UpdateSchoolFailedMessage);
             }
 
             return Ok(response);

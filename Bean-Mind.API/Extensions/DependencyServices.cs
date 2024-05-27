@@ -53,6 +53,8 @@ namespace Bean_Mind.API.Extensions
             services.AddScoped<IParentService, ParentService>();
             //Student
             services.AddScoped<IStudentService, StudentService>();
+            //Subject
+            services.AddScoped<ISubjectService, SubjectService>();
             //Chapter
             services.AddScoped<IChapterService, ChapterService>();
             //Topic
@@ -61,7 +63,6 @@ namespace Bean_Mind.API.Extensions
             services.AddScoped<ICourseService, CourseService>();
             //Curriculum
             services.AddScoped<ICurriculumService, CurriculumService>();
-
 
             return services;
         }

@@ -55,14 +55,15 @@ namespace Bean_Mind.API.Service.Implement
         {
             if(Id == Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
+                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
             }
             var school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
             if(school == null)
             {
                 
-                throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
+                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
             }
+            school.UpdDate = TimeUtils.GetCurrentSEATime();
             school.DelFlg = true;
             _unitOfWork.GetRepository<School>().UpdateAsync(school);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
@@ -84,7 +85,7 @@ namespace Bean_Mind.API.Service.Implement
         {
             if (id == Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
+                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
             }
             var school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(
                 selector: s => new GetSchoolResponse(s.Id, s.Name, s.Address, s.Phone, s.Email, s.Logo, s.Description),
@@ -92,7 +93,7 @@ namespace Bean_Mind.API.Service.Implement
         );
             if (school == null)
             {
-                throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
+                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
             }
             return school;
         }
@@ -101,12 +102,12 @@ namespace Bean_Mind.API.Service.Implement
         {
             if (Id == Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
+                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
             }
             var school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
             if (school == null)
             {
-                throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
+                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
             }
             school.Name = string.IsNullOrEmpty(createNewSchoolRequest.Name) ? school.Name : createNewSchoolRequest.Name;
             school.Address = string.IsNullOrEmpty(createNewSchoolRequest.Address) ? school.Address : createNewSchoolRequest.Address;

@@ -24,7 +24,7 @@ namespace Bean_Mind.API.Service.Implement
             var accounts = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(predicate : account => account.UserName.Equals(newParentRequest.UserName));
             if (accounts != null ) 
             {
-                throw new BadHttpRequestException(MessageConstant.Account.UsernameExisted);
+                throw new BadHttpRequestException(MessageConstant.AccountMessage.UsernameExisted);
             }
 
 
@@ -142,7 +142,7 @@ namespace Bean_Mind.API.Service.Implement
             parent.Phone = string.IsNullOrEmpty(request.Phone) ? parent.Phone : request.Phone;
             parent.Email = string.IsNullOrEmpty(request.Email) ? parent.Email : request.Email;
             parent.Address = string.IsNullOrEmpty(request.Address) ? parent.Address : request.Address;
-            parent.UpdDate = DateTime.UtcNow;
+            parent.UpdDate = TimeUtils.GetCurrentSEATime();
 
             _unitOfWork.GetRepository<Parent>().UpdateAsync(parent);
             var isSuccessful = await _unitOfWork.CommitAsync() > 0;
@@ -154,14 +154,15 @@ namespace Bean_Mind.API.Service.Implement
         {
             if (Id == Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.Parent.ParentIdEmpty);
+                throw new BadHttpRequestException(MessageConstant.ParentMessage.ParentIdEmpty);
             }
             var parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
             if (parent == null)
             {
 
-                throw new BadHttpRequestException(MessageConstant.Parent.ParentNotFound);
+                throw new BadHttpRequestException(MessageConstant.ParentMessage.ParentNotFound);
             }
+            parent.UpdDate = TimeUtils.GetCurrentSEATime();
             parent.DelFlg = true;
             _unitOfWork.GetRepository<Parent>().UpdateAsync(parent);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;

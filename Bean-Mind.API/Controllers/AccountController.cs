@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Bean_Mind.API.Service.Interface;
 
-using Bean_Mind.API.Payload.Response;
+using Bean_Mind.API.Payload.Response.Accounts;
 using Bean_Mind.API.Payload.Request;
 
 namespace Bean_Mind.API.Controllers
@@ -26,7 +26,7 @@ namespace Bean_Mind.API.Controllers
                 await _accountService.CreateNewAccount(createNewAccountRequest);
             if (response == null)
             {
-                return Problem(MessageConstant.Account.CreateSchoolAccountFailMessage);
+                return Problem(MessageConstant.AccountMessage.CreateSchoolAccountFailMessage);
             }
 
             return CreatedAtAction(nameof(CreateAccount), response);

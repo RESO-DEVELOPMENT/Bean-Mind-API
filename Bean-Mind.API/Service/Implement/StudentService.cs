@@ -30,7 +30,7 @@ namespace Bean_Mind.API.Service.Implement
                 predicate: account => account.UserName.Equals(request.UserName)
                 );
             if( accountS != null ) {
-                throw new BadHttpRequestException(MessageConstant.Account.UsernameExisted);
+                throw new BadHttpRequestException(MessageConstant.AccountMessage.UsernameExisted);
             }
             Account account = new Account()
             {
@@ -47,13 +47,13 @@ namespace Bean_Mind.API.Service.Implement
             var successAccount = await _unitOfWork.CommitAsync() > 0;
             if (!successAccount)
             {
-                throw new BadHttpRequestException(MessageConstant.Account.CreateStudentAccountFailMessage);
+                throw new BadHttpRequestException(MessageConstant.AccountMessage.CreateStudentAccountFailMessage);
             }
 
             School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(schoolId));
             if (school == null)
             {
-                throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
+                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
             }
             Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Id == parentId);
             if (parent == null)
@@ -112,7 +112,7 @@ namespace Bean_Mind.API.Service.Implement
         {
             if (id == Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.Student.StudentNotFound);
+                throw new BadHttpRequestException(MessageConstant.StudentMessage.StudentNotFound);
             }
             var student = await _unitOfWork.GetRepository<Student>().SingleOrDefaultAsync(
                 selector: s => new GetStudentResponse(s.Id, s.FirstName, s.LastName, s.DateOfBirth, s.ImgUrl, s.Parent, s.School),
@@ -120,7 +120,7 @@ namespace Bean_Mind.API.Service.Implement
                 include: s => s.Include(s => s.Parent));
             if(student == null)
             {
-                throw new BadHttpRequestException(MessageConstant.Student.StudentNotFound);
+                throw new BadHttpRequestException(MessageConstant.StudentMessage.StudentNotFound);
             }
             return student;
         }
@@ -129,14 +129,15 @@ namespace Bean_Mind.API.Service.Implement
         {
             if (studentId == Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.Student.StudentNotFound);
+                throw new BadHttpRequestException(MessageConstant.StudentMessage.StudentNotFound);
             }
             var student = await _unitOfWork.GetRepository<Student>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(studentId));
             if (student == null)
             {
 
-                throw new BadHttpRequestException(MessageConstant.Student.StudentNotFound);
+                throw new BadHttpRequestException(MessageConstant.StudentMessage.StudentNotFound);
             }
+            student.UpdDate = TimeUtils.GetCurrentSEATime();
             student.DelFlg = true;
             _unitOfWork.GetRepository<Student>().UpdateAsync(student);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
@@ -147,19 +148,19 @@ namespace Bean_Mind.API.Service.Implement
         {
             if (Id == Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.Student.StudentNotFound);
+                throw new BadHttpRequestException(MessageConstant.StudentMessage.StudentNotFound);
             }
             var student = await _unitOfWork.GetRepository<Student>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
             if (student == null)
             {
-                throw new BadHttpRequestException(MessageConstant.Student.StudentNotFound);
+                throw new BadHttpRequestException(MessageConstant.StudentMessage.StudentNotFound);
             }
             if (schoolId != Guid.Empty)
             {
                 School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(schoolId));
                 if (school == null)
                 {
-                    throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
+                    throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
                 }
                 student.SchoolId = schoolId;
             }
@@ -181,6 +182,7 @@ namespace Bean_Mind.API.Service.Implement
 
             _unitOfWork.GetRepository<Student>().UpdateAsync(student);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+
             return isSuccessful;
         }
     }
