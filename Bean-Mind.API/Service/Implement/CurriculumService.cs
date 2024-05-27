@@ -74,13 +74,13 @@ namespace Bean_Mind.API.Service.Implement
         {
             if (Id == Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.Curriculum.CurriculumNotFound);
+                throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
             }
             var curriculum = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
             if (curriculum == null)
             {
 
-                throw new BadHttpRequestException(MessageConstant.Curriculum
+                throw new BadHttpRequestException(MessageConstant.CurriculumMessage
                     .CurriculumNotFound);
             }
             curriculum.DelFlg = true;
@@ -145,19 +145,19 @@ namespace Bean_Mind.API.Service.Implement
         {
             if (Id == Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.Curriculum.CurriculumNotFound);
+                throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
             }
             var curriculum  = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
             if (curriculum == null)
             {
-                throw new BadHttpRequestException(MessageConstant.Curriculum.CurriculumNotFound);
+                throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
             }
             if (SchoolId != Guid.Empty)
             {
                 School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(SchoolId));
                 if (school == null)
                 {
-                    throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
+                    throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
                 }
                 curriculum.SchoolId = SchoolId;
             }

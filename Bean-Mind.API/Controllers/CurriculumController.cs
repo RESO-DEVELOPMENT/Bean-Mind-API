@@ -24,7 +24,7 @@ namespace Bean_Mind.API.Controllers
             CreateNewCurriculumResponse response = await _curriculumService.CreateNewCurriculum(createNewCurriculumRequest);
             if (response == null)
             {
-                return Problem(MessageConstant.Curriculum.CreateNewCurriculumFailedMessage);
+                return Problem(MessageConstant.CurriculumMessage.CreateNewCurriculumFailedMessage);
             }
 
             return CreatedAtAction(nameof(CreateCurriculum), response);
@@ -38,7 +38,7 @@ namespace Bean_Mind.API.Controllers
             var response = await _curriculumService.getListCurriculum(page, size);
             if (response == null)
             {
-                return Problem(MessageConstant.Curriculum.CurriculumsIsEmpty);
+                return Problem(MessageConstant.CurriculumMessage.CurriculumsIsEmpty);
             }
 
             return Ok(response);

@@ -98,7 +98,7 @@
             public const string UpdateChapterFailedMessage = "Update thông tin chương thất bại";
         }
 
-        public static class Topic
+        public static class TopicMessage
         {
             public const string CreateNewTopicFailedMessage = "Tạo mới Chương thất bại";
             public const string UpdateTopicFailedMessage = "Cập nhật thất bại";
@@ -106,7 +106,7 @@
             public const string TopicNotFound = "Không tìm thấy topic nào";
         }
       
-        public static class Curriculum
+        public static class CurriculumMessage
         {
             public const string CreateNewCurriculumFailedMessage = "Thêm chương trình học mới thất bại";
             public const string CurriculumsIsEmpty = "Không có chương trình học nào.";

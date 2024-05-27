@@ -148,7 +148,7 @@ namespace Bean_Mind.API.Service.Implement
                 Curriculum curriculum = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(curriculumId));
                 if (curriculum == null)
                 {
-                    throw new BadHttpRequestException(MessageConstant.Curriculum.CurriculumNotFound);
+                    throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
                 }
                 course.CurriculumId = curriculumId;
             }

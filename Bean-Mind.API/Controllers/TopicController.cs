@@ -27,7 +27,7 @@ namespace Bean_Mind.API.Controllers
             CreateNewTopicResponse response = await _topicService.CreateNewTopic(createNewTopicRequest, chatterId);
             if (response == null)
             {
-                return Problem(MessageConstant.Topic.CreateNewTopicFailedMessage);
+                return Problem(MessageConstant.TopicMessage.CreateNewTopicFailedMessage);
             }
             return CreatedAtAction(nameof(CreateTopic), response);
         }
@@ -40,7 +40,7 @@ namespace Bean_Mind.API.Controllers
             var response = await _topicService.GetListTopic(page, size);
             if(response == null)
             {
-                return Problem(MessageConstant.Topic.ListIsEmpty);
+                return Problem(MessageConstant.TopicMessage.ListIsEmpty);
             }
             return Ok(response);
         }
@@ -71,7 +71,7 @@ namespace Bean_Mind.API.Controllers
             var response = await _topicService.UpdateTopic(topicId, chapterId, request);
             if(response == false)
             {
-                return Problem(MessageConstant.Topic.UpdateTopicFailedMessage);
+                return Problem(MessageConstant.TopicMessage.UpdateTopicFailedMessage);
             }
             return Ok(response);
         }
