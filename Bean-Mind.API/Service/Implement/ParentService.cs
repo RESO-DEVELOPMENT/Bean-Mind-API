@@ -14,9 +14,9 @@ namespace Bean_Mind.API.Service.Implement
    
         public class ParentService : BaseService<ParentService>, IParentService
         {
-            public ParentService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<ParentService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, logger, mapper, httpContextAccessor)
-            {
-            }
+                public ParentService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<ParentService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, logger, mapper, httpContextAccessor)
+                {
+                }
 
             public async Task<CreateNewParentResponse> AddParent(CreateNewParentResquest newParentRequest)
             {
