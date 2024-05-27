@@ -82,17 +82,28 @@
             public const string StudentNotFound = "Không tìm thấy học sinh";
         }
 
+        public static class SubjectMessage
+        {
+            public const string SubjectNotFound = "Không tìm thấy môn học";
+            public const string SubjectsIsEmpty = "Không có môn học nào.";
+            public const string CreateNewSubjectFailedMessage = "Tạo mới phụ huynh thất bại";
+            public const string UpdateSubjectFailedMessage = "Update thông tin phụ huynh thất bại";
+        }
+
+        public static class ChapterMessage
+        {
+            public const string CreateNewChapterFailedMessage = "Thêm chương mới thất bại";
+            public const string ChaptersIsEmpty = "Không có chương nào.";
+            public const string ChapterNotFound = "Không tìm thấy chương";
+            public const string UpdateChapterFailedMessage = "Update thông tin chương thất bại";
+        }
+
         public static class Topic
         {
             public const string CreateNewTopicFailedMessage = "Tạo mới Chương thất bại";
             public const string UpdateTopicFailedMessage = "Cập nhật thất bại";
             public const string ListIsEmpty = "Không có gì cả";
             public const string TopicNotFound = "Không tìm thấy topic nào";
-        }
-
-        public static class Chapter
-        {
-            public const string ChapterNotFound = "Không tìm thấy chương";
         }
       
         public static class Curriculum
@@ -107,9 +118,6 @@
             public const string CreateNewCourseFailedMessage = "Tạo mới khóa học thất bại";
             public const string CoursesIsEmpty = "Không có khóa học nào.";
             public const string CourseNotFound = "Không tìm thấy khóa học";
-            
         }
     }
-
-
 }
