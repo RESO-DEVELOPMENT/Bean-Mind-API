@@ -87,6 +87,7 @@
             public const string CurriculumsIsEmpty = "Không có chương trình học nào.";
             public const string CurriculumNotFound = "Không tìm thấy chương trình học";
         }
+        
     }
 
 
