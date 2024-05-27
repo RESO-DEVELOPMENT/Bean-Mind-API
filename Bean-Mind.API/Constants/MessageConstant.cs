@@ -81,6 +81,19 @@
             public const string StudentsIsEmpty = "Không có học sinh nào.";
             public const string StudentNotFound = "Không tìm thấy học sinh";
         }
+        public static class Curriculum
+        {
+            public const string CreateNewCurriculumFailedMessage = "Thêm chương trình học mới thất bại";
+            public const string CurriculumsIsEmpty = "Không có chương trình học nào.";
+            public const string CurriculumNotFound = "Không tìm thấy chương trình học";
+        }
+        public static class CourseMessage
+        {
+            public const string CreateNewCourseFailedMessage = "Tạo mới khóa học thất bại";
+            public const string CoursesIsEmpty = "Không có khóa học nào.";
+            public const string CourseNotFound = "Không tìm thấy khóa học";
+            
+        }
     }
 
 
