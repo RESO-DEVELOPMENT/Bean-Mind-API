@@ -32,9 +32,9 @@ namespace Bean_Mind.API.Controllers
             return CreatedAtAction(nameof(CreateStudent), response);
         }
 
-        [HttpGet(ApiEndPointConstant.Student.GetAll)]
-        [ProducesResponseType(typeof(IPaginate<GetStudentResponse>), StatusCodes.Status200OK)]
-        [ProducesErrorResponseType(typeof(ProblemDetails))]
+            [HttpGet(ApiEndPointConstant.Student.GetAll)]
+            [ProducesResponseType(typeof(IPaginate<GetStudentResponse>), StatusCodes.Status200OK)]
+            [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<IActionResult> GetListStudent([FromQuery] int page, [FromQuery] int size) { 
             var response = await _studentService.getListStudent(page, size);
             if(response == null)
