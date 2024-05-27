@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper;
 using Azure.Core;
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Curriculums;
@@ -83,6 +84,15 @@ namespace Bean_Mind.API.Service.Implement
                     .CurriculumNotFound);
             }
             curriculum.DelFlg = true;
+            var courses = await _unitOfWork.GetRepository<Course>().GetListAsync(predicate: c => c.CurriculumId.Equals(Id));
+            foreach (var course in courses)
+            {
+                course.DelFlg = true;
+                course.UpdDate = TimeUtils.GetCurrentSEATime();
+                _unitOfWork.GetRepository<Course>().UpdateAsync(course);
+
+            }
+            await _unitOfWork.CommitAsync();
             _unitOfWork.GetRepository<Curriculum>().UpdateAsync(curriculum);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;
