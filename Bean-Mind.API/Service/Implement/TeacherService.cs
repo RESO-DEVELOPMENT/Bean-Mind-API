@@ -176,6 +176,7 @@ namespace Bean_Mind.API.Service.Implement
         {
 
             Teacher teachers = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(predicate: x => x.Id.Equals(teacherId));
+            teachers.UpdDate = TimeUtils.GetCurrentSEATime();
             teachers.DelFlg = true;
             _unitOfWork.GetRepository<Teacher>().UpdateAsync(teachers);
             var isSuccessful = await _unitOfWork.CommitAsync() > 0;

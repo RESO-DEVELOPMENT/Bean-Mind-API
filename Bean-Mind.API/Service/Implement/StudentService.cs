@@ -137,6 +137,7 @@ namespace Bean_Mind.API.Service.Implement
 
                 throw new BadHttpRequestException(MessageConstant.Student.StudentNotFound);
             }
+            student.UpdDate = TimeUtils.GetCurrentSEATime();
             student.DelFlg = true;
             _unitOfWork.GetRepository<Student>().UpdateAsync(student);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
@@ -181,6 +182,7 @@ namespace Bean_Mind.API.Service.Implement
 
             _unitOfWork.GetRepository<Student>().UpdateAsync(student);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+
             return isSuccessful;
         }
     }

@@ -63,6 +63,7 @@ namespace Bean_Mind.API.Service.Implement
                 
                 throw new BadHttpRequestException(MessageConstant.School.SchoolNotFound);
             }
+            school.UpdDate = TimeUtils.GetCurrentSEATime();
             school.DelFlg = true;
             _unitOfWork.GetRepository<School>().UpdateAsync(school);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;

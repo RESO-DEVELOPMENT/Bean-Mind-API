@@ -142,7 +142,7 @@ namespace Bean_Mind.API.Service.Implement
             parent.Phone = string.IsNullOrEmpty(request.Phone) ? parent.Phone : request.Phone;
             parent.Email = string.IsNullOrEmpty(request.Email) ? parent.Email : request.Email;
             parent.Address = string.IsNullOrEmpty(request.Address) ? parent.Address : request.Address;
-            parent.UpdDate = DateTime.UtcNow;
+            parent.UpdDate = TimeUtils.GetCurrentSEATime();
 
             _unitOfWork.GetRepository<Parent>().UpdateAsync(parent);
             var isSuccessful = await _unitOfWork.CommitAsync() > 0;
@@ -162,6 +162,7 @@ namespace Bean_Mind.API.Service.Implement
 
                 throw new BadHttpRequestException(MessageConstant.Parent.ParentNotFound);
             }
+            parent.UpdDate = TimeUtils.GetCurrentSEATime();
             parent.DelFlg = true;
             _unitOfWork.GetRepository<Parent>().UpdateAsync(parent);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;

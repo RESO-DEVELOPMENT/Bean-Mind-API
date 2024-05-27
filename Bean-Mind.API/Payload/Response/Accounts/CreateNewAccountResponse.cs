@@ -1,6 +1,6 @@
 ﻿using Bean_Mind_Data.Enums;
 
-namespace Bean_Mind.API.Payload.Response
+namespace Bean_Mind.API.Payload.Response.Accounts
 {
     public class CreateNewAccountResponse
     {

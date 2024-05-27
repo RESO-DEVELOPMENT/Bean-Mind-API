@@ -13,7 +13,7 @@ public partial class Subject
     public Guid Id { get; set; }
 
     [StringLength(50)]
-    public string Name { get; set; } = null!;
+    public string Title { get; set; } = null!;
 
     public string Description { get; set; } = null!;
 

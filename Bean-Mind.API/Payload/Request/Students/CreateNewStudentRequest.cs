@@ -9,7 +9,7 @@ namespace Bean_Mind.API.Payload.Request.Students
 
         public string? LastName { get; set; }
 
-        public DateTime? DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
         public string? ImgUrl { get; set; }
         [Required(ErrorMessage = "Username is missing")]

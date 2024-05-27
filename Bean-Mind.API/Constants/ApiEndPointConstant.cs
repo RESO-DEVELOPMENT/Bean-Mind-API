@@ -62,5 +62,15 @@ namespace Bean_Mind.API.Constants
             public const string UpdateParent = ParentEndpoint + "/{parentId}";
             public const string DeleteParent = ParentEndpoint + "/{parentId}";
         }
+
+        public static class Subject
+        {
+            public const string SubjectEndpoint = ApiEndpoint + "/subjects";
+            public const string Create = SubjectEndpoint;
+            public const string GetAll = SubjectEndpoint;
+            public const string GetById = SubjectEndpoint + "/{subjectId}";
+            public const string UpdateSubject = SubjectEndpoint + "/{subjectId}";
+            public const string DeleteSubject = SubjectEndpoint + "/{subjectId}";
+        }
     }
 }

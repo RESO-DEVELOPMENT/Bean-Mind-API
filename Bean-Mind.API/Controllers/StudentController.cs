@@ -26,7 +26,7 @@ namespace Bean_Mind.API.Controllers
             CreateNewStudentResponse response = await _studentService.CreateNewStudent(createNewStudentRequest, schoolId, parentId);
             if (response == null)
             {
-                return Problem(MessageConstant.School.CreateNewSchoolFailedMessage);
+                return Problem(MessageConstant.Student.CreateNewStudentFailedMessage);
             }
 
             return CreatedAtAction(nameof(CreateStudent), response);
