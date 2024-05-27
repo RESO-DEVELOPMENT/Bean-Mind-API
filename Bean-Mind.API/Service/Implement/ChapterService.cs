@@ -25,7 +25,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
-            Subject subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(subjectId));
+            Subject subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(subjectId) && s.DelFlg != true);
             if (subject == null)
             {
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
@@ -97,7 +97,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
             }
-            var chapter = await _unitOfWork.GetRepository<Chapter>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id));
+            var chapter = await _unitOfWork.GetRepository<Chapter>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (chapter == null)
             {
                 throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
@@ -107,7 +107,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
-            var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(subjectId));
+            var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(subjectId) && c.DelFlg != true);
             if (subject == null)
             {
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
@@ -129,7 +129,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
             }
-            var chapter = await _unitOfWork.GetRepository<Chapter>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id));
+            var chapter = await _unitOfWork.GetRepository<Chapter>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (chapter == null)
             {
 
