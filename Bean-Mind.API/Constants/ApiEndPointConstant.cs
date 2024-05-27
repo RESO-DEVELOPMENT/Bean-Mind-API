@@ -62,6 +62,7 @@ namespace Bean_Mind.API.Constants
             public const string UpdateParent = ParentEndpoint + "/{parentId}";
             public const string DeleteParent = ParentEndpoint + "/{parentId}";
         }
+
         public static class Course
         {
             public const string CourseEndpoint = ApiEndpoint + "/courses";
@@ -72,5 +73,14 @@ namespace Bean_Mind.API.Constants
             public const string DeleteCourse = CourseEndpoint + "/{id}";
         }
 
+        public static class Curriculum
+        {
+            public const string CurriculumEndpoint = ApiEndpoint + "/curriculums";
+            public const string Create = CurriculumEndpoint;
+            public const string GetAll = CurriculumEndpoint;
+            public const string GetById = CurriculumEndpoint + "/{id}";
+            public const string DeleteCurriculum = CurriculumEndpoint + "/{id}";
+            public const string UpdateCurriculum = CurriculumEndpoint + "/{id}";
+        }
     }
 }
