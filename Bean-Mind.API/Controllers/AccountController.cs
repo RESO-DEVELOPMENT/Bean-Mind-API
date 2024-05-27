@@ -26,7 +26,7 @@ namespace Bean_Mind.API.Controllers
                 await _accountService.CreateNewAccount(createNewAccountRequest);
             if (response == null)
             {
-                return Problem(MessageConstant.Account.CreateSchoolAccountFailMessage);
+                return Problem(MessageConstant.AccountMessage.CreateSchoolAccountFailMessage);
             }
 
             return CreatedAtAction(nameof(CreateAccount), response);

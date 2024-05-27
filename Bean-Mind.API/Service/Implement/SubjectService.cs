@@ -24,12 +24,12 @@ namespace Bean_Mind.API.Service.Implement
             _logger.LogInformation($"Create new Subject with {request.Title}");
             if (courseId == Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.Course.CourseNotFound);
+                throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
             }
             Course course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(courseId));
             if (course == null)
             {
-                throw new BadHttpRequestException(MessageConstant.Course.CourseNotFound);
+                throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
             }
 
             Subject newSubject = new Subject()
@@ -70,13 +70,17 @@ namespace Bean_Mind.API.Service.Implement
                 page: page,
                 size: size
                 );
+            if (subjects == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectsIsEmpty);
+            }
             return subjects;
         }
         public async Task<GetSubjectResponse> getSubjectById(Guid id)
         {
             if (id == Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.Subject.SubjectNotFound);
+                throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
             var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(
                 selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description),
@@ -84,7 +88,7 @@ namespace Bean_Mind.API.Service.Implement
                 include: s => s.Include(s => s.Chapters));
             if (subject == null)
             {
-                throw new BadHttpRequestException(MessageConstant.Subject.SubjectNotFound);
+                throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
             return subject;
         }
@@ -92,22 +96,22 @@ namespace Bean_Mind.API.Service.Implement
         {
             if (id == Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.Subject.SubjectNotFound);
+                throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
             var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id));
             if (subject == null)
             {
-                throw new BadHttpRequestException(MessageConstant.Subject.SubjectNotFound);
+                throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
 
             if (courseId == Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.Course.CourseNotFound);
+                throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
             }
             var course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(courseId));
             if (course == null)
             {
-                throw new BadHttpRequestException(MessageConstant.Course.CourseNotFound);
+                throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
             }
 
             subject.Title = string.IsNullOrEmpty(request.Title) ? subject.Title : request.Title;
@@ -124,13 +128,13 @@ namespace Bean_Mind.API.Service.Implement
         {
             if (id == Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.Subject.SubjectNotFound);
+                throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
             var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id));
             if (subject == null)
             {
 
-                throw new BadHttpRequestException(MessageConstant.Subject.SubjectNotFound);
+                throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
             subject.UpdDate = TimeUtils.GetCurrentSEATime();
             subject.DelFlg = true;

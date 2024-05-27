@@ -26,7 +26,7 @@ namespace Bean_Mind.API.Controllers
             CreateNewStudentResponse response = await _studentService.CreateNewStudent(createNewStudentRequest, schoolId, parentId);
             if (response == null)
             {
-                return Problem(MessageConstant.Student.CreateNewStudentFailedMessage);
+                return Problem(MessageConstant.StudentMessage.CreateNewStudentFailedMessage);
             }
 
             return CreatedAtAction(nameof(CreateStudent), response);
@@ -39,7 +39,7 @@ namespace Bean_Mind.API.Controllers
             var response = await _studentService.getListStudent(page, size);
             if(response == null)
             {
-                return Problem(MessageConstant.Student.StudentsIsEmpty);
+                return Problem(MessageConstant.StudentMessage.StudentsIsEmpty);
             }
 
             return Ok(response);

@@ -58,9 +58,9 @@ namespace Bean_Mind.API.Constants
             public const string ParentEndpoint = ApiEndpoint + "/parents";
             public const string Create = ParentEndpoint;
             public const string GetAll = ParentEndpoint;
-            public const string GetById = ParentEndpoint + "/{parentId}";
-            public const string UpdateParent = ParentEndpoint + "/{parentId}";
-            public const string DeleteParent = ParentEndpoint + "/{parentId}";
+            public const string GetById = ParentEndpoint + "/{id}";
+            public const string UpdateParent = ParentEndpoint + "/{id}";
+            public const string DeleteParent = ParentEndpoint + "/{id}";
         }
 
         public static class Subject
@@ -68,9 +68,9 @@ namespace Bean_Mind.API.Constants
             public const string SubjectEndpoint = ApiEndpoint + "/subjects";
             public const string Create = SubjectEndpoint;
             public const string GetAll = SubjectEndpoint;
-            public const string GetById = SubjectEndpoint + "/{subjectId}";
-            public const string UpdateSubject = SubjectEndpoint + "/{subjectId}";
-            public const string DeleteSubject = SubjectEndpoint + "/{subjectId}";
+            public const string GetById = SubjectEndpoint + "/{id}";
+            public const string UpdateSubject = SubjectEndpoint + "/{id}";
+            public const string DeleteSubject = SubjectEndpoint + "/{id}";
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Bean_Mind.API.Controllers
             CreateNewSubjectResponse response = await _subjectService.CreateNewSubject(createNewStudentRequest, courseId);
             if (response == null)
             {
-                return Problem(MessageConstant.Subject.CreateNewSubjectFailedMessage);
+                return Problem(MessageConstant.SubjectMessage.CreateNewSubjectFailedMessage);
             }
 
             return CreatedAtAction(nameof(CreateStudent), response);
@@ -42,7 +42,7 @@ namespace Bean_Mind.API.Controllers
             var response = await _subjectService.getListSubject(page, size);
             if (response == null)
             {
-                return Problem(MessageConstant.Subject.SubjectsIsEmpty);
+                return Problem(MessageConstant.SubjectMessage.SubjectsIsEmpty);
             }
             return Ok(response);
         }
@@ -69,7 +69,7 @@ namespace Bean_Mind.API.Controllers
 
         }
 
-        [HttpPatch(ApiEndPointConstant.School.UpdateSchool)]
+        [HttpPatch(ApiEndPointConstant.Subject.UpdateSubject)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<IActionResult> UpdateSchool([FromBody] UpdateSubjectRequest request, [FromRoute] Guid id, [FromQuery] Guid courseId)
@@ -78,7 +78,7 @@ namespace Bean_Mind.API.Controllers
             var response = await _subjectService.UpdateSubject(id, request, courseId);
             if (response == false)
             {
-                return Problem(MessageConstant.Subject.UpdateSubjectFailedMessage);
+                return Problem(MessageConstant.SubjectMessage.UpdateSubjectFailedMessage);
             }
 
             return Ok(response);

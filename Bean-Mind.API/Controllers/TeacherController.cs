@@ -91,7 +91,7 @@ namespace Bean_Mind.API.Controllers
                 return BadRequest(new ErrorResponse()
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
-                    Error = MessageConstant.Teacher.InvalidTeacherData,
+                    Error = MessageConstant.TeacherMessage.InvalidTeacherData,
                     TimeStamp = TimeUtils.GetCurrentSEATime()
                 });
             }
@@ -104,12 +104,12 @@ namespace Bean_Mind.API.Controllers
                     return BadRequest(new ErrorResponse()
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
-                        Error = MessageConstant.Teacher.UpdateTeacherFailedMessage,
+                        Error = MessageConstant.TeacherMessage.UpdateTeacherFailedMessage,
                         TimeStamp = TimeUtils.GetCurrentSEATime()
                     });
                 }
 
-                return Ok(MessageConstant.Teacher.UpdateTeacherSuccessfulMessage);
+                return Ok(MessageConstant.TeacherMessage.UpdateTeacherSuccessfulMessage);
             }
             catch (BadHttpRequestException ex)
             {

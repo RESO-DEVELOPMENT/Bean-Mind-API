@@ -8,7 +8,7 @@
             public const string DeactivatedAccount = "Tài khoản đang bị vô hiệu hoá";
         }
 
-        public static class Account
+        public static class AccountMessage
         {
             public const string UsernameExisted = "Tài khoản đã tồn tại";
             public const string CreateAccountWithWrongRoleMessage = "Please create with acceptent role";
@@ -30,7 +30,7 @@
             public const string UpdateAccountPassFailedMessage = "Cập nhật status tài khoản thất bại";
         }
 
-        public static class User
+        public static class UserMessage
         {
             public const string CreateNewUserFailedMessage = "Tạo mới Người dùng thất bại";
             public const string UpdateUserFailedMessage = "Cập nhật thông tin Người dùng thất bại";
@@ -48,7 +48,7 @@
             public const string InputPin = "Nhập mã pin để đăng nhập";
         }
 
-        public static class School
+        public static class SchoolMessage
         {
             public const string CreateNewSchoolFailedMessage = "Tạo mới trường học thất bại";
             public const string SchoolNotFound = "Không tìm thấy trường.";
@@ -57,7 +57,7 @@
 
         }
 
-        public static class Teacher
+        public static class TeacherMessage
         {
             public const string EmptyCategoryIdMessage = "The category ID cannot be empty.";
             public const string InvalidTeacherData = "Invalid teacher data provided.";
@@ -66,7 +66,7 @@
             public const string UpdateTeacherSuccessfulMessage = "Teacher information updated successfully.";
             // Thêm các thông điệp khác liên quan đến Teacher tại đây
         }
-        public static class Parent
+        public static class ParentMessage
         {
             public const string CreateNewParentFailedMessage = "Tạo mới phụ huynh thất bại";
             public const string ParentNotFound = "Không tìm thấy phụ huynh.";
@@ -75,19 +75,19 @@
 
             // Thêm các thông điệp khác liên quan đến phụ huynh tại đây
         }
-        public static class Student
+        public static class StudentMessage
         {
             public const string CreateNewStudentFailedMessage = "Thêm học sinh mới thất bại";
             public const string StudentsIsEmpty = "Không có học sinh nào.";
             public const string StudentNotFound = "Không tìm thấy học sinh";
         }
 
-        public static class Course
+        public static class CourseMessage
         {
             public const string CourseNotFound = "Không tìm thấy khóa học";
         }
 
-        public static class Subject
+        public static class SubjectMessage
         {
             public const string SubjectNotFound = "Không tìm thấy môn học";
             public const string SubjectsIsEmpty = "Không có môn học nào.";
