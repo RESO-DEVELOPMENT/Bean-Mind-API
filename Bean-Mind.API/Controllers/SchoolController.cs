@@ -63,7 +63,7 @@ namespace Bean_Mind.API.Controllers
         }
 
         [HttpDelete(ApiEndPointConstant.School.DeleteSchool)]
-        [ProducesResponseType(typeof(GetSchoolResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<IActionResult> DeleteSchool([FromRoute] Guid id)
         {
@@ -75,7 +75,7 @@ namespace Bean_Mind.API.Controllers
         }
 
         [HttpPatch(ApiEndPointConstant.School.UpdateSchool)]
-        [ProducesResponseType(typeof(GetSchoolResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<IActionResult> UpdateSchool([FromBody] CreateNewSchoolRequest createNewSchoolRequest, [FromRoute] Guid id)
         {

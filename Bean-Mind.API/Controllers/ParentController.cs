@@ -7,6 +7,7 @@ using Bean_Mind_Data.Paginate;
 using Microsoft.AspNetCore.Mvc;
 using Bean_Mind.API.Service.Implement;
 using Bean_Mind_Data.Models;
+using Bean_Mind.API.Utils;
 
 namespace Bean_Mind.API.Controllers
 {
@@ -32,7 +33,7 @@ namespace Bean_Mind.API.Controllers
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Error = "Invalid input data",
-                    TimeStamp = DateTime.Now
+                    TimeStamp = TimeUtils.GetCurrentSEATime()
                 });
             }
 
@@ -43,7 +44,7 @@ namespace Bean_Mind.API.Controllers
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Error = "Failed to create parent",
-                    TimeStamp = DateTime.Now
+                    TimeStamp = TimeUtils.GetCurrentSEATime()
                 });
             }
 
@@ -119,7 +120,7 @@ namespace Bean_Mind.API.Controllers
         }
 
         [HttpDelete(ApiEndPointConstant.Parent.DeleteParent)]
-        [ProducesResponseType(typeof(Parent), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(NotFoundObjectResult))]
         public async Task<IActionResult> RemoveParents(Guid Id)
         {

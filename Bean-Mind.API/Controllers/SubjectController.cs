@@ -23,7 +23,7 @@ namespace Bean_Mind.API.Controllers
         [HttpPost(ApiEndPointConstant.Subject.Create)]
         [ProducesResponseType(typeof(CreateNewSubjectResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> CreateStudent([FromBody] CreateNewSubjectRequest createNewStudentRequest, [FromQuery] Guid courseId)
+        public async Task<IActionResult> CreateSubject([FromBody] CreateNewSubjectRequest createNewStudentRequest, [FromQuery] Guid courseId)
         {
             CreateNewSubjectResponse response = await _subjectService.CreateNewSubject(createNewStudentRequest, courseId);
             if (response == null)
@@ -31,13 +31,13 @@ namespace Bean_Mind.API.Controllers
                 return Problem(MessageConstant.SubjectMessage.CreateNewSubjectFailedMessage);
             }
 
-            return CreatedAtAction(nameof(CreateStudent), response);
+            return CreatedAtAction(nameof(CreateSubject), response);
         }
 
         [HttpGet(ApiEndPointConstant.Subject.GetAll)]
         [ProducesResponseType(typeof(IPaginate<GetSubjectResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetListStudent([FromQuery] int page, [FromQuery] int size)
+        public async Task<IActionResult> GetListSubject([FromQuery] int page, [FromQuery] int size)
         {
             var response = await _subjectService.getListSubject(page, size);
             if (response == null)
@@ -50,7 +50,7 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.Subject.GetById)]
         [ProducesResponseType(typeof(GetSubjectResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetStudent([FromRoute] Guid id)
+        public async Task<IActionResult> GetSubject([FromRoute] Guid id)
         {
             var response = await _subjectService.getSubjectById(id);
 
@@ -60,7 +60,7 @@ namespace Bean_Mind.API.Controllers
         [HttpDelete(ApiEndPointConstant.Subject.DeleteSubject)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> DeleteSchool([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteSubject([FromRoute] Guid id)
         {
 
             var response = await _subjectService.RemoveSubject(id);
@@ -72,7 +72,7 @@ namespace Bean_Mind.API.Controllers
         [HttpPatch(ApiEndPointConstant.Subject.UpdateSubject)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> UpdateSchool([FromBody] UpdateSubjectRequest request, [FromRoute] Guid id, [FromQuery] Guid courseId)
+        public async Task<IActionResult> UpdateSubject([FromBody] UpdateSubjectRequest request, [FromRoute] Guid id, [FromQuery] Guid courseId)
         {
 
             var response = await _subjectService.UpdateSubject(id, request, courseId);

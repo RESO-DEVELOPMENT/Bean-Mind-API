@@ -56,7 +56,7 @@ namespace Bean_Mind.API.Controllers
         }
 
         [HttpDelete(ApiEndPointConstant.Student.DeleteStudent)]
-        [ProducesResponseType(typeof(GetStudentResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<IActionResult> DeleteStudent([FromRoute] Guid id)
         {
@@ -65,7 +65,7 @@ namespace Bean_Mind.API.Controllers
         }
 
         [HttpPatch(ApiEndPointConstant.Student.GetById)]
-        [ProducesResponseType(typeof(GetStudentResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<IActionResult> UpdateStudent([FromRoute] Guid id, [FromBody] UpdateStudentRequest request, [FromQuery] Guid schoolId, [FromQuery] Guid parentId)
         {
