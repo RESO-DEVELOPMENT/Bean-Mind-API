@@ -35,16 +35,25 @@ try
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddConfigSwagger();
+    builder.Services.AddSwaggerGen();
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
-    app.UseSwagger();
+    app.UseSwagger(options =>
+    {
+        options.SerializeAsV2 = true;
+    });
+    // app.UseSwaggerUI(c =>
+    // {
+    //     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bean-Mind Web API v1");
+    //     c.RoutePrefix = string.Empty;
+    // });
     app.UseSwaggerUI();
     app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-    //app.UseHttpsRedirection();
+    app.UseHttpsRedirection();
     app.UseCors(CorsConstant.PolicyName);
-    app.UseAuthentication();
+    // app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();
