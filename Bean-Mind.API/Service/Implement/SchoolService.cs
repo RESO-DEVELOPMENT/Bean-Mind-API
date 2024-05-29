@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Schools;
 using Bean_Mind.API.Payload.Response.Schools;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
+using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
 
@@ -32,8 +34,22 @@ namespace Bean_Mind.API.Service.Implement
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false,
             };
+            
             await _unitOfWork.GetRepository<School>().InsertAsync(newSchool);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+            Account account = new Account()
+            {
+                Id = Guid.NewGuid(),
+                UserName = createNewSchoolRequest.UserName,
+                Password = PasswordUtil.HashPassword(createNewSchoolRequest.Password),
+                InsDate = TimeUtils.GetCurrentSEATime(),
+                UpdDate = TimeUtils.GetCurrentSEATime(),
+                DelFlg = false,
+                Role = RoleEnum.SysSchool.GetDescriptionFromEnum(),
+                SchoolId = newSchool.Id,
+            };
+            await _unitOfWork.GetRepository<Account>().InsertAsync(account);
+            await _unitOfWork.CommitAsync();
             CreateNewSchoolResponse createNewSchoolResponse = null;
             if (isSuccessful)
             {
@@ -98,7 +114,7 @@ namespace Bean_Mind.API.Service.Implement
             return school;
         }
 
-        public async Task<bool> updateSchool(CreateNewSchoolRequest createNewSchoolRequest, Guid Id)
+        public async Task<bool> updateSchool(UpdateSchoolRequest request, Guid Id)
         {
             if (Id == Guid.Empty)
             {
@@ -109,12 +125,12 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
             }
-            school.Name = string.IsNullOrEmpty(createNewSchoolRequest.Name) ? school.Name : createNewSchoolRequest.Name;
-            school.Address = string.IsNullOrEmpty(createNewSchoolRequest.Address) ? school.Address : createNewSchoolRequest.Address;
-            school.Phone = string.IsNullOrEmpty(createNewSchoolRequest.Phone) ? school.Phone : createNewSchoolRequest.Phone;
-            school.Logo = string.IsNullOrEmpty(createNewSchoolRequest.Logo) ? school.Logo : createNewSchoolRequest.Logo;
-            school.Description = string.IsNullOrEmpty(createNewSchoolRequest.Description) ? school.Description : createNewSchoolRequest.Description;
-            school.Email = string.IsNullOrEmpty(createNewSchoolRequest.Email) ? school.Email : createNewSchoolRequest.Email;
+            school.Name = string.IsNullOrEmpty(request.Name) ? school.Name : request.Name;
+            school.Address = string.IsNullOrEmpty(request.Address) ? school.Address : request.Address;
+            school.Phone = string.IsNullOrEmpty(request.Phone) ? school.Phone : request.Phone;
+            school.Logo = string.IsNullOrEmpty(request.Logo) ? school.Logo : request.Logo;
+            school.Description = string.IsNullOrEmpty(request.Description) ? school.Description : request.Description;
+            school.Email = string.IsNullOrEmpty(request.Email) ? school.Email : request.Email;
             school.UpdDate = TimeUtils.GetCurrentSEATime();
 
             _unitOfWork.GetRepository<School>().UpdateAsync(school);

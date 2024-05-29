@@ -77,10 +77,10 @@ namespace Bean_Mind.API.Controllers
         [HttpPatch(ApiEndPointConstant.School.UpdateSchool)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> UpdateSchool([FromBody] CreateNewSchoolRequest createNewSchoolRequest, [FromRoute] Guid id)
+        public async Task<IActionResult> UpdateSchool([FromBody] UpdateSchoolRequest request, [FromRoute] Guid id)
         {
 
-            var response = await _schoolService.updateSchool(createNewSchoolRequest, id);
+            var response = await _schoolService.updateSchool(request, id);
             if (response == false)
             {
                 return Problem(MessageConstant.SchoolMessage.UpdateSchoolFailedMessage);

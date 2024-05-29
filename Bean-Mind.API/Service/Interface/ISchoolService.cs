@@ -13,7 +13,7 @@ namespace Bean_Mind.API.Service.Interface
 
         public Task<GetSchoolResponse> getSchoolById(Guid Id);
         public Task<bool> deleteSchool(Guid Id);
-        public Task<bool> updateSchool(CreateNewSchoolRequest createNewSchoolRequest, Guid Id);
+        public Task<bool> updateSchool(UpdateSchoolRequest request, Guid Id);
 
     }
 }
