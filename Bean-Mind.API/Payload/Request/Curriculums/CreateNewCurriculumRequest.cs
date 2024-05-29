@@ -11,7 +11,7 @@ namespace Bean_Mind.API.Payload.Request.Curriculums
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public Guid SchoolId { get; set; }
+       
        
         
     }

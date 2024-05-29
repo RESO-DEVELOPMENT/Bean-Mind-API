@@ -13,6 +13,7 @@ using Bean_Mind_Data.Paginate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client.Extensibility;
 using System.Drawing;
+using System.Security.Claims;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -25,35 +26,37 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<CreateNewCurriculumResponse> CreateNewCurriculum(CreateNewCurriculumRequest createNewCurriculumRequest)
         {
             _logger.LogInformation($"Create new Curriculum with {createNewCurriculumRequest.Title}");
+            //Get AccountId of User curent from httpcontext 
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId)
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
             Curriculum newCurriculum = new Curriculum()
             {
                 Id = Guid.NewGuid(),
-                Title =createNewCurriculumRequest.Title,
-                Description =createNewCurriculumRequest.Description,
+                Title = createNewCurriculumRequest.Title,
+                Description = createNewCurriculumRequest.Description,
                 StartDate = TimeUtils.GetCurrentSEATime(),
                 EndDate = TimeUtils.GetCurrentSEATime(),
-                SchoolId = createNewCurriculumRequest.SchoolId,
+                SchoolId = account.SchoolId.Value,//Account Id for School in these Case not null and .value same as get real value for it  
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
-                DelFlg = false 
+                DelFlg = false
 
             };
-            var school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync( predicate: s => s.Id == createNewCurriculumRequest.SchoolId);
 
-            if (school == null)
-            {
-               
-                _logger.LogError($"SchoolId {createNewCurriculumRequest.SchoolId} not found.");
-                
-                return null;
-            }
+
+
             await _unitOfWork.GetRepository<Curriculum>().InsertAsync(newCurriculum);
-            bool isSuccessful = await _unitOfWork.CommitAsync() > 0 ;
+            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             CreateNewCurriculumResponse createNewCurriculumResponse = null;
             if (isSuccessful)
             {
                 createNewCurriculumResponse = new CreateNewCurriculumResponse()
                 {
+                    Id = newCurriculum.Id,
                     Title = newCurriculum.Title,
                     Description = newCurriculum.Description,
                     StartDate = newCurriculum.StartDate,
@@ -141,13 +144,13 @@ namespace Bean_Mind.API.Service.Implement
             return curriculums;
         }
 
-        public async Task<bool> updateCurriculum( Guid Id ,UpdateCurriculumRequest updateCurriculumRequest, Guid SchoolId)
+        public async Task<bool> updateCurriculum(Guid Id, UpdateCurriculumRequest updateCurriculumRequest, Guid SchoolId)
         {
             if (Id == Guid.Empty)
             {
                 throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
             }
-            var curriculum  = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
+            var curriculum = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
             if (curriculum == null)
             {
                 throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
@@ -165,11 +168,11 @@ namespace Bean_Mind.API.Service.Implement
 
             curriculum.Title = string.IsNullOrEmpty(updateCurriculumRequest.Title.ToString()) ? curriculum.Title : updateCurriculumRequest.Title;
             curriculum.Description = string.IsNullOrEmpty(updateCurriculumRequest.Description.ToString()) ? curriculum.Description : updateCurriculumRequest.Description;
-           
-            
+
+
             curriculum.StartDate = TimeUtils.GetCurrentSEATime();
             curriculum.EndDate = TimeUtils.GetCurrentSEATime();
-            
+
 
 
             _unitOfWork.GetRepository<Curriculum>().UpdateAsync(curriculum);
