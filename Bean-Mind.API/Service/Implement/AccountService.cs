@@ -55,7 +55,8 @@ namespace Bean_Mind.API.Service.Implement
                 ((p.Role == RoleEnum.SysAdmin.GetDescriptionFromEnum() ||
                 p.Role == RoleEnum.Teacher.GetDescriptionFromEnum()) ||
                 p.Role == RoleEnum.Parent.GetDescriptionFromEnum() ||
-                p.Role == RoleEnum.Student.GetDescriptionFromEnum());
+                p.Role == RoleEnum.Student.GetDescriptionFromEnum() ||
+                p.Role == RoleEnum.SysSchool.GetDescriptionFromEnum());
 
             Account account = await _unitOfWork.GetRepository<Account>()
              .SingleOrDefaultAsync(predicate: searchFilter);
@@ -65,48 +66,13 @@ namespace Bean_Mind.API.Service.Implement
             RoleEnum role = EnumUtil.ParseEnum<RoleEnum>(account.Role);
             Tuple<string, Guid> guidClaim = new Tuple<string, Guid>("AccountId", account.Id);
             LoginResponse loginResponse = null;
-
-            switch (role)
+            loginResponse = new LoginResponse()
             {
-                case RoleEnum.SysAdmin:
-                    // Tạo logic xử lý khi là Admin
-                    loginResponse = new LoginResponse()
-                    {
-                        Role = role,
-                        UserId = account.Id,
-                        Name = account.UserName
+                Role = role,
+                UserId = account.Id,
+                Name = account.UserName
 
-                    };
-                    break;
-                case RoleEnum.Teacher:
-                    // Tạo logic xử lý khi là Teacher
-                    loginResponse = new LoginResponse()
-                    {
-                        Role = role,
-                        UserId = account.Id,
-                        Name = account.UserName
-                    };
-                    break;
-                case RoleEnum.Parent:
-                    // Tạo logic xử lý khi là Parent
-                    loginResponse = new LoginResponse()
-                    {
-                        Role = role,
-                        UserId = account.Id,
-                        Name = account.UserName
-                    };
-                    break;
-                case RoleEnum.Student:
-                    // Tạo logic xử lý khi là Student
-                    loginResponse = new LoginResponse()
-                    {
-                        Role = role,
-                        UserId = account.Id,
-                        Name = account.UserName
-                    };
-                    break;
-            }
-
+            };
             var token = JwtUtil.GenerateJwtToken(account, guidClaim);
             loginResponse.AccessToken = token;
             return loginResponse;

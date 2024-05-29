@@ -32,7 +32,8 @@ namespace Bean_Mind.API.Utils
             List<Claim> claims = new List<Claim>()
         {
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Sub, account.UserName),
+            //new Claim(JwtRegisteredClaimNames.Sub, account.UserName),
+            new Claim(JwtRegisteredClaimNames.NameId, account.Id.ToString()),
             new Claim(ClaimTypes.Role, account.Role),
         };
             if (guidClaim != null) claims.Add(new Claim(guidClaim.Item1, guidClaim.Item2.ToString()));

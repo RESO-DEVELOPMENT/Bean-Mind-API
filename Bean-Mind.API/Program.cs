@@ -36,24 +36,26 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddConfigSwagger();
     builder.Services.AddSwaggerGen();
+
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
-    app.UseSwagger(options =>
+    //app.UseSwagger(options =>
+    //{
+    //    options.SerializeAsV2 = true;
+    //});
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
     {
-        options.SerializeAsV2 = true;
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bean-Mind Web API v1");
+        c.RoutePrefix = string.Empty;
     });
-    // app.UseSwaggerUI(c =>
-    // {
-    //     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bean-Mind Web API v1");
-    //     c.RoutePrefix = string.Empty;
-    // });
     app.UseSwaggerUI();
     app.UseMiddleware<ExceptionHandlingMiddleware>();
 
     app.UseHttpsRedirection();
     app.UseCors(CorsConstant.PolicyName);
-    // app.UseAuthentication();
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();
