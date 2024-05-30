@@ -22,7 +22,7 @@ namespace Bean_Mind.API.Service.Implement
         {
             _logger.LogInformation($"Create new Topic with {request.Title}");
             var chapter = await _unitOfWork.GetRepository<Chapter>().SingleOrDefaultAsync(
-                predicate: c => c.Id.Equals(chapterId));
+                predicate: c => c.Id.Equals(chapterId) && c.DelFlg != true);
             if(chapter == null)
             {
                 throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
@@ -60,7 +60,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<bool> DeleteTopic(Guid id)
         {
             var topic = await _unitOfWork.GetRepository<Topic>().SingleOrDefaultAsync(
-                predicate: t => t.Id.Equals(id) && t.Id.Equals(id));
+                predicate: t => t.Id.Equals(id) && t.DelFlg != true);
             if(topic == null)
                 throw new BadHttpRequestException(MessageConstant.TopicMessage.TopicNotFound);
             topic.DelFlg = true;
@@ -85,7 +85,7 @@ namespace Bean_Mind.API.Service.Implement
         {
             var topic = await _unitOfWork.GetRepository<Topic>().SingleOrDefaultAsync(
                 selector: t => new GetTopicResponse(t.Id, t.Title, t.Description),
-                predicate: t => t.Id.Equals(id) && t.Id.Equals(id),
+                predicate: t => t.Id.Equals(id) && t.DelFlg != true,
                 include: t => t.Include(t => t.Chapter)
             );
                 
@@ -101,14 +101,14 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.TopicMessage.TopicNotFound);
             }
-            var topic = await _unitOfWork.GetRepository<Topic>().SingleOrDefaultAsync(predicate: t => t.Id.Equals(topicId));
+            var topic = await _unitOfWork.GetRepository<Topic>().SingleOrDefaultAsync(predicate: t => t.Id.Equals(topicId) && t.DelFlg != true);
             if (topic == null)
             {
                 throw new BadHttpRequestException(MessageConstant.TopicMessage.TopicNotFound);
             }
             if (chapterId != Guid.Empty)
             {
-                Chapter chapter = await _unitOfWork.GetRepository<Chapter>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(chapterId));
+                Chapter chapter = await _unitOfWork.GetRepository<Chapter>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(chapterId) && c.DelFlg != true);
                 if (chapter == null)
                 {
                     throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);

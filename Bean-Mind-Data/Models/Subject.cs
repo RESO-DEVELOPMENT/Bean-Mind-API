@@ -28,7 +28,7 @@ public partial class Subject
     public bool? DelFlg { get; set; }
 
     [InverseProperty("Subject")]
-    public virtual ICollection<Chapter> Chapters { get; set; } = new List<Chapter>();
+    public virtual ICollection<Chapter> Chapters { get; set; } = null!;
 
     [ForeignKey("CourseId")]
     [InverseProperty("Subjects")]

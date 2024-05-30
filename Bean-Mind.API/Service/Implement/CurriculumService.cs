@@ -12,6 +12,7 @@ using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client.Extensibility;
+using System.Data;
 using System.Drawing;
 using System.Security.Claims;
 
@@ -29,7 +30,7 @@ namespace Bean_Mind.API.Service.Implement
             //Get AccountId of User curent from httpcontext 
             Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
             var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
-                predicate: s => s.Id.Equals(accountId)
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
                 );
             if (account == null || account.SchoolId == null)
                 throw new Exception("Account or SchoolId is null");
@@ -38,8 +39,8 @@ namespace Bean_Mind.API.Service.Implement
                 Id = Guid.NewGuid(),
                 Title = createNewCurriculumRequest.Title,
                 Description = createNewCurriculumRequest.Description,
-                StartDate = TimeUtils.GetCurrentSEATime(),
-                EndDate = TimeUtils.GetCurrentSEATime(),
+                StartDate = createNewCurriculumRequest.StartDate,
+                EndDate = createNewCurriculumRequest.EndDate,
                 SchoolId = account.SchoolId.Value,//Account Id for School in these Case not null and .value same as get real value for it  
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
@@ -62,8 +63,8 @@ namespace Bean_Mind.API.Service.Implement
                     StartDate = newCurriculum.StartDate,
                     EndDate = newCurriculum.EndDate,
                     SchoolId = newCurriculum.SchoolId,
-                    InsDate = TimeUtils.GetCurrentSEATime(),
-                    UpdDate = TimeUtils.GetCurrentSEATime(),
+                    InsDate = newCurriculum.InsDate,
+                    UpdDate = newCurriculum.UpdDate,
                     DelFlg = newCurriculum.DelFlg
 
 
@@ -79,7 +80,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
             }
-            var curriculum = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
+            var curriculum = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
             if (curriculum == null)
             {
 
@@ -87,7 +88,7 @@ namespace Bean_Mind.API.Service.Implement
                     .CurriculumNotFound);
             }
             curriculum.DelFlg = true;
-            var courses = await _unitOfWork.GetRepository<Course>().GetListAsync(predicate: c => c.CurriculumId.Equals(Id));
+            var courses = await _unitOfWork.GetRepository<Course>().GetListAsync(predicate: c => c.CurriculumId.Equals(Id) && c.DelFlg != true);
             foreach (var course in courses)
             {
                 course.DelFlg = true;
@@ -116,7 +117,7 @@ namespace Bean_Mind.API.Service.Implement
                  UpdDate = s.UpdDate,
                  DelFlg = s.DelFlg,
              },
-             predicate: x => x.Id == Id
+             predicate: x => x.Id == Id && x.DelFlg != true
              );
 
             return curriculums;
@@ -150,14 +151,14 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
             }
-            var curriculum = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
+            var curriculum = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
             if (curriculum == null)
             {
                 throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
             }
             if (SchoolId != Guid.Empty)
             {
-                School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(SchoolId));
+                School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(SchoolId) && s.DelFlg != true);
                 if (school == null)
                 {
                     throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
@@ -165,15 +166,13 @@ namespace Bean_Mind.API.Service.Implement
                 curriculum.SchoolId = SchoolId;
             }
 
-
-            curriculum.Title = string.IsNullOrEmpty(updateCurriculumRequest.Title.ToString()) ? curriculum.Title : updateCurriculumRequest.Title;
-            curriculum.Description = string.IsNullOrEmpty(updateCurriculumRequest.Description.ToString()) ? curriculum.Description : updateCurriculumRequest.Description;
-
-
-            curriculum.StartDate = TimeUtils.GetCurrentSEATime();
-            curriculum.EndDate = TimeUtils.GetCurrentSEATime();
+            curriculum.Title = string.IsNullOrEmpty(updateCurriculumRequest.Title) ? curriculum.Title : updateCurriculumRequest.Title;
+            curriculum.Description = string.IsNullOrEmpty(updateCurriculumRequest.Description) ? curriculum.Description : updateCurriculumRequest.Description;
 
 
+            curriculum.StartDate = (updateCurriculumRequest.StartDate.HasValue && updateCurriculumRequest.StartDate != DateTime.MinValue) ? updateCurriculumRequest.StartDate.Value : curriculum.StartDate;
+            curriculum.EndDate = (updateCurriculumRequest.EndDate.HasValue && updateCurriculumRequest.EndDate != DateTime.MinValue) ? updateCurriculumRequest.EndDate.Value : curriculum.EndDate;
+            curriculum.UpdDate= TimeUtils.GetCurrentSEATime();
 
             _unitOfWork.GetRepository<Curriculum>().UpdateAsync(curriculum);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;

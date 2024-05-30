@@ -6,7 +6,7 @@
 
         public string? LastName { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         public string? ImgUrl { get; set; }
     }

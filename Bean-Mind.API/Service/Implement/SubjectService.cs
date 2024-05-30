@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Subjects;
+using Bean_Mind.API.Payload.Response.Chapters;
 using Bean_Mind.API.Payload.Response.Students;
 using Bean_Mind.API.Payload.Response.Subjects;
 using Bean_Mind.API.Service.Interface;
@@ -66,7 +67,6 @@ namespace Bean_Mind.API.Service.Implement
             var subjects = await _unitOfWork.GetRepository<Subject>().GetPagingListAsync(
                 selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description),
                 predicate: s => s.DelFlg != true,
-                include: s => s.Include(s => s.Chapters),
                 page: page,
                 size: size
                 );
@@ -84,8 +84,7 @@ namespace Bean_Mind.API.Service.Implement
             }
             var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(
                 selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description),
-                predicate: s => s.Id.Equals(id) && s.DelFlg != true,
-                include: s => s.Include(s => s.Chapters));
+                predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (subject == null)
             {
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
@@ -104,19 +103,19 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
 
-            if (courseId == Guid.Empty)
+            if (courseId != Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
+                var course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(courseId) && c.DelFlg != true);
+                if (course == null)
+                {
+                    throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
+                }
+                subject.CourseId = courseId;
             }
-            var course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(courseId) && c.DelFlg != true);
-            if (course == null)
-            {
-                throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
-            }
+
 
             subject.Title = string.IsNullOrEmpty(request.Title) ? subject.Title : request.Title;
             subject.Description = string.IsNullOrEmpty(request.Description) ? subject.Description : request.Description;
-            subject.CourseId = courseId;
             subject.UpdDate = TimeUtils.GetCurrentSEATime();
 
             _unitOfWork.GetRepository<Subject>().UpdateAsync(subject);
@@ -142,5 +141,25 @@ namespace Bean_Mind.API.Service.Implement
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;
         }
+
+        public async Task<IPaginate<GetChapterResponse>> GetListChapters(Guid id, int page, int size)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
+            }
+            var chapters = await _unitOfWork.GetRepository<Chapter>().GetPagingListAsync(
+                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description),
+                predicate: s => s.SubjectId.Equals(id) && s.DelFlg != true,
+                page: page,
+                size: size
+                );
+            if (chapters == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChaptersIsEmpty);
+            }
+            return chapters;
+        }
+
     }
 }

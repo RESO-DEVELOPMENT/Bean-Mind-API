@@ -21,7 +21,7 @@ namespace Bean_Mind.API.Service.Implement
             public async Task<CreateNewParentResponse> AddParent(CreateNewParentResquest newParentRequest)
             {
             _logger.LogInformation($"Creating new parent with {newParentRequest.FirstName} {newParentRequest.LastName}");
-            var accounts = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(predicate : account => account.UserName.Equals(newParentRequest.UserName));
+            var accounts = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(predicate : account => account.UserName.Equals(newParentRequest.UserName) && account.DelFlg != true);
             if (accounts != null ) 
             {
                 throw new BadHttpRequestException(MessageConstant.AccountMessage.UsernameExisted);
@@ -117,7 +117,7 @@ namespace Bean_Mind.API.Service.Implement
                     UpdDate = x.UpdDate,
                     DelFlg = x.DelFlg
                 },
-                predicate: x => x.Id == parentId);
+                predicate: x => x.Id == parentId && x.DelFlg != true);
 
             return parent;
         }
@@ -127,7 +127,7 @@ namespace Bean_Mind.API.Service.Implement
             if (parentId == Guid.Empty)
                 throw new ArgumentNullException(nameof(parentId), "Parent ID cannot be empty");
 
-            var parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: x => x.Id.Equals(parentId)); ;
+            var parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: x => x.Id.Equals(parentId) && x.DelFlg != true); ;
 
             if (parent == null)
                 throw new ArgumentException("Parent not found", nameof(parentId));
@@ -156,7 +156,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.ParentMessage.ParentIdEmpty);
             }
-            var parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
+            var parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
             if (parent == null)
             {
 

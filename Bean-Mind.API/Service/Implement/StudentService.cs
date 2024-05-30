@@ -26,10 +26,17 @@ namespace Bean_Mind.API.Service.Implement
         {
             _logger.LogInformation($"Create new Student with {request.FirstName}  {request.LastName}");
 
+            School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(schoolId) && s.DelFlg != true);
+            if (school == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
+            }
+
             var accountS = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
-                predicate: account => account.UserName.Equals(request.UserName)
+                predicate: account => account.UserName.Equals(request.UserName) && account.DelFlg != true
                 );
-            if( accountS != null ) {
+            if (accountS != null)
+            {
                 throw new BadHttpRequestException(MessageConstant.AccountMessage.UsernameExisted);
             }
             Account account = new Account()
@@ -50,15 +57,11 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.AccountMessage.CreateStudentAccountFailMessage);
             }
 
-            School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(schoolId));
-            if (school == null)
-            {
-                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
-            }
-            Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Id == parentId);
+            
+            Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Id.Equals(parentId) && p.DelFlg != true);
             if (parent == null)
             {
-                throw new BadHttpRequestException("Không tìm thấy dữ liệu của phụ huynh");
+                throw new BadHttpRequestException(MessageConstant.ParentMessage.ParentNotFound);
             }
             Student newStudent = new Student()
             {
@@ -99,11 +102,10 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<IPaginate<GetStudentResponse>> getListStudent(int page, int size)
         {
             var students = await _unitOfWork.GetRepository<Student>().GetPagingListAsync(
-                selector: s => new GetStudentResponse(s.Id, s.FirstName, s.LastName, s.DateOfBirth, s.ImgUrl, s.Parent, s.School),
+                selector: s => new GetStudentResponse(s.Id, s.FirstName, s.LastName, s.DateOfBirth, s.ImgUrl),
                 predicate: s => s.DelFlg != true,
-                include: s => s.Include(s => s.Parent),
-                page : page,
-                size : size
+                page: page,
+                size: size
                 );
             return students;
         }
@@ -115,10 +117,10 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.StudentMessage.StudentNotFound);
             }
             var student = await _unitOfWork.GetRepository<Student>().SingleOrDefaultAsync(
-                selector: s => new GetStudentResponse(s.Id, s.FirstName, s.LastName, s.DateOfBirth, s.ImgUrl, s.Parent, s.School),
-                predicate: s => s.Id.Equals(id) && s.DelFlg != true,
-                include: s => s.Include(s => s.Parent));
-            if(student == null)
+                selector: s => new GetStudentResponse(s.Id, s.FirstName, s.LastName, s.DateOfBirth, s.ImgUrl),
+                predicate: s => s.Id.Equals(id) && s.DelFlg != true
+                );
+            if (student == null)
             {
                 throw new BadHttpRequestException(MessageConstant.StudentMessage.StudentNotFound);
             }
@@ -131,7 +133,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.StudentMessage.StudentNotFound);
             }
-            var student = await _unitOfWork.GetRepository<Student>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(studentId));
+            var student = await _unitOfWork.GetRepository<Student>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(studentId) && s.DelFlg != true);
             if (student == null)
             {
 
@@ -150,14 +152,14 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.StudentMessage.StudentNotFound);
             }
-            var student = await _unitOfWork.GetRepository<Student>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
+            var student = await _unitOfWork.GetRepository<Student>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
             if (student == null)
             {
                 throw new BadHttpRequestException(MessageConstant.StudentMessage.StudentNotFound);
             }
             if (schoolId != Guid.Empty)
             {
-                School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(schoolId));
+                School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(schoolId) && s.DelFlg != true);
                 if (school == null)
                 {
                     throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
@@ -166,14 +168,14 @@ namespace Bean_Mind.API.Service.Implement
             }
             if (parentId != Guid.Empty)
             {
-                Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Id == parentId);
+                Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Id.Equals(parentId) && p.DelFlg != true);
                 if (parent == null)
                 {
                     throw new BadHttpRequestException("Không tìm thấy dữ liệu của phụ huynh");
                 }
                 student.ParentId = parentId;
             }
-            
+
             student.DateOfBirth = string.IsNullOrEmpty(request.DateOfBirth.ToString()) ? student.DateOfBirth : request.DateOfBirth;
             student.FirstName = string.IsNullOrEmpty(request.FirstName) ? student.FirstName : request.FirstName;
             student.LastName = string.IsNullOrEmpty(request.LastName) ? student.LastName : request.LastName;

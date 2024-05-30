@@ -28,14 +28,14 @@ namespace Bean_Mind.API.Service.Implement
         {
             _logger.LogInformation($"Create new teacher with {newTeacherRequest.FirstName} {newTeacherRequest.LastName}");
 
-            School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(schoolId));
+            School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(schoolId) && s.DelFlg != true);
             if (school == null)
             {
                 throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
             }
 
             var accountS = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
-                predicate: account => account.UserName.Equals(newTeacherRequest.UserName)
+                predicate: account => account.UserName.Equals(newTeacherRequest.UserName) && account.DelFlg != true
                 );
             if (accountS != null)
             {
@@ -111,10 +111,8 @@ namespace Bean_Mind.API.Service.Implement
                 Phone = x.Phone,
                 DateOfBirth = x.DateOfBirth,
                 ImgUrl = x.ImgUrl,
-                School = x.School
             },
             predicate: x => x.DelFlg == false,
-            include: x => x.Include(x => x.School),
             size: size,
             page: page);
             return teachers;
@@ -133,10 +131,8 @@ namespace Bean_Mind.API.Service.Implement
                Phone = x.Phone,
                DateOfBirth = x.DateOfBirth,
                ImgUrl = x.ImgUrl,
-               School = x.School
            },
-           predicate: x => x.Id.Equals(teacherId),
-           include: x => x.Include(x => x.School)
+           predicate: x => x.Id.Equals(teacherId) && x.DelFlg != true
            );
            
             return teachers;
@@ -148,7 +144,7 @@ namespace Bean_Mind.API.Service.Implement
             if (id == Guid.Empty) throw new BadHttpRequestException(MessageConstant.TeacherMessage.TeacherNotFound);
 
             Teacher teacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
-                predicate: x => x.Id.Equals(id)
+                predicate: x => x.Id.Equals(id) && x.DelFlg != true
             );
 
             if (teacher == null) throw new BadHttpRequestException(MessageConstant.TeacherMessage.TeacherNotFound);
@@ -175,7 +171,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<bool> RemoveTeacher(Guid teacherId)
         {
 
-            Teacher teachers = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(predicate: x => x.Id.Equals(teacherId));
+            Teacher teachers = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(predicate: x => x.Id.Equals(teacherId) && x.DelFlg != true);
             teachers.UpdDate = TimeUtils.GetCurrentSEATime();
             teachers.DelFlg = true;
             _unitOfWork.GetRepository<Teacher>().UpdateAsync(teachers);

@@ -31,8 +31,8 @@ namespace Bean_Mind.API.Service.Implement
                 Id = Guid.NewGuid(),
                 Title = createNewCourseRequest.Title,
                 Description = createNewCourseRequest.Description,
-                StartDate = TimeUtils.GetCurrentSEATime(),
-                EndDate = TimeUtils.GetCurrentSEATime(),
+                StartDate = createNewCourseRequest.StartDate,
+                EndDate = createNewCourseRequest.EndDate,
                 CurriculumId = createNewCourseRequest.CurriculumId,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
@@ -49,19 +49,18 @@ namespace Bean_Mind.API.Service.Implement
                 Response = new CreateNewCourseResponse()
                 {
                     Id = Guid.NewGuid(),
-                    Title = createNewCourseRequest.Title,
-                    Description = createNewCourseRequest.Description,
-                    StartDate = TimeUtils.GetCurrentSEATime(),
-                    EndDate = TimeUtils.GetCurrentSEATime(),
-                    CurriculumId = createNewCourseRequest.CurriculumId,
-                    InsDate = TimeUtils.GetCurrentSEATime(),
-                    UpdDate = TimeUtils.GetCurrentSEATime(),
+                    Title = newCourse.Title,
+                    Description = newCourse.Description,
+                    StartDate = newCourse.StartDate,
+                    EndDate = newCourse.EndDate,
+                    CurriculumId = newCourse.CurriculumId,
+                    InsDate = newCourse.InsDate,
+                    UpdDate = newCourse.UpdDate,
                     DelFlg = false
 
                 };
             }
             return Response;
-
         }
 
         public async Task<bool> DeleteCourse(Guid Id)
@@ -73,7 +72,6 @@ namespace Bean_Mind.API.Service.Implement
             var course  = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
             if (course == null)
             {
-
                 throw new BadHttpRequestException(MessageConstant.CourseMessage
                     .CourseNotFound);
             }
@@ -103,6 +101,10 @@ namespace Bean_Mind.API.Service.Implement
              predicate: x => x.Id == Id && x.DelFlg != true
              );
 
+            if (curriculums == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
+            }
             return curriculums;
         }
 
@@ -138,14 +140,14 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
             }
-            var course  = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id));
+            var course  = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
             if (course == null)
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
             }
             if (curriculumId != Guid.Empty)
             {
-                Curriculum curriculum = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(curriculumId));
+                Curriculum curriculum = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(curriculumId) && s.DelFlg !=true);
                 if (curriculum == null)
                 {
                     throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
@@ -156,14 +158,11 @@ namespace Bean_Mind.API.Service.Implement
 
             course.Title = string.IsNullOrEmpty(updateCourseRequest.Title.ToString()) ? course.Title : updateCourseRequest.Title;
             course.Description = string.IsNullOrEmpty(updateCourseRequest.Description.ToString()) ? course.Description : updateCourseRequest.Description;
-
-
-            course.StartDate = TimeUtils.GetCurrentSEATime();
-            course.EndDate = TimeUtils.GetCurrentSEATime();
-
+            course.StartDate = (updateCourseRequest.StartDate.HasValue && updateCourseRequest.StartDate != DateTime.MinValue) ? updateCourseRequest.StartDate.Value : course.StartDate;
+            course.EndDate = (updateCourseRequest.EndDate.HasValue && updateCourseRequest.EndDate != DateTime.MinValue) ? updateCourseRequest.EndDate.Value : course.EndDate;
             course.UpdDate = TimeUtils.GetCurrentSEATime();
 
-
+            DateTime date;
 
             _unitOfWork.GetRepository<Course>().UpdateAsync(course);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;

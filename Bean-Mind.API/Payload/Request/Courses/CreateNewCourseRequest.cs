@@ -14,6 +14,10 @@ namespace Bean_Mind.API.Payload.Request.Courses
 
         [Required]
         public Guid CurriculumId { get; set; }
+        [Required]
+        public DateTime StartDate { get; set; }
+        [Required]
+        public DateTime EndDate { get; set; }
 
     }
 }

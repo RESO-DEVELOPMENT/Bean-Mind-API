@@ -65,7 +65,6 @@ namespace Bean_Mind.API.Service.Implement
             var chapters = await _unitOfWork.GetRepository<Chapter>().GetPagingListAsync(
                 selector: s => new GetChapterResponse(s.Id, s.Title, s.Description),
                 predicate: s => s.DelFlg != true,
-                include: s => s.Include(s => s.Topics),
                 page: page,
                 size: size
                 );
@@ -83,8 +82,7 @@ namespace Bean_Mind.API.Service.Implement
             }
             var chapter = await _unitOfWork.GetRepository<Chapter>().SingleOrDefaultAsync(
                 selector: s => new GetChapterResponse(s.Id, s.Title, s.Description),
-                predicate: s => s.Id.Equals(id) && s.DelFlg != true,
-                include: s => s.Include(s => s.Topics));
+                predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (chapter == null)
             {
                 throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
@@ -103,19 +101,19 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
             }
 
-            if (subjectId == Guid.Empty)
+            if (subjectId != Guid.Empty)
             {
-                throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
+                var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(subjectId) && c.DelFlg != true);
+                if (subject == null)
+                {
+                    throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
+                }
+                chapter.SubjectId = subjectId;
             }
-            var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(subjectId) && c.DelFlg != true);
-            if (subject == null)
-            {
-                throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
-            }
+
 
             chapter.Title = string.IsNullOrEmpty(request.Title) ? chapter.Title : request.Title;
             chapter.Description = string.IsNullOrEmpty(request.Description) ? chapter.Description : request.Description;
-            chapter.SubjectId = subjectId;
             chapter.UpdDate = TimeUtils.GetCurrentSEATime();
 
             _unitOfWork.GetRepository<Chapter>().UpdateAsync(chapter);

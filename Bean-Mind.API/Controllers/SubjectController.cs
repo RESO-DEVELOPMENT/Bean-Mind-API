@@ -1,6 +1,7 @@
 ﻿using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Schools;
 using Bean_Mind.API.Payload.Request.Subjects;
+using Bean_Mind.API.Payload.Response.Chapters;
 using Bean_Mind.API.Payload.Response.Schools;
 using Bean_Mind.API.Payload.Response.Students;
 using Bean_Mind.API.Payload.Response.Subjects;
@@ -80,6 +81,16 @@ namespace Bean_Mind.API.Controllers
             {
                 return Problem(MessageConstant.SubjectMessage.UpdateSubjectFailedMessage);
             }
+
+            return Ok(response);
+        }
+
+        [HttpGet(ApiEndPointConstant.Subject.GetChapterInSubject)]
+        [ProducesResponseType(typeof(IPaginate<GetChapterResponse>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> GetChapterInSubject([FromRoute] Guid id, [FromQuery] int page, [FromQuery] int size)
+        {
+            var response = await _subjectService.GetListChapters(id, page, size);
 
             return Ok(response);
         }
