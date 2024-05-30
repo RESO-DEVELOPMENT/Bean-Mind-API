@@ -1,6 +1,8 @@
 ﻿
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Curriculums;
+using Bean_Mind.API.Payload.Response.Chapters;
+using Bean_Mind.API.Payload.Response.Courses;
 using Bean_Mind.API.Payload.Response.Curriculums;
 using Bean_Mind.API.Service.Implement;
 using Bean_Mind.API.Service.Interface;
@@ -72,6 +74,15 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [HttpGet(ApiEndPointConstant.Curriculum.GetCourseInCurriculum)]
+        [ProducesResponseType(typeof(IPaginate<GetCourseResponse>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> GetCourseInCurriculum([FromRoute] Guid id, [FromQuery] int page, [FromQuery] int size)
+        {
+            var response = await _curriculumService.GetListCourses(id, page, size);
+
+            return Ok(response);
+        }
 
     }
 }

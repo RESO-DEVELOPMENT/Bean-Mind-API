@@ -32,6 +32,7 @@ namespace Bean_Mind.API.Constants
             public const string GetSchool = SchoolEndpoint + "/{id}";
             public const string DeleteSchool = SchoolEndpoint + "/{id}";
             public const string UpdateSchool = SchoolEndpoint + "/{id}";
+            public const string GetCurriculumInSchool = SchoolEndpoint + "/{id}/curriculums";
         }
 
         public static class Teacher
@@ -113,6 +114,7 @@ namespace Bean_Mind.API.Constants
             public const string GetById = CurriculumEndpoint + "/{id}";
             public const string DeleteCurriculum = CurriculumEndpoint + "/{id}";
             public const string UpdateCurriculum = CurriculumEndpoint + "/{id}";
+            public const string GetCourseInCurriculum = CurriculumEndpoint + "/{id}/courses";
         }
     }
 }
