@@ -146,7 +146,6 @@ namespace Bean_Mind.API.Service.Implement
                 _unitOfWork.GetRepository<Topic>().UpdateAsync(topic);
             }
 
-            await _unitOfWork.CommitAsync();
             _unitOfWork.GetRepository<Chapter>().UpdateAsync(chapter);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;

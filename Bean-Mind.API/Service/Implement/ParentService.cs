@@ -182,7 +182,6 @@ namespace Bean_Mind.API.Service.Implement
                 student.DelFlg = true;
                 _unitOfWork.GetRepository<Student>().UpdateAsync(student);
             }
-            await _unitOfWork.CommitAsync();
             _unitOfWork.GetRepository<Parent>().UpdateAsync(parent);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;
