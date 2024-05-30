@@ -150,13 +150,13 @@ namespace Bean_Mind.API.Service.Implement
             return isSuccessful;
         }
 
-        public async Task<bool> RemoveParent(Guid Id)
+        public async Task<bool> RemoveParent(Guid id)
         {
-            if (Id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 throw new BadHttpRequestException(MessageConstant.ParentMessage.ParentIdEmpty);
             }
-            var parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
+            var parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (parent == null)
             {
 
@@ -164,6 +164,25 @@ namespace Bean_Mind.API.Service.Implement
             }
             parent.UpdDate = TimeUtils.GetCurrentSEATime();
             parent.DelFlg = true;
+            
+            //Cập nhật DelFlg của Account
+           var account = await _unitOfWork.GetRepository<Account>()
+                                           .SingleOrDefaultAsync(predicate: a => a.Id.Equals(parent.AccountId) && a.DelFlg != true);
+            if (account != null)
+            {
+                account.DelFlg = true;
+                account.UpdDate = TimeUtils.GetCurrentSEATime();
+                _unitOfWork.GetRepository<Account>().UpdateAsync(account);
+            }
+            //Cập nhật DelFlg của các Student
+            var students = await _unitOfWork.GetRepository<Student>().GetListAsync(predicate: c => c.ParentId.Equals(id) && c.DelFlg != true);
+            foreach (var student in students)
+            {
+                student.UpdDate = TimeUtils.GetCurrentSEATime();
+                student.DelFlg = true;
+                _unitOfWork.GetRepository<Student>().UpdateAsync(student);
+            }
+            await _unitOfWork.CommitAsync();
             _unitOfWork.GetRepository<Parent>().UpdateAsync(parent);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;

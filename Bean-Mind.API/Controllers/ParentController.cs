@@ -121,11 +121,11 @@ namespace Bean_Mind.API.Controllers
 
         [HttpDelete(ApiEndPointConstant.Parent.DeleteParent)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
-        [ProducesErrorResponseType(typeof(NotFoundObjectResult))]
-        public async Task<IActionResult> RemoveParents(Guid Id)
+        [ProducesErrorResponseType(typeof(ActionResult))]
+        public async Task<IActionResult> RemoveParents([FromRoute] Guid id)
         {
 
-            var response = await _parentService.RemoveParent(Id);
+            var response = await _parentService.RemoveParent(id);
 
             return Ok(response);
 
