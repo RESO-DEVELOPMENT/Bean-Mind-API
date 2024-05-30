@@ -84,6 +84,7 @@ namespace Bean_Mind.API.Constants
             public const string GetById = ChapterEndpoint + "/{id}";
             public const string UpdateChapter = ChapterEndpoint + "/{id}";
             public const string DeleteChapter = ChapterEndpoint + "/{id}";
+            public const string GetTopicInChapter = ChapterEndpoint + "/{id}/topics";
         }
 
         public static class Topic
