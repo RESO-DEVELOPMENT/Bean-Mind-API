@@ -12,7 +12,7 @@ namespace Bean_Mind.API.Service.Interface
         Task<IPaginate<GetCourseResponse>> GetListCourse(int page, int size);
         Task<bool> UpdateCourse(Guid id, UpdateCourseRequest updateCourseRequest, Guid curriculumId);
         Task<bool> DeleteCourse(Guid id);
-        public Task<IPaginate<GetSubjectResponse>> GetListSubjectsByCourseId(Guid courseId, int page, int size);
+        public Task<IPaginate<GetSubjectResponse>> GetListSubjectsByCourseId(Guid id, int page, int size);
 
     }
 }

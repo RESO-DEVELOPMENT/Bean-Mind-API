@@ -169,16 +169,16 @@ namespace Bean_Mind.API.Service.Implement
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;
         }
-        public async Task<IPaginate<GetSubjectResponse>> GetListSubjectsByCourseId(Guid courseId, int page, int size)
+        public async Task<IPaginate<GetSubjectResponse>> GetListSubjectsByCourseId(Guid id, int page, int size)
         {
-            if (courseId == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
             }
 
             var subjects = await _unitOfWork.GetRepository<Subject>().GetPagingListAsync(
                 selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description),
-                predicate: s => s.CourseId.Equals(courseId) && s.DelFlg != true,
+                predicate: s => s.CourseId.Equals(id) && s.DelFlg != true,
                 page: page,
                 size: size
             );

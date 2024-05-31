@@ -106,7 +106,7 @@ namespace Bean_Mind.API.Constants
             public const string GetById = CourseEndpoint + "/{id}";
             public const string UpdateCourse = CourseEndpoint + "/{id}";
             public const string DeleteCourse = CourseEndpoint + "/{id}";
-            public const string GetSubjectsInCourse  = CourseEndpoint + "/{courseId}/courses";
+            public const string GetSubjectsInCourse  = CourseEndpoint + "/{id}/subjects";
 
         }
 
