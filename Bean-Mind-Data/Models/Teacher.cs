@@ -19,7 +19,7 @@ public partial class Teacher
     public string LastName { get; set; } = null!;
 
     [Column(TypeName = "datetime")]
-    public DateTime? DateOfBirth { get; set; }
+    public DateTime DateOfBirth { get; set; }
 
     public string ImgUrl { get; set; } = null!;
 

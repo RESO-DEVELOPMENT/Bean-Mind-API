@@ -87,96 +87,122 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.CurriculumMessage
                     .CurriculumNotFound);
             }
-            curriculum.DelFlg = true;
+
             var courses = await _unitOfWork.GetRepository<Course>().GetListAsync(predicate: c => c.CurriculumId.Equals(Id) && c.DelFlg != true);
             foreach (var course in courses)
             {
+                var subjects = await _unitOfWork.GetRepository<Subject>().GetListAsync(
+                        predicate: s => s.CourseId.Equals(course.Id) && s.DelFlg == false);
+                foreach (var subject in subjects)
+                {
+                    var chapters = await _unitOfWork.GetRepository<Chapter>().GetListAsync(
+                        predicate: c => c.SubjectId.Equals(subject.Id) && c.DelFlg == false);
+                    foreach (var chapter in chapters)
+                    {
+                        var topics = await _unitOfWork.GetRepository<Topic>().GetListAsync(
+                            predicate: t => t.ChapterId.Equals(chapter.Id) && t.DelFlg == false);
+                        foreach (var topic in topics)
+                        {
+                            topic.DelFlg = true;
+                            topic.UpdDate = TimeUtils.GetCurrentSEATime();
+                            _unitOfWork.GetRepository<Topic>().UpdateAsync(topic);
+                        }
+                        chapter.DelFlg = true;
+                        chapter.UpdDate = TimeUtils.GetCurrentSEATime();
+                        _unitOfWork.GetRepository<Chapter>().UpdateAsync(chapter);
+                    }
+                    subject.DelFlg = true;
+                    subject.UpdDate = TimeUtils.GetCurrentSEATime();
+                    _unitOfWork.GetRepository<Subject>().UpdateAsync(subject);
+                }
                 course.DelFlg = true;
                 course.UpdDate = TimeUtils.GetCurrentSEATime();
                 _unitOfWork.GetRepository<Course>().UpdateAsync(course);
-
             }
-            await _unitOfWork.CommitAsync();
+            curriculum.DelFlg = true;
+            curriculum.UpdDate = TimeUtils.GetCurrentSEATime();
             _unitOfWork.GetRepository<Curriculum>().UpdateAsync(curriculum);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+
             return isSuccessful;
         }
 
-        public async Task<GetCurriculumResponse> getCurriculumById(Guid Id)
-        {
-            var curriculums = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(
-             selector: s => new GetCurriculumResponse
-             {
-                 Id = s.Id,
-                 Title = s.Title,
-                 Description = s.Description,
-                 StartDate = s.StartDate,
-                 EndDate = s.EndDate,
-                 SchoolId = s.SchoolId,
-                 InsDate = s.InsDate,
-                 UpdDate = s.UpdDate,
-                 DelFlg = s.DelFlg,
-             },
-             predicate: x => x.Id == Id && x.DelFlg != true
-             );
-
-            return curriculums;
-        }
-
-        public async Task<IPaginate<GetCurriculumResponse>> getListCurriculum(int page, int size)
-        {
-            var curriculums = await _unitOfWork.GetRepository<Curriculum>().GetPagingListAsync(
-              selector: s => new GetCurriculumResponse
-              {
-                  Id = s.Id,
-                  Title = s.Title,
-                  Description = s.Description,
-                  StartDate = s.StartDate,
-                  EndDate = s.EndDate,
-                  SchoolId = s.SchoolId,
-                  InsDate = s.InsDate,
-                  UpdDate = s.UpdDate,
-                  DelFlg = s.DelFlg,
-              },
-              predicate: x => x.DelFlg == false,
-              size: size,
-              page: page);
-
-            return curriculums;
-        }
-
-        public async Task<bool> updateCurriculum(Guid Id, UpdateCurriculumRequest updateCurriculumRequest, Guid SchoolId)
-        {
-            if (Id == Guid.Empty)
+            public async Task<GetCurriculumResponse> getCurriculumById(Guid Id)
             {
-                throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
+                var curriculums = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(
+                 selector: s => new GetCurriculumResponse
+                 {
+                     Id = s.Id,
+                     Title = s.Title,
+                     Description = s.Description,
+                     StartDate = s.StartDate,
+                     EndDate = s.EndDate,
+                     SchoolId = s.SchoolId,
+                     InsDate = s.InsDate,
+                     UpdDate = s.UpdDate,
+                     DelFlg = s.DelFlg,
+                 },
+                 predicate: x => x.Id == Id && x.DelFlg != true
+                 );
+
+                return curriculums;
             }
-            var curriculum = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
-            if (curriculum == null)
+
+            public async Task<IPaginate<GetCurriculumResponse>> getListCurriculum(int page, int size)
             {
-                throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
+                var curriculums = await _unitOfWork.GetRepository<Curriculum>().GetPagingListAsync(
+                  selector: s => new GetCurriculumResponse
+                  {
+                      Id = s.Id,
+                      Title = s.Title,
+                      Description = s.Description,
+                      StartDate = s.StartDate,
+                      EndDate = s.EndDate,
+                      SchoolId = s.SchoolId,
+                      InsDate = s.InsDate,
+                      UpdDate = s.UpdDate,
+                      DelFlg = s.DelFlg,
+                  },
+                  predicate: x => x.DelFlg == false,
+                  size: size,
+                  page: page);
+
+                return curriculums;
             }
-            if (SchoolId != Guid.Empty)
+
+            public async Task<bool> updateCurriculum(Guid Id, UpdateCurriculumRequest updateCurriculumRequest, Guid SchoolId)
             {
-                School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(SchoolId) && s.DelFlg != true);
-                if (school == null)
+                if (Id == Guid.Empty)
                 {
-                    throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
+                    throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
                 }
-                curriculum.SchoolId = SchoolId;
+                var curriculum = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
+                if (curriculum == null)
+                {
+                    throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
+                }
+                if (SchoolId != Guid.Empty)
+                {
+                    School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(SchoolId) && s.DelFlg != true);
+                    if (school == null)
+                    {
+                        throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
+                    }
+                    curriculum.SchoolId = SchoolId;
+                }
+
+                curriculum.Title = string.IsNullOrEmpty(updateCurriculumRequest.Title) ? curriculum.Title : updateCurriculumRequest.Title;
+                curriculum.Description = string.IsNullOrEmpty(updateCurriculumRequest.Description) ? curriculum.Description : updateCurriculumRequest.Description;
+
+
+                curriculum.StartDate = (updateCurriculumRequest.StartDate.HasValue && updateCurriculumRequest.StartDate != DateTime.MinValue) ? updateCurriculumRequest.StartDate.Value : curriculum.StartDate;
+                curriculum.EndDate = (updateCurriculumRequest.EndDate.HasValue && updateCurriculumRequest.EndDate != DateTime.MinValue) ? updateCurriculumRequest.EndDate.Value : curriculum.EndDate;
+                curriculum.UpdDate = TimeUtils.GetCurrentSEATime();
+
+                _unitOfWork.GetRepository<Curriculum>().UpdateAsync(curriculum);
+                bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+                return isSuccessful;
             }
-
-            curriculum.Title = string.IsNullOrEmpty(updateCurriculumRequest.Title) ? curriculum.Title : updateCurriculumRequest.Title;
-            curriculum.Description = string.IsNullOrEmpty(updateCurriculumRequest.Description) ? curriculum.Description : updateCurriculumRequest.Description;
-
-
-            curriculum.StartDate = (updateCurriculumRequest.StartDate.HasValue && updateCurriculumRequest.StartDate != DateTime.MinValue) ? updateCurriculumRequest.StartDate.Value : curriculum.StartDate;
-            curriculum.EndDate = (updateCurriculumRequest.EndDate.HasValue && updateCurriculumRequest.EndDate != DateTime.MinValue) ? updateCurriculumRequest.EndDate.Value : curriculum.EndDate;
-            curriculum.UpdDate= TimeUtils.GetCurrentSEATime();
-
-            _unitOfWork.GetRepository<Curriculum>().UpdateAsync(curriculum);
-            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
-            return isSuccessful;
         }
     }
-}
+

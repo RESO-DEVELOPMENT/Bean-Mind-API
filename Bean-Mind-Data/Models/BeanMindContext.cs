@@ -97,6 +97,10 @@ public partial class BeanMindContext : DbContext
             entity.HasOne(d => d.Account).WithMany(p => p.Parents)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Parent_Account ");
+
+            entity.HasOne(d => d.School).WithMany(p => p.Parents)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Parent_School");
         });
 
         modelBuilder.Entity<School>(entity =>
