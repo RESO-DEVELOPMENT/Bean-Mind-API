@@ -27,6 +27,9 @@ public partial class Topic
 
     public bool? DelFlg { get; set; }
 
+    [InverseProperty("Topic")]
+    public virtual ICollection<Activity> Activities { get; set; } = new List<Activity>();
+
     [ForeignKey("ChapterId")]
     [InverseProperty("Topics")]
     public virtual Chapter Chapter { get; set; } = null!;

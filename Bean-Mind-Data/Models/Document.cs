@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind_Data.Models;
 
-[Table("Video")]
-public partial class Video
+[Table("Document")]
+public partial class Document
 {
     [Key]
     public Guid Id { get; set; }
@@ -22,7 +22,7 @@ public partial class Video
     public Guid ActivityId { get; set; }
 
     [Column(TypeName = "datetime")]
-    public DateTime? InsDate { get; set; }
+    public DateTime? Insdate { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? UpdDate { get; set; }
@@ -30,6 +30,6 @@ public partial class Video
     public bool? DelFlg { get; set; }
 
     [ForeignKey("ActivityId")]
-    [InverseProperty("Videos")]
+    [InverseProperty("Documents")]
     public virtual Activity Activity { get; set; } = null!;
 }
