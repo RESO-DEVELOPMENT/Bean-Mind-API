@@ -2,6 +2,7 @@
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Courses;
 using Bean_Mind.API.Payload.Response.Courses;
+using Bean_Mind.API.Payload.Response.Subjects;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
@@ -194,7 +195,28 @@ namespace Bean_Mind.API.Service.Implement
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;
         }
+        public async Task<IPaginate<GetSubjectResponse>> GetListSubjectsByCourseId(Guid id, int page, int size)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
+            }
 
-        
+            var subjects = await _unitOfWork.GetRepository<Subject>().GetPagingListAsync(
+                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description),
+                predicate: s => s.CourseId.Equals(id) && s.DelFlg != true,
+                page: page,
+                size: size
+            );
+
+            if (subjects == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectsIsEmpty);
+            }
+
+            return subjects;
+        }
+
+
     }
 }

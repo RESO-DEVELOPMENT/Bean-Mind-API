@@ -2,6 +2,8 @@
 using Azure.Core;
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Schools;
+using Bean_Mind.API.Payload.Response.Chapters;
+using Bean_Mind.API.Payload.Response.Curriculums;
 using Bean_Mind.API.Payload.Response.Schools;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
@@ -152,6 +154,36 @@ namespace Bean_Mind.API.Service.Implement
             _unitOfWork.GetRepository<School>().UpdateAsync(school);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;
+        }
+
+        public async Task<IPaginate<GetCurriculumResponse>> GetListCurriculum(Guid id, int page, int size)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
+            }
+            var curriculums = await _unitOfWork.GetRepository<Curriculum>().GetPagingListAsync(
+                selector: s => new GetCurriculumResponse
+                {
+                    Id = s.Id,
+                    Title = s.Title,
+                    Description = s.Description,
+                    StartDate = s.StartDate,
+                    EndDate = s.EndDate,
+                    SchoolId = s.SchoolId,
+                    InsDate = s.InsDate,
+                    UpdDate = s.UpdDate,
+                    DelFlg = s.DelFlg,
+                },
+                predicate: s => s.SchoolId.Equals(id) && s.DelFlg != true,
+                page: page,
+                size: size
+                );
+            if (curriculums == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumsIsEmpty);
+            }
+            return curriculums;
         }
 
         public async Task<IPaginate<GetSchoolResponse>> getListSchool(int page, int size)

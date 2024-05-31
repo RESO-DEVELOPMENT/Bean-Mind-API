@@ -32,6 +32,7 @@ namespace Bean_Mind.API.Constants
             public const string GetSchool = SchoolEndpoint + "/{id}";
             public const string DeleteSchool = SchoolEndpoint + "/{id}";
             public const string UpdateSchool = SchoolEndpoint + "/{id}";
+            public const string GetCurriculumInSchool = SchoolEndpoint + "/{id}/curriculums";
         }
 
         public static class Teacher
@@ -73,6 +74,7 @@ namespace Bean_Mind.API.Constants
             public const string UpdateSubject = SubjectEndpoint + "/{id}";
             public const string DeleteSubject = SubjectEndpoint + "/{id}";
             public const string GetChapterInSubject = SubjectEndpoint + "/{id}/chapters";
+
         }
 
         public static class Chapter
@@ -83,6 +85,7 @@ namespace Bean_Mind.API.Constants
             public const string GetById = ChapterEndpoint + "/{id}";
             public const string UpdateChapter = ChapterEndpoint + "/{id}";
             public const string DeleteChapter = ChapterEndpoint + "/{id}";
+            public const string GetTopicInChapter = ChapterEndpoint + "/{id}/topics";
         }
 
         public static class Topic
@@ -103,6 +106,8 @@ namespace Bean_Mind.API.Constants
             public const string GetById = CourseEndpoint + "/{id}";
             public const string UpdateCourse = CourseEndpoint + "/{id}";
             public const string DeleteCourse = CourseEndpoint + "/{id}";
+            public const string GetSubjectsInCourse  = CourseEndpoint + "/{id}/subjects";
+
         }
 
         public static class Curriculum
@@ -113,6 +118,7 @@ namespace Bean_Mind.API.Constants
             public const string GetById = CurriculumEndpoint + "/{id}";
             public const string DeleteCurriculum = CurriculumEndpoint + "/{id}";
             public const string UpdateCurriculum = CurriculumEndpoint + "/{id}";
+            public const string GetCourseInCurriculum = CurriculumEndpoint + "/{id}/courses";
         }
     }
 }

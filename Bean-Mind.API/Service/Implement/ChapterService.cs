@@ -3,6 +3,7 @@ using Bean_Mind.API.Constants;
 using Bean_Mind.API.Controllers;
 using Bean_Mind.API.Payload.Request.Chapters;
 using Bean_Mind.API.Payload.Response.Chapters;
+using Bean_Mind.API.Payload.Response.Topics;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
@@ -60,7 +61,7 @@ namespace Bean_Mind.API.Service.Implement
 
             return createNewChapterResponse;
         }
-        public async Task<IPaginate<GetChapterResponse>> getListChapter(int page, int size)
+        public async Task<IPaginate<GetChapterResponse>> GetListChapter(int page, int size)
         {
             var chapters = await _unitOfWork.GetRepository<Chapter>().GetPagingListAsync(
                 selector: s => new GetChapterResponse(s.Id, s.Title, s.Description),
@@ -74,7 +75,7 @@ namespace Bean_Mind.API.Service.Implement
             }
             return chapters;
         }
-        public async Task<GetChapterResponse> getChapterById(Guid id)
+        public async Task<GetChapterResponse> GetChapterById(Guid id)
         {
             if (id == Guid.Empty)
             {
@@ -149,6 +150,25 @@ namespace Bean_Mind.API.Service.Implement
             _unitOfWork.GetRepository<Chapter>().UpdateAsync(chapter);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;
+        }
+
+        public async Task<IPaginate<GetTopicResponse>> GetListTopic(Guid id, int page, int size)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
+            }
+            var topics = await _unitOfWork.GetRepository<Topic>().GetPagingListAsync(
+                selector: s => new GetTopicResponse(s.Id, s.Title, s.Description),
+                predicate: s => s.ChapterId.Equals(id) && s.DelFlg != true,
+                page: page,
+                size: size
+                );
+            if (topics == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.TopicMessage.ListIsEmpty);
+            }
+            return topics;
         }
     }
 }

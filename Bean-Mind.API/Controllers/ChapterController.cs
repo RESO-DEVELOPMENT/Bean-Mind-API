@@ -1,6 +1,7 @@
 ﻿using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Chapters;
 using Bean_Mind.API.Payload.Response.Chapters;
+using Bean_Mind.API.Payload.Response.Topics;
 using Bean_Mind.API.Service.Implement;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
@@ -36,7 +37,7 @@ namespace Bean_Mind.API.Controllers
         [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<IActionResult> GetListChapter([FromQuery] int page, [FromQuery] int size)
         {
-            var response = await _chapterService.getListChapter(page, size);
+            var response = await _chapterService.GetListChapter(page, size);
             if (response == null)
             {
                 return Problem(MessageConstant.ChapterMessage.ChaptersIsEmpty);
@@ -49,7 +50,7 @@ namespace Bean_Mind.API.Controllers
         [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<IActionResult> GetChapter([FromRoute] Guid id)
         {
-            var response = await _chapterService.getChapterById(id);
+            var response = await _chapterService.GetChapterById(id);
 
             return Ok(response);
         }
@@ -77,6 +78,16 @@ namespace Bean_Mind.API.Controllers
             {
                 return Problem(MessageConstant.ChapterMessage.UpdateChapterFailedMessage);
             }
+
+            return Ok(response);
+        }
+
+        [HttpGet(ApiEndPointConstant.Chapter.GetTopicInChapter)]
+        [ProducesResponseType(typeof(IPaginate<GetTopicResponse>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> GetTopicInChaper([FromRoute] Guid id, [FromQuery] int page, [FromQuery] int size)
+        {
+            var response = await _chapterService.GetListTopic(id, page, size);
 
             return Ok(response);
         }
