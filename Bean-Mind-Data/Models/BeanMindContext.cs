@@ -109,7 +109,6 @@ public partial class BeanMindContext : DbContext
         {
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.DelFlg).HasDefaultValue(false);
-            entity.Property(e => e.Insdate).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
 
             entity.HasOne(d => d.Activity).WithMany(p => p.Documents)

@@ -22,7 +22,7 @@ public partial class Document
     public Guid ActivityId { get; set; }
 
     [Column(TypeName = "datetime")]
-    public DateTime? Insdate { get; set; }
+    public DateTime? InsDate { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? UpdDate { get; set; }
