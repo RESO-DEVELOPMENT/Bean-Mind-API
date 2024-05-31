@@ -160,6 +160,5 @@ namespace Bean_Mind.API.Service.Implement
             }
             return chapters;
         }
-
     }
 }
