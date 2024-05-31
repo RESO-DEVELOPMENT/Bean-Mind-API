@@ -94,5 +94,7 @@ namespace Bean_Mind.API.Controllers
 
             return Ok(response);
         }
+        
+
     }
 }

@@ -6,6 +6,8 @@ using Bean_Mind.API.Payload.Response.Courses;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
 using Microsoft.AspNetCore.Mvc;
+using Bean_Mind.API.Payload.Response.Subjects;
+using Bean_Mind.API.Service.Implement;
 
 namespace Bean_Mind.API.Controllers
     {
@@ -71,9 +73,18 @@ namespace Bean_Mind.API.Controllers
                 var response = await _courseService.UpdateCourse(id, request, curriculumId);
                 return Ok(response);
             }
+        [HttpGet(ApiEndPointConstant.Course.GetSubjectsInCourse)]
+        [ProducesResponseType(typeof(IPaginate<GetSubjectResponse>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> GetSubjectsByCourseId([FromRoute] Guid courseId, [FromQuery] int page, [FromQuery] int size)
+        {
 
+            var response = await _courseService.GetListSubjectsByCourseId(courseId, page, size);
+            return Ok(response);
 
         }
+
+    }
     }
 
 
