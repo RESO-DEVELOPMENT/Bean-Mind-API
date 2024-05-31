@@ -12,8 +12,6 @@ namespace Bean_Mind.API.Service.Interface
         public Task<GetSubjectResponse> getSubjectById(Guid id);
         public Task<bool> UpdateSubject(Guid id, UpdateSubjectRequest request, Guid courseId);
         public Task<bool> RemoveSubject(Guid id);
-        public Task<IPaginate<GetChapterResponse>> GetListChapters(Guid id, int page, int size);
-       
-
+        public Task<IPaginate<GetChapterResponse>> GetListChapter(Guid id, int page, int size);
     }
 }

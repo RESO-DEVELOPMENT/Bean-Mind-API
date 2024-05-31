@@ -142,7 +142,7 @@ namespace Bean_Mind.API.Service.Implement
             return isSuccessful;
         }
 
-        public async Task<IPaginate<GetChapterResponse>> GetListChapters(Guid id, int page, int size)
+        public async Task<IPaginate<GetChapterResponse>> GetListChapter(Guid id, int page, int size)
         {
             if (id == Guid.Empty)
             {
@@ -160,8 +160,6 @@ namespace Bean_Mind.API.Service.Implement
             }
             return chapters;
         }
-        
-
 
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload;
 using Bean_Mind.API.Payload.Request.Schools;
+using Bean_Mind.API.Payload.Response.Chapters;
 using Bean_Mind.API.Payload.Response.Schools;
+using Bean_Mind.API.Service.Implement;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
 using Microsoft.AspNetCore.Mvc;
@@ -85,6 +87,16 @@ namespace Bean_Mind.API.Controllers
             {
                 return Problem(MessageConstant.SchoolMessage.UpdateSchoolFailedMessage);
             }
+
+            return Ok(response);
+        }
+
+        [HttpGet(ApiEndPointConstant.School.GetCurriculumInSchool)]
+        [ProducesResponseType(typeof(IPaginate<GetChapterResponse>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> GetChapterInSubject([FromRoute] Guid id, [FromQuery] int page, [FromQuery] int size)
+        {
+            var response = await _schoolService.GetListCurriculum(id, page, size);
 
             return Ok(response);
         }

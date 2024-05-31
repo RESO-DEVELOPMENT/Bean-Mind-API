@@ -3,6 +3,8 @@ using AutoMapper;
 using Azure.Core;
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Curriculums;
+using Bean_Mind.API.Payload.Response.Chapters;
+using Bean_Mind.API.Payload.Response.Courses;
 using Bean_Mind.API.Payload.Response.Curriculums;
 using Bean_Mind.API.Payload.Response.Schools;
 using Bean_Mind.API.Service.Interface;
@@ -121,6 +123,36 @@ namespace Bean_Mind.API.Service.Implement
              );
 
             return curriculums;
+        }
+
+        public async Task<IPaginate<GetCourseResponse>> GetListCourses(Guid id, int page, int size)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
+            }
+            var courses = await _unitOfWork.GetRepository<Course>().GetPagingListAsync(
+                selector: s => new GetCourseResponse
+                {
+                    Id = s.Id,
+                    Title = s.Title,
+                    Description = s.Description,
+                    StartDate = s.StartDate,
+                    EndDate = s.EndDate,
+                    CurriculumId = s.CurriculumId,
+                    InsDate = s.InsDate,
+                    UpdDate = s.UpdDate,
+                    DelFlg = s.DelFlg
+                },
+                predicate: s => s.CurriculumId.Equals(id) && s.DelFlg != true,
+                page: page,
+                size: size
+                );
+            if (courses == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
+            }
+            return courses;
         }
 
         public async Task<IPaginate<GetCurriculumResponse>> getListCurriculum(int page, int size)

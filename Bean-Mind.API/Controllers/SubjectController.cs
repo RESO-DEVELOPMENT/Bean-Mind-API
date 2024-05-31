@@ -90,7 +90,7 @@ namespace Bean_Mind.API.Controllers
         [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<IActionResult> GetChapterInSubject([FromRoute] Guid id, [FromQuery] int page, [FromQuery] int size)
         {
-            var response = await _subjectService.GetListChapters(id, page, size);
+            var response = await _subjectService.GetListChapter(id, page, size);
 
             return Ok(response);
         }

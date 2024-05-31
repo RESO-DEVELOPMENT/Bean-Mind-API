@@ -62,7 +62,7 @@ namespace Bean_Mind.API.Service.Implement
             var topic = await _unitOfWork.GetRepository<Topic>().SingleOrDefaultAsync(
                 predicate: t => t.Id.Equals(id) && t.DelFlg != true);
             if(topic == null)
-                throw new BadHttpRequestException(MessageConstant.TopicMessage.TopicNotFound);
+                throw new BadHttpRequestException(MessageConstant.TopicMessage.ListIsEmpty);
             topic.DelFlg = true;
             topic.UpdDate = TimeUtils.GetCurrentSEATime();
             _unitOfWork.GetRepository<Topic>().UpdateAsync(topic);
