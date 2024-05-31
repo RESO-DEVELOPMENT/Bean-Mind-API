@@ -120,5 +120,21 @@
             public const string CoursesIsEmpty = "Không có khóa học nào.";
             public const string CourseNotFound = "Không tìm thấy khóa học";
         }
+        public static class DocumentMessage
+        {
+            public const string CreateNewDocumentFailedMessage = "Tạo mới tài liệu thất bại.";
+            public const string DocumentNotFound = "Không tìm thấy tài liệu.";
+            public const string DocumentIdEmpty = "Id của tài liệu bị trống.";
+            public const string UpdateDocumentFailedMessage = "Cập nhật tài liệu thất bại.";
+        }
+        public static class ActivityMessage
+        {
+            public const string CreateNewActivityFailedMessage = "Tạo mới hoạt động thất bại.";
+            public const string ActivityNotFound = "Không tìm thấy hoạt động.";
+            public const string ActivityIdEmpty = "Id của hoạt động bị trống.";
+            public const string UpdateActivityFailedMessage = "Cập nhật hoạt động thất bại.";
+        }
+
+
     }
 }

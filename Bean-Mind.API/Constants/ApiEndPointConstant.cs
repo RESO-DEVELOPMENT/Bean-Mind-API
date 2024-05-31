@@ -120,6 +120,18 @@ namespace Bean_Mind.API.Constants
             public const string UpdateCurriculum = CurriculumEndpoint + "/{id}";
             public const string GetCourseInCurriculum = CurriculumEndpoint + "/{id}/courses";
         }
+        public static class Document
+        {
+            public const string DocumentEndpoint = ApiEndpoint + "/documents";
+            public const string Create = DocumentEndpoint;
+            public const string GetAll = DocumentEndpoint;
+            public const string GetById = DocumentEndpoint + "/{id}";
+            public const string UpdateDocument = DocumentEndpoint + "/{id}";
+            public const string DeleteDocument = DocumentEndpoint + "/{id}";
+            
+        }
+
+
     }
 }
     
