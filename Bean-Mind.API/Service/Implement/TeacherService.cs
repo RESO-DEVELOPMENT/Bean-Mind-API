@@ -156,7 +156,7 @@ namespace Bean_Mind.API.Service.Implement
 
             teacher.FirstName = string.IsNullOrEmpty(request.FirstName) ? teacher.FirstName : request.FirstName;
             teacher.LastName = string.IsNullOrEmpty(request.LastName) ? teacher.LastName : request.LastName;
-            teacher.DateOfBirth = string.IsNullOrEmpty(request.DateOfBirth.ToString()) ? teacher.DateOfBirth : request.DateOfBirth;
+            teacher.DateOfBirth = (request.DateOfBirth.HasValue && request.DateOfBirth != DateTime.MinValue) ? request.DateOfBirth.Value : teacher.DateOfBirth;
             teacher.Email = string.IsNullOrEmpty(request.Email) ? teacher.Email : request.Email;
             teacher.Phone = string.IsNullOrEmpty(request.Phone) ? teacher.Phone : request.Phone;
             teacher.UpdDate = TimeUtils.GetCurrentSEATime();

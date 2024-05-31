@@ -75,11 +75,79 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
             }
-            var school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
+            var school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
             if(school == null)
             {
-                
                 throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
+            }
+            
+            var parents = await _unitOfWork.GetRepository<Parent>().GetListAsync(
+                predicate: p => p.SchoolId.Equals(Id) && p.DelFlg == false);
+            foreach(var parent in parents)
+            {
+                var students = await _unitOfWork.GetRepository<Student>().GetListAsync(
+                    predicate: s => s.ParentId.Equals(parent.Id)  && s.DelFlg == false);
+                foreach(var student in students)
+                {
+                    var accountS = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                        predicate: a => a.Id.Equals(student.AccountId) && a.DelFlg == false);
+                    accountS.DelFlg = true;
+                    accountS.UpdDate = TimeUtils.GetCurrentSEATime();
+                    _unitOfWork.GetRepository<Account>().UpdateAsync(accountS);
+                    student.DelFlg = true;
+                    student.UpdDate = TimeUtils.GetCurrentSEATime();
+                    _unitOfWork.GetRepository<Student>().UpdateAsync(student);
+                }
+                var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                        predicate: a => a.Id.Equals(parent.AccountId) && a.DelFlg == false);
+                account.DelFlg = true;
+                account.UpdDate = TimeUtils.GetCurrentSEATime();
+                _unitOfWork.GetRepository<Account>().UpdateAsync(account);
+                parent.DelFlg = true;
+                parent.UpdDate = TimeUtils.GetCurrentSEATime();
+                _unitOfWork.GetRepository<Parent>().UpdateAsync(parent);
+            }
+
+            var currilums = await _unitOfWork.GetRepository<Curriculum>().GetListAsync(
+                predicate: c => c.SchoolId.Equals(Id) && c.DelFlg == false);
+            foreach (var currilum in currilums)
+            {
+                var courses = await _unitOfWork.GetRepository<Course>().GetListAsync(
+                    predicate: c => c.CurriculumId.Equals(currilum.Id) && c.DelFlg == false);
+                foreach(var course in courses)
+                {
+                    var subjects = await _unitOfWork.GetRepository<Subject>().GetListAsync(
+                        predicate: s => s.CourseId.Equals(course.Id) && s.DelFlg == false);
+                    foreach(var subject in subjects)
+                    {
+                        var chapters = await _unitOfWork.GetRepository<Chapter>().GetListAsync(
+                            predicate: c => c.SubjectId.Equals(subject.Id) && c.DelFlg == false);
+                        foreach(var chapter in chapters)
+                        {
+                            var topics = await _unitOfWork.GetRepository<Topic>().GetListAsync(
+                                predicate: t => t.ChapterId.Equals(chapter.Id) && t.DelFlg == false);
+                            foreach(var topic in topics)
+                            {
+                                topic.DelFlg = true;
+                                topic.UpdDate = TimeUtils.GetCurrentSEATime();
+                                _unitOfWork.GetRepository<Topic>().UpdateAsync(topic);
+                            }
+                            chapter.DelFlg = true;
+                            chapter.UpdDate = TimeUtils.GetCurrentSEATime();
+                            _unitOfWork.GetRepository<Chapter>().UpdateAsync(chapter);
+                        }
+                        subject.DelFlg = true;
+                        subject.UpdDate = TimeUtils.GetCurrentSEATime();
+                        _unitOfWork.GetRepository<Subject>().UpdateAsync(subject);
+                    }
+                    course.DelFlg = true;
+                    course.UpdDate = TimeUtils.GetCurrentSEATime();
+                    _unitOfWork.GetRepository<Course>().UpdateAsync(course);
+                }
+                currilum.DelFlg = true;
+                currilum.UpdDate= TimeUtils.GetCurrentSEATime();
+                _unitOfWork.GetRepository<Curriculum>().UpdateAsync(currilum);
             }
             school.UpdDate = TimeUtils.GetCurrentSEATime();
             school.DelFlg = true;

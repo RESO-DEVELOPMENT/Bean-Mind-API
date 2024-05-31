@@ -44,6 +44,9 @@ public partial class School
     public virtual ICollection<Curriculum> Curricula { get; set; } = new List<Curriculum>();
 
     [InverseProperty("School")]
+    public virtual ICollection<Parent> Parents { get; set; } = new List<Parent>();
+
+    [InverseProperty("School")]
     public virtual ICollection<Student> Students { get; set; } = new List<Student>();
 
     [InverseProperty("School")]

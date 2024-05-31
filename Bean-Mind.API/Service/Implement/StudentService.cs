@@ -176,7 +176,7 @@ namespace Bean_Mind.API.Service.Implement
                 student.ParentId = parentId;
             }
 
-            student.DateOfBirth = string.IsNullOrEmpty(request.DateOfBirth.ToString()) ? student.DateOfBirth : request.DateOfBirth;
+            student.DateOfBirth = (request.DateOfBirth.HasValue && request.DateOfBirth != DateTime.MinValue) ? request.DateOfBirth.Value : student.DateOfBirth;
             student.FirstName = string.IsNullOrEmpty(request.FirstName) ? student.FirstName : request.FirstName;
             student.LastName = string.IsNullOrEmpty(request.LastName) ? student.LastName : request.LastName;
             student.ImgUrl = string.IsNullOrEmpty(request.ImgUrl) ? student.ImgUrl : request.ImgUrl;

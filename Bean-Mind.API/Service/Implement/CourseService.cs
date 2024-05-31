@@ -76,7 +76,33 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.CourseMessage
                     .CourseNotFound);
             }
+            var subjects = await _unitOfWork.GetRepository<Subject>().GetListAsync(
+                        predicate: s => s.CourseId.Equals(Id) && s.DelFlg == false);
+            foreach (var subject in subjects)
+            {
+                var chapters = await _unitOfWork.GetRepository<Chapter>().GetListAsync(
+                    predicate: c => c.SubjectId.Equals(subject.Id) && c.DelFlg == false);
+                foreach (var chapter in chapters)
+                {
+                    var topics = await _unitOfWork.GetRepository<Topic>().GetListAsync(
+                        predicate: t => t.ChapterId.Equals(chapter.Id) && t.DelFlg == false);
+                    foreach (var topic in topics)
+                    {
+                        topic.DelFlg = true;
+                        topic.UpdDate = TimeUtils.GetCurrentSEATime();
+                        _unitOfWork.GetRepository<Topic>().UpdateAsync(topic);
+                    }
+                    chapter.DelFlg = true;
+                    chapter.UpdDate = TimeUtils.GetCurrentSEATime();
+                    _unitOfWork.GetRepository<Chapter>().UpdateAsync(chapter);
+                }
+                subject.DelFlg = true;
+                subject.UpdDate = TimeUtils.GetCurrentSEATime();
+                _unitOfWork.GetRepository<Subject>().UpdateAsync(subject);
+            }
+
             course.DelFlg = true;
+            course.UpdDate = TimeUtils.GetCurrentSEATime();
             _unitOfWork.GetRepository<Course>().UpdateAsync(course);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;

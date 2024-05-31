@@ -2,15 +2,12 @@
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Subjects;
 using Bean_Mind.API.Payload.Response.Chapters;
-using Bean_Mind.API.Payload.Response.Students;
 using Bean_Mind.API.Payload.Response.Subjects;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
-using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
-using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -132,11 +129,27 @@ namespace Bean_Mind.API.Service.Implement
             var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (subject == null)
             {
-
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
             subject.UpdDate = TimeUtils.GetCurrentSEATime();
             subject.DelFlg = true;
+
+            var chapters = await _unitOfWork.GetRepository<Chapter>().GetListAsync(predicate: s => s.SubjectId.Equals(id) && s.DelFlg != true);
+
+            foreach (var chapter in chapters)
+            {
+                var topics = await _unitOfWork.GetRepository<Topic>().GetListAsync(predicate: s => s.ChapterId.Equals(chapter.Id) && s.DelFlg != true);
+                foreach (var topic in topics)
+                {
+                    topic.UpdDate = TimeUtils.GetCurrentSEATime();
+                    topic.DelFlg = true;
+                    _unitOfWork.GetRepository<Topic>().UpdateAsync(topic);
+                }
+                chapter.UpdDate = TimeUtils.GetCurrentSEATime();
+                chapter.DelFlg = true;
+                _unitOfWork.GetRepository<Chapter>().UpdateAsync(chapter);
+            }
+
             _unitOfWork.GetRepository<Subject>().UpdateAsync(subject);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;

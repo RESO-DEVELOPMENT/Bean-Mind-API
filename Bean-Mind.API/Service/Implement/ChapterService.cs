@@ -134,8 +134,19 @@ namespace Bean_Mind.API.Service.Implement
 
                 throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
             }
+            // Xóa chapter
             chapter.UpdDate = TimeUtils.GetCurrentSEATime();
             chapter.DelFlg = true;
+
+            // Cập nhật DelFlg của các Topic
+            var topics = await _unitOfWork.GetRepository<Topic>().GetListAsync(predicate: c => c.ChapterId.Equals(id) && c.DelFlg != true);
+            foreach (var topic in topics)
+            {
+                topic.DelFlg = true;
+                topic.UpdDate = TimeUtils.GetCurrentSEATime();
+                _unitOfWork.GetRepository<Topic>().UpdateAsync(topic);
+            }
+
             _unitOfWork.GetRepository<Chapter>().UpdateAsync(chapter);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;
