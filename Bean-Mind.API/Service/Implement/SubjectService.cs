@@ -31,7 +31,7 @@ namespace Bean_Mind.API.Service.Implement
             }
 
             Subject newSubject = new Subject()
-            {
+            {   
                 Id = Guid.NewGuid(),
                 Title = request.Title,
                 Description = request.Description,

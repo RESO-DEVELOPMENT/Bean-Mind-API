@@ -120,6 +120,16 @@ namespace Bean_Mind.API.Constants
             public const string UpdateCurriculum = CurriculumEndpoint + "/{id}";
             public const string GetCourseInCurriculum = CurriculumEndpoint + "/{id}/courses";
         }
+
+        public static class Video
+        {
+            public const string VideoEndpoint = ApiEndpoint + "/videos";
+            public const string Create = VideoEndpoint;
+            public const string GetAll = VideoEndpoint;
+            public const string GetById = VideoEndpoint + "/{id}";
+            public const string UpdateVideo = VideoEndpoint + "/{id}";
+            public const string DeleteVideo = VideoEndpoint + "/{id}";
+        }
     }
 }
     

@@ -93,7 +93,7 @@
         public static class ChapterMessage
         {
             public const string CreateNewChapterFailedMessage = "Thêm chương mới thất bại";
-            public const string ChaptersIsEmpty = "Không có chương nào.";
+            public const string ChaptersIsEmpty = "Không có chương nào";
             public const string ChapterNotFound = "Không tìm thấy chương";
             public const string UpdateChapterFailedMessage = "Update thông tin chương thất bại";
         }
@@ -119,6 +119,22 @@
             public const string CreateNewCourseFailedMessage = "Tạo mới khóa học thất bại";
             public const string CoursesIsEmpty = "Không có khóa học nào.";
             public const string CourseNotFound = "Không tìm thấy khóa học";
+        }
+
+        public static class VideoMessage
+        {
+            public const string CreateNewVideoFailedMessage = "Tạo mới video thất bại";
+            public const string VideoIsEmpty = "Không có video nào";
+            public const string VideoNotFound = "Không tìm thấy video";
+            public const string UpdateVideoFailedMessage = "Cập nhật video thất bại";
+        }
+
+        public static class ActivityMessage
+        {
+            public const string CreateNewActivityFailedMessage = "Tạo mới activity thất bại";
+            public const string ActivityIsEmpty = "Không có activity nào";
+            public const string ActivityNotFound = "Không tìm thấy activity";
+            public const string UpdateActivityFailedMessage = "Cập nhật activity thất bại";
         }
     }
 }
