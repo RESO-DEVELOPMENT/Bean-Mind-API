@@ -102,7 +102,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.VideoMessage.VideoNotFound);
             }
-            video.DelFlg = false;
+            video.DelFlg = true;
             video.UpdDate = TimeUtils.GetCurrentSEATime();
 
             _unitOfWork.GetRepository<Video>().UpdateAsync(video);
