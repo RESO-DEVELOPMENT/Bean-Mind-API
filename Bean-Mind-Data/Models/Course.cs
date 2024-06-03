@@ -18,13 +18,15 @@ public partial class Course
     [StringLength(50)]
     public string Description { get; set; } = null!;
 
+    public int Status { get; set; }
+
     [Column(TypeName = "datetime")]
     public DateTime StartDate { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime EndDate { get; set; }
 
-    public Guid CurriculumId { get; set; }
+    public Guid? CurriculumId { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
@@ -36,7 +38,7 @@ public partial class Course
 
     [ForeignKey("CurriculumId")]
     [InverseProperty("Courses")]
-    public virtual Curriculum Curriculum { get; set; } = null!;
+    public virtual Curriculum? Curriculum { get; set; }
 
     [InverseProperty("Course")]
     public virtual ICollection<Subject> Subjects { get; set; } = new List<Subject>();

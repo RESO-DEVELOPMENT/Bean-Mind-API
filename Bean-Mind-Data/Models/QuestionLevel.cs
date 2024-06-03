@@ -12,8 +12,7 @@ public partial class QuestionLevel
     [Key]
     public Guid Id { get; set; }
 
-    [StringLength(50)]
-    public string Name { get; set; } = null!;
+    public int Level { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }

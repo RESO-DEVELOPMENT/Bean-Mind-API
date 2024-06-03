@@ -5,9 +5,9 @@ namespace Bean_Mind.API.Payload.Response.Students
 {
     public class GetStudentResponse
     {
-        public Guid Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public Guid? Id { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string? ImgUrl { get; set; }
 

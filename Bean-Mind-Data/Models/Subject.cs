@@ -17,7 +17,7 @@ public partial class Subject
 
     public string Description { get; set; } = null!;
 
-    public Guid CourseId { get; set; }
+    public Guid? CourseId { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
@@ -32,5 +32,5 @@ public partial class Subject
 
     [ForeignKey("CourseId")]
     [InverseProperty("Subjects")]
-    public virtual Course Course { get; set; } = null!;
+    public virtual Course? Course { get; set; }
 }

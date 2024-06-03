@@ -4,7 +4,7 @@ namespace Bean_Mind.API.Payload.Response.Teachers
 {
     public class GetTeacherResponse
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         public string? FirstName { get; set; }
 
