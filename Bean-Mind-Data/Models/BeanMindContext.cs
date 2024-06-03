@@ -29,6 +29,14 @@ public partial class BeanMindContext : DbContext
 
     public virtual DbSet<Parent> Parents { get; set; }
 
+    public virtual DbSet<Question> Questions { get; set; }
+
+    public virtual DbSet<QuestionAnswer> QuestionAnswers { get; set; }
+
+    public virtual DbSet<QuestionLevel> QuestionLevels { get; set; }
+
+    public virtual DbSet<QuestionType> QuestionTypes { get; set; }
+
     public virtual DbSet<School> Schools { get; set; }
 
     public virtual DbSet<Student> Students { get; set; }
@@ -40,6 +48,12 @@ public partial class BeanMindContext : DbContext
     public virtual DbSet<Topic> Topics { get; set; }
 
     public virtual DbSet<Video> Videos { get; set; }
+
+    public virtual DbSet<WorkSheet> WorkSheets { get; set; }
+
+    public virtual DbSet<WorksheetQuestion> WorksheetQuestions { get; set; }
+
+    public virtual DbSet<WorksheetTemplate> WorksheetTemplates { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -132,6 +146,47 @@ public partial class BeanMindContext : DbContext
                 .HasConstraintName("FK_Parent_School");
         });
 
+        modelBuilder.Entity<Question>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.DelFlg).HasDefaultValue(false);
+            entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.QuestionLevel).WithMany(p => p.Questions)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Question_QuestionLevel");
+
+            entity.HasOne(d => d.QuestionType).WithMany(p => p.Questions)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Question_QuestionType");
+        });
+
+        modelBuilder.Entity<QuestionAnswer>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.DelFlg).HasDefaultValue(false);
+            entity.Property(e => e.IndDate).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.Question).WithMany(p => p.QuestionAnswers)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_QuestionAnswer_Question");
+        });
+
+        modelBuilder.Entity<QuestionLevel>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.DelFlg).HasDefaultValue(false);
+            entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
+        });
+
+        modelBuilder.Entity<QuestionType>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+        });
+
         modelBuilder.Entity<School>(entity =>
         {
             entity.Property(e => e.Id).ValueGeneratedNever();
@@ -213,6 +268,40 @@ public partial class BeanMindContext : DbContext
             entity.HasOne(d => d.Activity).WithMany(p => p.Videos)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Video_Activity");
+        });
+
+        modelBuilder.Entity<WorkSheet>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.DelFlg).HasDefaultValue(false);
+            entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.Activity).WithMany(p => p.WorkSheets)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_WorkSheet_Activity");
+
+            entity.HasOne(d => d.WorksheetTemplate).WithMany(p => p.WorkSheets)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_WorkSheet_WorksheetTemplate");
+        });
+
+        modelBuilder.Entity<WorksheetQuestion>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.DelFlg).HasDefaultValue(false);
+            entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.Worksheet).WithMany(p => p.WorksheetQuestions)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_WorksheetQuestion_WorkSheet");
+        });
+
+        modelBuilder.Entity<WorksheetTemplate>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
         });
 
         OnModelCreatingPartial(modelBuilder);

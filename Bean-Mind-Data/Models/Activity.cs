@@ -36,4 +36,7 @@ public partial class Activity
 
     [InverseProperty("Activity")]
     public virtual ICollection<Video> Videos { get; set; } = new List<Video>();
+
+    [InverseProperty("Activity")]
+    public virtual ICollection<WorkSheet> WorkSheets { get; set; } = new List<WorkSheet>();
 }
