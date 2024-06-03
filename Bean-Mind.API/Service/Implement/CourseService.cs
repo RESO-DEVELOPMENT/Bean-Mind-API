@@ -6,8 +6,10 @@ using Bean_Mind.API.Payload.Response.Subjects;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
+using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
+using Microsoft.OpenApi.Extensions;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -35,6 +37,7 @@ namespace Bean_Mind.API.Service.Implement
                 StartDate = createNewCourseRequest.StartDate,
                 EndDate = createNewCourseRequest.EndDate,
                 CurriculumId = createNewCourseRequest.CurriculumId,
+                Status = (int)(createNewCourseRequest.Status),
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false
@@ -54,6 +57,7 @@ namespace Bean_Mind.API.Service.Implement
                     Description = newCourse.Description,
                     StartDate = newCourse.StartDate,
                     EndDate = newCourse.EndDate,
+                    Status = newCourse.Status,
                     CurriculumId = newCourse.CurriculumId,
                     InsDate = newCourse.InsDate,
                     UpdDate = newCourse.UpdDate,
@@ -120,6 +124,7 @@ namespace Bean_Mind.API.Service.Implement
                  Description = s.Description,
                  StartDate = s.StartDate,
                  EndDate = s.EndDate,
+                 Status = s.Status,
                  CurriculumId = s.CurriculumId,
                  InsDate = s.InsDate,
                  UpdDate = s.UpdDate,
@@ -147,6 +152,7 @@ namespace Bean_Mind.API.Service.Implement
                   Description = s.Description,
                   StartDate = s.StartDate,
                   EndDate = s.EndDate,
+                  Status = s.Status,
                   CurriculumId = s.CurriculumId,
                   InsDate = s.InsDate,
                   UpdDate = s.UpdDate,
@@ -183,8 +189,9 @@ namespace Bean_Mind.API.Service.Implement
             }
 
 
-            course.Title = string.IsNullOrEmpty(updateCourseRequest.Title.ToString()) ? course.Title : updateCourseRequest.Title;
-            course.Description = string.IsNullOrEmpty(updateCourseRequest.Description.ToString()) ? course.Description : updateCourseRequest.Description;
+            course.Title = string.IsNullOrEmpty(updateCourseRequest.Title) ? course.Title : updateCourseRequest.Title;
+            course.Description = string.IsNullOrEmpty(updateCourseRequest.Description) ? course.Description : updateCourseRequest.Description;
+            course.Status = string.IsNullOrEmpty(updateCourseRequest.Status.ToString()) ? course.Status : (int)updateCourseRequest.Status;
             course.StartDate = (updateCourseRequest.StartDate.HasValue && updateCourseRequest.StartDate != DateTime.MinValue) ? updateCourseRequest.StartDate.Value : course.StartDate;
             course.EndDate = (updateCourseRequest.EndDate.HasValue && updateCourseRequest.EndDate != DateTime.MinValue) ? updateCourseRequest.EndDate.Value : course.EndDate;
             course.UpdDate = TimeUtils.GetCurrentSEATime();
