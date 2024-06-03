@@ -191,7 +191,8 @@ namespace Bean_Mind.API.Service.Implement
             var schools = await _unitOfWork.GetRepository<School>().GetPagingListAsync(
                 selector: s => new GetSchoolResponse(s.Id, s.Name, s.Address, s.Phone, s.Email, s.Logo, s.Description),
                 predicate: s => s.DelFlg != true,
-                page: page, size: size);
+                page: page, size: size,
+                orderBy: s => s.OrderBy(s => s.InsDate));
             return schools;
 
         }

@@ -105,7 +105,7 @@
             public const string ListIsEmpty = "Không có gì cả";
             public const string TopicNotFound = "Không tìm thấy topic nào";
         }
-      
+
         public static class CurriculumMessage
         {
             public const string CreateNewCurriculumFailedMessage = "Thêm chương trình học mới thất bại";
@@ -136,6 +136,7 @@
             public const string ActivityNotFound = "Không tìm thấy hoạt động";
             public const string UpdateActivityFailedMessage = "Cập nhật hoạt động thất bại";
         }
+
 
         public static class DocumentMessage
         {

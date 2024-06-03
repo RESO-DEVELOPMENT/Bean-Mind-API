@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bean_Mind.API.Payload.Response.Documents
 {
@@ -6,7 +6,6 @@ namespace Bean_Mind.API.Payload.Response.Documents
     {
         public Guid Id { get; set; }
 
-        [StringLength(50)]
         public string Title { get; set; } = null!;
 
         public string Description { get; set; } = null!;

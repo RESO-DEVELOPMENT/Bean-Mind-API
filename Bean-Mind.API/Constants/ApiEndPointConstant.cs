@@ -121,6 +121,17 @@ namespace Bean_Mind.API.Constants
             public const string GetCourseInCurriculum = CurriculumEndpoint + "/{id}/courses";
         }
 
+        public static class Activity
+        {
+            public const string ActivityEndPoint = ApiEndpoint + "/activity";
+            public const string Create = ActivityEndPoint;
+            public const string GetAll = ActivityEndPoint;
+            public const string GetById = ActivityEndPoint + "/{id}";
+            public const string DeleteActivity = ActivityEndPoint + "/{id}";
+            public const string UpdateActivity = ActivityEndPoint + "/{id}";
+            public const string GetVideoInActivity = ActivityEndPoint + "/{id}/videos";
+            public const string GetDocumentInActivity = ActivityEndPoint + "/{id}/documents";
+        }
         public static class Video
         {
             public const string VideoEndpoint = ApiEndpoint + "/videos";
@@ -138,8 +149,7 @@ namespace Bean_Mind.API.Constants
             public const string GetAll = DocumentEndpoint;
             public const string GetById = DocumentEndpoint + "/{id}";
             public const string UpdateDocument = DocumentEndpoint + "/{id}";
-            public const string DeleteDocument = DocumentEndpoint + "/{id}";
-            
+            public const string DeleteDocument = DocumentEndpoint + "/{id}";        
         }
     }
 }

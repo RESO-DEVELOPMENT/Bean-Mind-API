@@ -73,18 +73,18 @@ namespace Bean_Mind.API.Controllers
                 var response = await _courseService.UpdateCourse(id, request, curriculumId);
                 return Ok(response);
             }
-        [HttpGet(ApiEndPointConstant.Course.GetSubjectsInCourse)]
-        [ProducesResponseType(typeof(IPaginate<GetSubjectResponse>), StatusCodes.Status200OK)]
-        [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetSubjectsByCourseId([FromRoute] Guid id, [FromQuery] int page, [FromQuery] int size)
-        {
+            [HttpGet(ApiEndPointConstant.Course.GetSubjectsInCourse)]
+            [ProducesResponseType(typeof(IPaginate<GetSubjectResponse>), StatusCodes.Status200OK)]
+            [ProducesErrorResponseType(typeof(ProblemDetails))]
+            public async Task<IActionResult> GetSubjectsByCourseId([FromRoute] Guid id, [FromQuery] int page, [FromQuery] int size)
+            {
 
-            var response = await _courseService.GetListSubjectsByCourseId(id, page, size);
-            return Ok(response);
+                var response = await _courseService.GetListSubjectsByCourseId(id, page, size);
+                return Ok(response);
 
-        }
+            }
 
     }
-    }
+}
 
 
