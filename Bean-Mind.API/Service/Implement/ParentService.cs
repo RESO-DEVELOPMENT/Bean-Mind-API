@@ -11,18 +11,18 @@ using Bean_Mind_Data.Paginate;
 
 namespace Bean_Mind.API.Service.Implement
 {
-   
-        public class ParentService : BaseService<ParentService>, IParentService
-        {
-                public ParentService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<ParentService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, logger, mapper, httpContextAccessor)
-                {
-                }
 
-            public async Task<CreateNewParentResponse> AddParent(CreateNewParentResquest newParentRequest)
-            {
+    public class ParentService : BaseService<ParentService>, IParentService
+    {
+        public ParentService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<ParentService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, logger, mapper, httpContextAccessor)
+        {
+        }
+
+        public async Task<CreateNewParentResponse> AddParent(CreateNewParentResquest newParentRequest)
+        {
             _logger.LogInformation($"Creating new parent with {newParentRequest.FirstName} {newParentRequest.LastName}");
-            var accounts = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(predicate : account => account.UserName.Equals(newParentRequest.UserName) && account.DelFlg != true);
-            if (accounts != null ) 
+            var accounts = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(predicate: account => account.UserName.Equals(newParentRequest.UserName) && account.DelFlg != true);
+            if (accounts != null)
             {
                 throw new BadHttpRequestException(MessageConstant.AccountMessage.UsernameExisted);
             }
@@ -49,38 +49,38 @@ namespace Bean_Mind.API.Service.Implement
 
 
             Parent newParent = new Parent()
-                {
-                    Id = Guid.NewGuid(),
-                    FirstName = newParentRequest.FirstName,
-                    LastName = newParentRequest.LastName,
-                    Phone = newParentRequest.Phone,
-                    Email = newParentRequest.Email,
-                    Address = newParentRequest.Address,
-                    InsDate = TimeUtils.GetCurrentSEATime(),
-                    UpdDate = TimeUtils.GetCurrentSEATime(),
-                    DelFlg = false,
-                    AccountId = account.Id,
-                };
+            {
+                Id = Guid.NewGuid(),
+                FirstName = newParentRequest.FirstName,
+                LastName = newParentRequest.LastName,
+                Phone = newParentRequest.Phone,
+                Email = newParentRequest.Email,
+                Address = newParentRequest.Address,
+                InsDate = TimeUtils.GetCurrentSEATime(),
+                UpdDate = TimeUtils.GetCurrentSEATime(),
+                DelFlg = false,
+                AccountId = account.Id,
+            };
 
-                await _unitOfWork.GetRepository<Parent>().InsertAsync(newParent);
+            await _unitOfWork.GetRepository<Parent>().InsertAsync(newParent);
 
-                var success = await _unitOfWork.CommitAsync() > 0;
-                if (!success)
-                {
-                    return null; // Or return appropriate error response
-                }
-
-                return new CreateNewParentResponse
-                {
-                    Id = newParent.Id,
-                    FirstName = newParent.FirstName,
-                    LastName = newParent.LastName,
-                    Email = newParent.Email,
-                    Phone = newParent.Phone,
-                    InsDate =newParent.InsDate,
-                    Message = "Parent created successfully"
-                };
+            var success = await _unitOfWork.CommitAsync() > 0;
+            if (!success)
+            {
+                return null; // Or return appropriate error response
             }
+
+            return new CreateNewParentResponse
+            {
+                Id = newParent.Id,
+                FirstName = newParent.FirstName,
+                LastName = newParent.LastName,
+                Email = newParent.Email,
+                Phone = newParent.Phone,
+                InsDate = newParent.InsDate,
+                Message = "Parent created successfully"
+            };
+        }
         public async Task<IPaginate<ParentResponse>> GetAllParents(int page, int size)
         {
             var parents = await _unitOfWork.GetRepository<Parent>().GetPagingListAsync(
@@ -164,10 +164,10 @@ namespace Bean_Mind.API.Service.Implement
             }
             parent.UpdDate = TimeUtils.GetCurrentSEATime();
             parent.DelFlg = true;
-            
+
             //Cập nhật DelFlg của Account
-           var account = await _unitOfWork.GetRepository<Account>()
-                                           .SingleOrDefaultAsync(predicate: a => a.Id.Equals(parent.AccountId) && a.DelFlg != true);
+            var account = await _unitOfWork.GetRepository<Account>()
+                                            .SingleOrDefaultAsync(predicate: a => a.Id.Equals(parent.AccountId) && a.DelFlg != true);
             if (account != null)
             {
                 account.DelFlg = true;
@@ -186,7 +186,5 @@ namespace Bean_Mind.API.Service.Implement
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;
         }
-
-
     }
 }

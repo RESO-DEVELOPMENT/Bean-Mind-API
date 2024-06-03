@@ -80,6 +80,25 @@ namespace Bean_Mind.API.Controllers
             return Ok(teacher);
         }
 
+        [HttpDelete(ApiEndPointConstant.Teacher.DeleteTeacher)]
+        [ProducesResponseType(typeof(Teacher), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(NotFoundObjectResult))]
+        public async Task<IActionResult> DeleteTeacher([FromRoute] Guid teacherId)
+        {
+            var teacher = await _teacherService.RemoveTeacher(teacherId);
+            if (teacher == null)
+            {
+                return NotFound(new ErrorResponse()
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Error = "Teacher not found",
+                    TimeStamp = TimeUtils.GetCurrentSEATime()
+                });
+            }
+
+            return Ok(teacher);
+        }
+
 
         [HttpPatch(ApiEndPointConstant.Teacher.UpdateTeacher)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
@@ -131,29 +150,6 @@ namespace Bean_Mind.API.Controllers
             }
 
         }
-
-        [HttpDelete(ApiEndPointConstant.Teacher.DeleteTeacher)]
-        [ProducesResponseType(typeof(Teacher), StatusCodes.Status200OK)]
-        [ProducesErrorResponseType(typeof(NotFoundObjectResult))]
-        public async Task<IActionResult> DeleteTeacher([FromRoute] Guid teacherId)
-        {
-            var teacher = await _teacherService.RemoveTeacher(teacherId);
-            if (teacher == null)
-            {
-                return NotFound(new ErrorResponse()
-                {
-                    StatusCode = StatusCodes.Status404NotFound,
-                    Error = "Teacher not found",
-                    TimeStamp = TimeUtils.GetCurrentSEATime()
-                });
-            }
-
-            return Ok(teacher);
-        }
-
-
     }
-
-
 }
 

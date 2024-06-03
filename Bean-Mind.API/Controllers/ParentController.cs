@@ -78,6 +78,18 @@ namespace Bean_Mind.API.Controllers
             return Ok(parent);
         }
 
+        [HttpDelete(ApiEndPointConstant.Parent.DeleteParent)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ActionResult))]
+        public async Task<IActionResult> RemoveParents([FromRoute] Guid id)
+        {
+
+            var response = await _parentService.RemoveParent(id);
+
+            return Ok(response);
+
+        }
+
         [HttpPatch(ApiEndPointConstant.Parent.UpdateParent)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
@@ -117,18 +129,6 @@ namespace Bean_Mind.API.Controllers
                     TimeStamp = DateTime.Now
                 });
             }
-        }
-
-        [HttpDelete(ApiEndPointConstant.Parent.DeleteParent)]
-        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
-        [ProducesErrorResponseType(typeof(ActionResult))]
-        public async Task<IActionResult> RemoveParents([FromRoute] Guid id)
-        {
-
-            var response = await _parentService.RemoveParent(id);
-
-            return Ok(response);
-
         }
     }
 }

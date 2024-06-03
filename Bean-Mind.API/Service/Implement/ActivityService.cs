@@ -135,13 +135,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<IPaginate<GetDocumentResponse>> GetListDocument(Guid id, int page, int size)
         {
             var documents = await _unitOfWork.GetRepository<Document>().GetPagingListAsync(
-                selector: d => new GetDocumentResponse
-                {
-                    Id = d.Id,
-                    Title = d.Title,
-                    Description = d.Description,
-                    Url = d.Url
-                },
+                selector: d => new GetDocumentResponse(d.Id, d.Title, d.Description, d.Url),
                 predicate: d => d.ActivityId.Equals(id) && d.DelFlg == false,
                 page: page,
                 size: size
@@ -152,13 +146,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<IPaginate<GetVideoResponse>> GetListVideo(Guid id, int page, int size)
         {
             var videos = await _unitOfWork.GetRepository<Video>().GetPagingListAsync(
-                selector: v => new GetVideoResponse
-                {
-                    Id = v.Id,
-                    Title = v.Title,
-                    Description = v.Description,
-                    Url = v.Url
-                },
+                selector: v => new GetVideoResponse(v.Id, v.Description, v.Title, v.Url),
                 predicate: d => d.ActivityId.Equals(id) && d.DelFlg == false,
                 page: page,
                 size: size

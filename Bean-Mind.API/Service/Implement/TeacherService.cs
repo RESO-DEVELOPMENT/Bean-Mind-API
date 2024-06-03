@@ -139,6 +139,19 @@ namespace Bean_Mind.API.Service.Implement
 
         }
 
+        public async Task<bool> RemoveTeacher(Guid teacherId)
+        {
+
+            Teacher teachers = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(predicate: x => x.Id.Equals(teacherId) && x.DelFlg != true);
+            teachers.UpdDate = TimeUtils.GetCurrentSEATime();
+            teachers.DelFlg = true;
+            _unitOfWork.GetRepository<Teacher>().UpdateAsync(teachers);
+            var isSuccessful = await _unitOfWork.CommitAsync() > 0;
+
+
+            return isSuccessful;
+        }
+
         public async Task<bool> UpdateTeacher(Guid id, UpdateTecherRequest request)
         {
             if (id == Guid.Empty) throw new BadHttpRequestException(MessageConstant.TeacherMessage.TeacherNotFound);
@@ -165,23 +178,6 @@ namespace Bean_Mind.API.Service.Implement
             var isSuccessful = await _unitOfWork.CommitAsync() > 0;
 
             return isSuccessful;
-        }
-
-
-        public async Task<bool> RemoveTeacher(Guid teacherId)
-        {
-
-            Teacher teachers = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(predicate: x => x.Id.Equals(teacherId) && x.DelFlg != true);
-            teachers.UpdDate = TimeUtils.GetCurrentSEATime();
-            teachers.DelFlg = true;
-            _unitOfWork.GetRepository<Teacher>().UpdateAsync(teachers);
-            var isSuccessful = await _unitOfWork.CommitAsync() > 0;
-
-
-            return isSuccessful;
-
-
-
         }
     }
 }

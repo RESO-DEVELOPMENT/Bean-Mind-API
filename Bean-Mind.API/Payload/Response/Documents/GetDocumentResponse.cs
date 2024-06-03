@@ -12,7 +12,7 @@ namespace Bean_Mind.API.Payload.Response.Documents
 
         public string Url { get; set; } = null!;
 
-        public GetDocumentResponse(Guid id, string? title, string description, string? url)
+        public GetDocumentResponse(Guid id, string title, string description, string url)
         {
             Id = id;
             Title = title;
