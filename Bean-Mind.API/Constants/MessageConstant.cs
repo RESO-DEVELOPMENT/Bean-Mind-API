@@ -105,7 +105,7 @@
             public const string ListIsEmpty = "Không có gì cả";
             public const string TopicNotFound = "Không tìm thấy topic nào";
         }
-      
+
         public static class CurriculumMessage
         {
             public const string CreateNewCurriculumFailedMessage = "Thêm chương trình học mới thất bại";
@@ -119,6 +119,14 @@
             public const string CreateNewCourseFailedMessage = "Tạo mới khóa học thất bại";
             public const string CoursesIsEmpty = "Không có khóa học nào.";
             public const string CourseNotFound = "Không tìm thấy khóa học";
+        }
+
+        public static class ActivityMessage
+        {
+            public const string CreateNewActivityFailedMessage = "Tạo mới hoạt động thất bại";
+            public const string ActivityIsEmpty = "Không có hoạt động nào";
+            public const string ActivityNotFound = "Không tìm thấy hoạt động";
+            public const string UpdateActivityFailedMessage = "Cập nhật hoạt động thất bại";
         }
     }
 }
