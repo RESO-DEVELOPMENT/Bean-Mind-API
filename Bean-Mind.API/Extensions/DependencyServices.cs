@@ -65,6 +65,10 @@ namespace Bean_Mind.API.Extensions
             services.AddScoped<ICurriculumService, CurriculumService>();
             //Activity
             services.AddScoped<IActivityService, ActivityService>();
+            //Video
+            services.AddScoped<IVideoService, VideoService>();
+            //Document
+            services.AddScoped<IDocumentService, DocumentService>();
 
             return services;
         }

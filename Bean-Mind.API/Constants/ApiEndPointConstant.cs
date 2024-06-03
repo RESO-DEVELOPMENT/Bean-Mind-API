@@ -132,6 +132,25 @@ namespace Bean_Mind.API.Constants
             public const string GetVideoInActivity = ActivityEndPoint + "/{id}/videos";
             public const string GetDocumentInActivity = ActivityEndPoint + "/{id}/documents";
         }
+        public static class Video
+        {
+            public const string VideoEndpoint = ApiEndpoint + "/videos";
+            public const string Create = VideoEndpoint;
+            public const string GetAll = VideoEndpoint;
+            public const string GetById = VideoEndpoint + "/{id}";
+            public const string UpdateVideo = VideoEndpoint + "/{id}";
+            public const string DeleteVideo = VideoEndpoint + "/{id}";
+        }
+
+        public static class Document
+        {
+            public const string DocumentEndpoint = ApiEndpoint + "/documents";
+            public const string Create = DocumentEndpoint;
+            public const string GetAll = DocumentEndpoint;
+            public const string GetById = DocumentEndpoint + "/{id}";
+            public const string UpdateDocument = DocumentEndpoint + "/{id}";
+            public const string DeleteDocument = DocumentEndpoint + "/{id}";        
+        }
     }
 }
     

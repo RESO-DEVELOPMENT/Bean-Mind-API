@@ -1,11 +1,7 @@
 ﻿using Bean_Mind.API.Constants;
-using Bean_Mind.API.Payload.Request.Schools;
 using Bean_Mind.API.Payload.Request.Subjects;
 using Bean_Mind.API.Payload.Response.Chapters;
-using Bean_Mind.API.Payload.Response.Schools;
-using Bean_Mind.API.Payload.Response.Students;
 using Bean_Mind.API.Payload.Response.Subjects;
-using Bean_Mind.API.Service.Implement;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
 using Microsoft.AspNetCore.Mvc;
@@ -24,14 +20,13 @@ namespace Bean_Mind.API.Controllers
         [HttpPost(ApiEndPointConstant.Subject.Create)]
         [ProducesResponseType(typeof(CreateNewSubjectResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> CreateSubject([FromBody] CreateNewSubjectRequest createNewStudentRequest, [FromQuery] Guid courseId)
+        public async Task<IActionResult> CreateSubject([FromBody] CreateNewSubjectRequest createNewSubjectRequest, [FromQuery] Guid courseId)
         {
-            CreateNewSubjectResponse response = await _subjectService.CreateNewSubject(createNewStudentRequest, courseId);
+            CreateNewSubjectResponse response = await _subjectService.CreateNewSubject(createNewSubjectRequest, courseId);
             if (response == null)
             {
                 return Problem(MessageConstant.SubjectMessage.CreateNewSubjectFailedMessage);
             }
-
             return CreatedAtAction(nameof(CreateSubject), response);
         }
 
@@ -94,7 +89,5 @@ namespace Bean_Mind.API.Controllers
 
             return Ok(response);
         }
-        
-
     }
 }

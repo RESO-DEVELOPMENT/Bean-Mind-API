@@ -1,5 +1,4 @@
-﻿using Bean_Mind.API.Payload.Request.Students;
-using Bean_Mind.API.Payload.Request.Topics;
+﻿using Bean_Mind.API.Payload.Request.Topics;
 using Bean_Mind.API.Payload.Response.Topics;
 using Bean_Mind_Data.Paginate;
 
