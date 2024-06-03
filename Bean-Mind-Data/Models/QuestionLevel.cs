@@ -15,8 +15,6 @@ public partial class QuestionLevel
     [StringLength(50)]
     public string Name { get; set; } = null!;
 
-    public int OrderIndex { get; set; }
-
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
 

@@ -14,8 +14,6 @@ public partial class QuestionType
 
     public string Name { get; set; } = null!;
 
-    public int OrderIndex { get; set; }
-
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
 
