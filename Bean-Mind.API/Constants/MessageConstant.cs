@@ -131,10 +131,18 @@
 
         public static class ActivityMessage
         {
-            public const string CreateNewActivityFailedMessage = "Tạo mới activity thất bại";
-            public const string ActivityIsEmpty = "Không có activity nào";
-            public const string ActivityNotFound = "Không tìm thấy activity";
-            public const string UpdateActivityFailedMessage = "Cập nhật activity thất bại";
+            public const string CreateNewActivityFailedMessage = "Tạo mới hoạt động thất bại";
+            public const string ActivityIsEmpty = "Không có hoạt động nào";
+            public const string ActivityNotFound = "Không tìm thấy hoạt động";
+            public const string UpdateActivityFailedMessage = "Cập nhật hoạt động thất bại";
+        }
+
+        public static class DocumentMessage
+        {
+            public const string CreateNewDocumentFailedMessage = "Tạo mới tài liệu thất bại.";
+            public const string DocumentNotFound = "Không có tài liệu nào";
+            public const string DocumentIdEmpty = "Không tìm thấy tài liệu";
+            public const string UpdateDocumentFailedMessage = "Cập nhật tài liệu thất bại.";
         }
     }
 }
