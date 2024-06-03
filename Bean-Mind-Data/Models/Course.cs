@@ -18,6 +18,8 @@ public partial class Course
     [StringLength(50)]
     public string Description { get; set; } = null!;
 
+    public int Status { get; set; }
+
     [Column(TypeName = "datetime")]
     public DateTime StartDate { get; set; }
 
