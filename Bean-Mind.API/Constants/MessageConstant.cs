@@ -150,7 +150,7 @@
         {
             public const string CreateNewWorkSheetFailedMessage = "Tạo mới worksheet thất bại.";
             public const string WorkSheetNotFound = "Không tìm thấy worksheet nào";
-            public const string WorkSheetIdEmpty = "Không có worksheet nào";
+            public const string WorkSheetIsEmpty = "Không có worksheet nào";
             public const string UpdateWorkSheetFailedMessage = "Cập nhật worksheet thất bại.";
         }
 
@@ -159,5 +159,12 @@
             public const string WorkSheetTemplateNotFound = "Không có template nào";
         }
 
+        public static class QuestionLevelMessage
+        {
+            public const string CreateNewQuestionLevelFailedMessage = "Tạo mới cấp độ câu hỏi thất bại.";
+            public const string QuestionLevelNotFound = "Không có cấp độ câu hỏi nào";
+            public const string QuestionLevelIsEmpty = "Không tìm thấy cấp độ câu hỏi";
+            public const string UpdateQuestionLevelFailedMessage = "Cập nhật cấp độ câu hỏi thất bại.";
+        }
     }
 }

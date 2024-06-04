@@ -49,6 +49,7 @@ namespace Bean_Mind.API.Service.Implement
                     Id = newDocument.Id,
                     Title = newDocument.Title,
                     Description = newDocument.Description,
+                    ActivityId = newDocument.ActivityId,
                     DelFlg = newDocument.DelFlg,
                     InsDate = newDocument.InsDate,
                     UpdDate = newDocument.UpdDate,
@@ -61,7 +62,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<IPaginate<GetDocumentResponse>> GetListDocument(int page, int size)
         {
             var documents = await _unitOfWork.GetRepository<Document>().GetPagingListAsync(
-                selector: s => new GetDocumentResponse(s.Id, s.Title, s.Description, s.Url),
+                selector: s => new GetDocumentResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId),
                 predicate: s => s.DelFlg != true,
                 page: page,
                 size: size
@@ -79,7 +80,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.DocumentMessage.DocumentNotFound);
             }
             var document = await _unitOfWork.GetRepository<Document>().SingleOrDefaultAsync(
-                selector: s => new GetDocumentResponse(s.Id, s.Title, s.Description,s.Url),
+                selector: s => new GetDocumentResponse(s.Id, s.Title, s.Description,s.Url, s.ActivityId),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (document == null)
             {

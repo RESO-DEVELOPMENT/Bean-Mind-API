@@ -1,6 +1,8 @@
 ﻿using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Schools;
 using Bean_Mind.API.Payload.Response.Chapters;
+using Bean_Mind.API.Payload.Response.Curriculums;
+using Bean_Mind.API.Payload.Response.QuestionLevels;
 using Bean_Mind.API.Payload.Response.Schools;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
@@ -92,14 +94,25 @@ namespace Bean_Mind.API.Controllers
         }
 
         [HttpGet(ApiEndPointConstant.School.GetCurriculumInSchool)]
-        [ProducesResponseType(typeof(IPaginate<GetChapterResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IPaginate<GetCurriculumResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetChapterInSubject([FromRoute] Guid id, [FromQuery] int? page, [FromQuery] int? size)
+        public async Task<IActionResult> GetCurriculumInSchool([FromRoute] Guid id, [FromQuery] int? page, [FromQuery] int? size)
         {
             int pageNumber = page ?? 1;
             int pageSize = size ?? 10;
             var response = await _schoolService.GetListCurriculum(id, pageNumber, pageSize);
 
+            return Ok(response);
+        }
+
+        [HttpGet(ApiEndPointConstant.School.GetQuestionLevelInSchool)]
+        [ProducesResponseType(typeof(IPaginate<GetQuestionLevelResponse>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> GetQuestionLevelInSchool([FromRoute] Guid id, [FromQuery] int? page, [FromQuery] int? size)
+        {
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _schoolService.GetListQuestionLevel(id, pageNumber, pageSize);
             return Ok(response);
         }
     }

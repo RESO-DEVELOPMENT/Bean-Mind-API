@@ -97,6 +97,8 @@ namespace Bean_Mind.API.Service.Implement
                     Id = w.Id,
                     Title = w.Title,
                     Description = w.Description,
+                    ActivityId = w.ActivityId,
+                    WorksheetTemplateId = w.WorksheetTemplateId
                 },
                 predicate: w => w.DelFlg == false,
                 page: page,
@@ -112,6 +114,8 @@ namespace Bean_Mind.API.Service.Implement
                     Id = w.Id,
                     Title = w.Title,
                     Description = w.Description,
+                    ActivityId = w.ActivityId,
+                    WorksheetTemplateId = w.WorksheetTemplateId
                 },
                 predicate: w => w.Id.Equals(id) && w.DelFlg == false);
             return workSheet;

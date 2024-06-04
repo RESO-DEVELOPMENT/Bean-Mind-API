@@ -36,9 +36,11 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.Activity.GetAll)]
         [ProducesResponseType(typeof(IPaginate<GetActivityResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof (ProblemDetails))]
-        public async Task<IActionResult> GetAllActivity([FromQuery] int page, [FromQuery] int size)
+        public async Task<IActionResult> GetAllActivity([FromQuery] int? page, [FromQuery] int? size)
         {
-            var response = await _activityService.GetListActivity(page, size);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _activityService.GetListActivity(pageNumber, pageSize);
             if(response == null)
             {
                 return Problem(MessageConstant.ActivityMessage.ActivityIsEmpty);

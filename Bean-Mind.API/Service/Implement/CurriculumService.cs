@@ -134,6 +134,13 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
             }
+            var curriculums = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(
+                 predicate: x => x.Id == id && x.DelFlg != true
+                 );
+            if (curriculums == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
+            }
             var courses = await _unitOfWork.GetRepository<Course>().GetPagingListAsync(
                 selector: s => new GetCourseResponse
                 {
@@ -150,7 +157,7 @@ namespace Bean_Mind.API.Service.Implement
                 );
             if (courses == null)
             {
-                throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
+                throw new BadHttpRequestException(MessageConstant.CourseMessage.CoursesIsEmpty);
             }
             return courses;
         }

@@ -190,9 +190,17 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
             }
+            var course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(
+             predicate: x => x.Id == id && x.DelFlg != true
+             );
+
+            if (course == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
+            }
 
             var subjects = await _unitOfWork.GetRepository<Subject>().GetPagingListAsync(
-                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description),
+                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId),
                 predicate: s => s.CourseId.Equals(id) && s.DelFlg != true,
                 page: page,
                 size: size
