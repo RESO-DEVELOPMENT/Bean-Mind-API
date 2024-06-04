@@ -19,7 +19,7 @@ public partial class Document
 
     public string Url { get; set; } = null!;
 
-    public Guid ActivityId { get; set; }
+    public Guid? ActivityId { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
@@ -31,5 +31,5 @@ public partial class Document
 
     [ForeignKey("ActivityId")]
     [InverseProperty("Documents")]
-    public virtual Activity Activity { get; set; } = null!;
+    public virtual Activity? Activity { get; set; }
 }

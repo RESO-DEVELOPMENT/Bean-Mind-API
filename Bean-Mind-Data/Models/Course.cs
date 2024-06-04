@@ -26,7 +26,7 @@ public partial class Course
     [Column(TypeName = "datetime")]
     public DateTime EndDate { get; set; }
 
-    public Guid CurriculumId { get; set; }
+    public Guid? CurriculumId { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
@@ -38,7 +38,7 @@ public partial class Course
 
     [ForeignKey("CurriculumId")]
     [InverseProperty("Courses")]
-    public virtual Curriculum Curriculum { get; set; } = null!;
+    public virtual Curriculum? Curriculum { get; set; }
 
     [InverseProperty("Course")]
     public virtual ICollection<Subject> Subjects { get; set; } = new List<Subject>();

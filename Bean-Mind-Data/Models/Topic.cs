@@ -17,7 +17,7 @@ public partial class Topic
 
     public string Description { get; set; } = null!;
 
-    public Guid ChapterId { get; set; }
+    public Guid? ChapterId { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
@@ -32,5 +32,5 @@ public partial class Topic
 
     [ForeignKey("ChapterId")]
     [InverseProperty("Topics")]
-    public virtual Chapter Chapter { get; set; } = null!;
+    public virtual Chapter? Chapter { get; set; }
 }

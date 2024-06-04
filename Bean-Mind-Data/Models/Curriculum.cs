@@ -23,7 +23,7 @@ public partial class Curriculum
     [Column(TypeName = "datetime")]
     public DateTime EndDate { get; set; }
 
-    public Guid SchoolId { get; set; }
+    public Guid? SchoolId { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
@@ -38,5 +38,5 @@ public partial class Curriculum
 
     [ForeignKey("SchoolId")]
     [InverseProperty("Curricula")]
-    public virtual School School { get; set; } = null!;
+    public virtual School? School { get; set; }
 }

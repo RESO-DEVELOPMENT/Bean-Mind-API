@@ -37,7 +37,6 @@ public partial class Question
     [InverseProperty("Questions")]
     public virtual QuestionLevel QuestionLevel { get; set; } = null!;
 
-    [ForeignKey("QuestionTypeId")]
-    [InverseProperty("Questions")]
-    public virtual QuestionType QuestionType { get; set; } = null!;
+    [InverseProperty("Question")]
+    public virtual ICollection<WorksheetQuestion> WorksheetQuestions { get; set; } = new List<WorksheetQuestion>();
 }
