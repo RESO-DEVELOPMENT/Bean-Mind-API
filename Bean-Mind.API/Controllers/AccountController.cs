@@ -1,7 +1,6 @@
 ﻿using Bean_Mind.API.Constants;
 using Microsoft.AspNetCore.Mvc;
 using Bean_Mind.API.Service.Interface;
-
 using Bean_Mind.API.Payload.Response.Accounts;
 using Bean_Mind.API.Payload.Request;
 

@@ -5,8 +5,6 @@ using Bean_Mind.API.Payload;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
 using Microsoft.AspNetCore.Mvc;
-using Bean_Mind.API.Service.Implement;
-using Bean_Mind_Data.Models;
 using Bean_Mind.API.Utils;
 
 namespace Bean_Mind.API.Controllers
@@ -53,9 +51,11 @@ namespace Bean_Mind.API.Controllers
 
         [HttpGet(ApiEndPointConstant.Parent.GetAll)]
         [ProducesResponseType(typeof(IPaginate<ParentResponse>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllParents([FromQuery] int page, [FromQuery] int size)
+        public async Task<IActionResult> GetAllParents([FromQuery] int? page, [FromQuery] int? size)
         {
-            var parents = await _parentService.GetAllParents(page, size);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var parents = await _parentService.GetAllParents(pageNumber, pageSize);
             return Ok(parents);
         }
 

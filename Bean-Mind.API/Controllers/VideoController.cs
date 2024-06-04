@@ -32,9 +32,11 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.Video.GetAll)]
         [ProducesResponseType(typeof(IPaginate<GetVideoResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetListVideo([FromQuery] int page, [FromQuery] int size)
+        public async Task<IActionResult> GetListVideo([FromQuery] int? page, [FromQuery] int? size)
         {
-            var response = await _videoService.GetListVideo(page, size);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _videoService.GetListVideo(pageNumber, pageSize);
             if (response == null)
             {
                 return Problem(MessageConstant.VideoMessage.VideoIsEmpty);

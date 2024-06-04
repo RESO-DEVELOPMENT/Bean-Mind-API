@@ -1,7 +1,6 @@
 ﻿using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Documents;
 using Bean_Mind.API.Payload.Response.Documents;
-using Bean_Mind.API.Service.Implement;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
 using Microsoft.AspNetCore.Mvc;
@@ -32,9 +31,11 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.Document.GetAll)]
         [ProducesResponseType(typeof(IPaginate<GetDocumentResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetListDocument([FromQuery] int page, [FromQuery] int size)
+        public async Task<IActionResult> GetListDocument([FromQuery] int? page, [FromQuery] int? size)
         {
-            var response = await _documentService.GetListDocument(page, size);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _documentService.GetListDocument(pageNumber, pageSize);
             if (response == null)
             {
                 return Problem(MessageConstant.DocumentMessage.DocumentIdEmpty);

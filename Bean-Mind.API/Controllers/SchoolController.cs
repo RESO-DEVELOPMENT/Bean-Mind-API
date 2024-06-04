@@ -1,9 +1,7 @@
 ﻿using Bean_Mind.API.Constants;
-using Bean_Mind.API.Payload;
 using Bean_Mind.API.Payload.Request.Schools;
 using Bean_Mind.API.Payload.Response.Chapters;
 using Bean_Mind.API.Payload.Response.Schools;
-using Bean_Mind.API.Service.Implement;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
 using Microsoft.AspNetCore.Mvc;
@@ -38,11 +36,13 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.School.GetListSchool)]
         [ProducesResponseType(typeof(IPaginate<GetSchoolResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetListSchool([FromQuery] int page,
-            [FromQuery] int size)
+        public async Task<IActionResult> GetListSchool([FromQuery] int? page,
+            [FromQuery] int? size)
         {
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
 
-            var response = await _schoolService.getListSchool(page, size);
+            var response = await _schoolService.getListSchool(pageNumber, pageSize);
             if (response == null)
             {
                 return Problem(MessageConstant.SchoolMessage.CreateNewSchoolFailedMessage);
@@ -94,9 +94,11 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.School.GetCurriculumInSchool)]
         [ProducesResponseType(typeof(IPaginate<GetChapterResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetChapterInSubject([FromRoute] Guid id, [FromQuery] int page, [FromQuery] int size)
+        public async Task<IActionResult> GetChapterInSubject([FromRoute] Guid id, [FromQuery] int? page, [FromQuery] int? size)
         {
-            var response = await _schoolService.GetListCurriculum(id, page, size);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _schoolService.GetListCurriculum(id, pageNumber, pageSize);
 
             return Ok(response);
         }
