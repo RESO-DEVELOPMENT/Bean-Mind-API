@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Bean_Mind.API.Constants;
-using Bean_Mind.API.Controllers;
 using Bean_Mind.API.Payload.Request.Chapters;
 using Bean_Mind.API.Payload.Response.Chapters;
 using Bean_Mind.API.Payload.Response.Topics;
@@ -9,7 +8,6 @@ using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
-using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind.API.Service.Implement
 {

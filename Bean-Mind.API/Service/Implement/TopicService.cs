@@ -49,8 +49,7 @@ namespace Bean_Mind.API.Service.Implement
                     Description = topic.Description,
                     InsDate = topic.InsDate,
                     UpdDate = topic.UpdDate,
-                    DelFlg = topic.DelFlg,
-                    ChapterId = topic.ChapterId
+                    DelFlg = topic.DelFlg
                 };
             }
             return response;

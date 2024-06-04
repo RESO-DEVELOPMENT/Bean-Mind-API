@@ -63,6 +63,9 @@ namespace Bean_Mind.API.Service.Implement
                     Logo = newSchool.Logo,
                     Description = newSchool.Description,
                     Email = newSchool.Email,
+                    InsDate = newSchool.InsDate,
+                    UpdDate = newSchool.UpdDate,
+                    DelFlg = newSchool.DelFlg
                 };
             }
 
@@ -170,10 +173,7 @@ namespace Bean_Mind.API.Service.Implement
                     Description = s.Description,
                     StartDate = s.StartDate,
                     EndDate = s.EndDate,
-                    SchoolId = s.SchoolId,
-                    InsDate = s.InsDate,
-                    UpdDate = s.UpdDate,
-                    DelFlg = s.DelFlg,
+                    SchoolId = s.SchoolId
                 },
                 predicate: s => s.SchoolId.Equals(id) && s.DelFlg != true,
                 page: page,

@@ -52,8 +52,9 @@ namespace Bean_Mind.API.Service.Implement
                     Title = newVideo.Title,
                     Description = newVideo.Description,
                     Url = newVideo.Url,
-                    InsDate = newVideo.InsDate.Value,
-                    UpdDate = newVideo.UpdDate.Value
+                    InsDate = newVideo.InsDate,
+                    UpdDate = newVideo.UpdDate,
+                    DelFlg = false
                 };
             }
             return createNewVideoResponse;

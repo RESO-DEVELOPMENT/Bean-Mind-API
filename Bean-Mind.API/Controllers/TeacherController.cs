@@ -62,11 +62,11 @@ namespace Bean_Mind.API.Controllers
         }
 
         [HttpGet(ApiEndPointConstant.Teacher.GetById)]
-        [ProducesResponseType(typeof(Teacher), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetTeacherResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(NotFoundObjectResult))]
-        public async Task<IActionResult> GetTeacherById([FromRoute] Guid teacherId)
+        public async Task<IActionResult> GetTeacherById([FromRoute] Guid id)
         {
-            var teacher = await _teacherService.GetTeacherById(teacherId);
+            var teacher = await _teacherService.GetTeacherById(id);
             if (teacher == null) 
             {
                 return NotFound(new ErrorResponse()
@@ -81,11 +81,11 @@ namespace Bean_Mind.API.Controllers
         }
 
         [HttpDelete(ApiEndPointConstant.Teacher.DeleteTeacher)]
-        [ProducesResponseType(typeof(Teacher), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(NotFoundObjectResult))]
-        public async Task<IActionResult> DeleteTeacher([FromRoute] Guid teacherId)
+        public async Task<IActionResult> DeleteTeacher([FromRoute] Guid id)
         {
-            var teacher = await _teacherService.RemoveTeacher(teacherId);
+            var teacher = await _teacherService.RemoveTeacher(id);
             if (teacher == null)
             {
                 return NotFound(new ErrorResponse()
