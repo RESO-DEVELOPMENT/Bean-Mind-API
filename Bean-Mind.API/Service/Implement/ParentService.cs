@@ -77,7 +77,10 @@ namespace Bean_Mind.API.Service.Implement
                 LastName = newParent.LastName,
                 Email = newParent.Email,
                 Phone = newParent.Phone,
+                Address = newParent.Address,
                 InsDate = newParent.InsDate,
+                UpdDate = newParent.UpdDate,
+                DelFlg = false,
                 Message = "Parent created successfully"
             };
         }
@@ -91,10 +94,7 @@ namespace Bean_Mind.API.Service.Implement
                     LastName = x.LastName,
                     Email = x.Email,
                     Phone = x.Phone,
-                    Address = x.Address,
-                    InsDate = x.InsDate,
-                    UpdDate = x.UpdDate,
-                    DelFlg = x.DelFlg
+                    Address = x.Address
                 },
                 predicate: x => x.DelFlg == false,
                 size: size,
@@ -112,10 +112,7 @@ namespace Bean_Mind.API.Service.Implement
                     LastName = x.LastName,
                     Email = x.Email,
                     Phone = x.Phone,
-                    Address = x.Address,
-                    InsDate = x.InsDate,
-                    UpdDate = x.UpdDate,
-                    DelFlg = x.DelFlg
+                    Address = x.Address
                 },
                 predicate: x => x.Id == parentId && x.DelFlg != true);
 

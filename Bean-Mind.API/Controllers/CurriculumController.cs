@@ -57,7 +57,7 @@ namespace Bean_Mind.API.Controllers
         }
 
         [HttpDelete(ApiEndPointConstant.Curriculum.DeleteCurriculum)]
-        [ProducesResponseType(typeof(GetCurriculumResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<IActionResult> DeleteCurriculum([FromRoute] Guid id)
         {
@@ -66,7 +66,7 @@ namespace Bean_Mind.API.Controllers
         }
 
         [HttpPatch(ApiEndPointConstant.Curriculum.GetById)]
-        [ProducesResponseType(typeof(GetCurriculumResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<IActionResult> UpdateCurriculum([FromRoute] Guid id, [FromBody] UpdateCurriculumRequest request, [FromQuery] Guid schoolId)
         {

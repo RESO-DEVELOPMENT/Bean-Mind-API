@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using Bean_Mind.API.Constants;
-using Bean_Mind.API.Payload;
-using Bean_Mind.API.Payload.Request;
 using Bean_Mind.API.Payload.Request.Teachers;
-
 using Bean_Mind.API.Payload.Response.Teachers;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
@@ -12,8 +8,6 @@ using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
-using Microsoft.EntityFrameworkCore;
-using System.Drawing;
 namespace Bean_Mind.API.Service.Implement
 {
     public class TeacherService : BaseService<TeacherService>, ITeacherService
@@ -92,7 +86,6 @@ namespace Bean_Mind.API.Service.Implement
                 Phone = newTeacher.Phone,   
                 DateOfBirth = newTeacher.DateOfBirth,
                 ImgUrl = newTeacher.ImgUrl,
-                School = newTeacher.School,
                 DelFlg = false,
                 InsDate = newTeacher.InsDate,
                 UpdDate= newTeacher.UpdDate
@@ -118,7 +111,7 @@ namespace Bean_Mind.API.Service.Implement
             return teachers;
         }
 
-        public async Task<GetTeacherResponse> GetTeacherById(Guid teacherId)
+        public async Task<GetTeacherResponse> GetTeacherById(Guid id)
         {
 
             GetTeacherResponse teachers = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
@@ -132,22 +125,33 @@ namespace Bean_Mind.API.Service.Implement
                DateOfBirth = x.DateOfBirth,
                ImgUrl = x.ImgUrl,
            },
-           predicate: x => x.Id.Equals(teacherId) && x.DelFlg != true
+           predicate: x => x.Id.Equals(id) && x.DelFlg != true
            );
            
             return teachers;
 
         }
 
-        public async Task<bool> RemoveTeacher(Guid teacherId)
+        public async Task<bool> RemoveTeacher(Guid id)
         {
+            if (id == Guid.Empty) throw new BadHttpRequestException(MessageConstant.TeacherMessage.TeacherNotFound);
 
-            Teacher teachers = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(predicate: x => x.Id.Equals(teacherId) && x.DelFlg != true);
+            Teacher teachers = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(predicate: x => x.Id.Equals(id) && x.DelFlg != true);
+            if (teachers == null) throw new BadHttpRequestException(MessageConstant.TeacherMessage.TeacherNotFound);
+
             teachers.UpdDate = TimeUtils.GetCurrentSEATime();
             teachers.DelFlg = true;
+            var account = await _unitOfWork.GetRepository<Account>()
+                                            .SingleOrDefaultAsync(predicate: a => a.Id.Equals(teachers.AccountId) && a.DelFlg != true);
+            if (account != null)
+            {
+                account.DelFlg = true;
+                account.UpdDate = TimeUtils.GetCurrentSEATime();
+                _unitOfWork.GetRepository<Account>().UpdateAsync(account);
+            }
+            
             _unitOfWork.GetRepository<Teacher>().UpdateAsync(teachers);
             var isSuccessful = await _unitOfWork.CommitAsync() > 0;
-
 
             return isSuccessful;
         }

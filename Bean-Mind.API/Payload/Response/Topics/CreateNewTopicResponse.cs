@@ -10,7 +10,6 @@ namespace Bean_Mind.API.Payload.Response.Topics
         public DateTime? InsDate { get; set; }
         public DateTime? UpdDate { get; set; }
         public bool? DelFlg { get; set; }
-        public Guid? ChapterId { get; set; }
 
     }
 }
