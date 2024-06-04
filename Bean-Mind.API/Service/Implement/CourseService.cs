@@ -58,7 +58,7 @@ namespace Bean_Mind.API.Service.Implement
                     StartDate = newCourse.StartDate,
                     EndDate = newCourse.EndDate,
                     Status = newCourse.Status,
-                    CurriculumId = newCourse.CurriculumId,
+                    CurriculumId = newCourse.CurriculumId.Value,
                     InsDate = newCourse.InsDate,
                     UpdDate = newCourse.UpdDate,
                     DelFlg = false
@@ -125,7 +125,7 @@ namespace Bean_Mind.API.Service.Implement
                  StartDate = s.StartDate,
                  EndDate = s.EndDate,
                  Status = s.Status,
-                 CurriculumId = s.CurriculumId,
+                 CurriculumId = s.CurriculumId.Value,
                  InsDate = s.InsDate,
                  UpdDate = s.UpdDate,
                  DelFlg = s.DelFlg,
@@ -153,7 +153,7 @@ namespace Bean_Mind.API.Service.Implement
                   StartDate = s.StartDate,
                   EndDate = s.EndDate,
                   Status = s.Status,
-                  CurriculumId = s.CurriculumId,
+                  CurriculumId = s.CurriculumId.Value,
                   InsDate = s.InsDate,
                   UpdDate = s.UpdDate,
                   DelFlg = s.DelFlg,
@@ -191,7 +191,7 @@ namespace Bean_Mind.API.Service.Implement
 
             course.Title = string.IsNullOrEmpty(updateCourseRequest.Title) ? course.Title : updateCourseRequest.Title;
             course.Description = string.IsNullOrEmpty(updateCourseRequest.Description) ? course.Description : updateCourseRequest.Description;
-            course.Status = string.IsNullOrEmpty(updateCourseRequest.Status.ToString()) ? course.Status : (int)updateCourseRequest.Status;
+            course.Status = updateCourseRequest.Status.HasValue ? (int)updateCourseRequest.Status.Value : course.Status;
             course.StartDate = (updateCourseRequest.StartDate.HasValue && updateCourseRequest.StartDate != DateTime.MinValue) ? updateCourseRequest.StartDate.Value : course.StartDate;
             course.EndDate = (updateCourseRequest.EndDate.HasValue && updateCourseRequest.EndDate != DateTime.MinValue) ? updateCourseRequest.EndDate.Value : course.EndDate;
             course.UpdDate = TimeUtils.GetCurrentSEATime();

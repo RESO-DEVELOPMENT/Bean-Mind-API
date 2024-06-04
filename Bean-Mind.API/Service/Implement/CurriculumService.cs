@@ -142,7 +142,7 @@ namespace Bean_Mind.API.Service.Implement
                     Description = s.Description,
                     StartDate = s.StartDate,
                     EndDate = s.EndDate,
-                    CurriculumId = s.CurriculumId,
+                    CurriculumId = s.CurriculumId.Value,
                     InsDate = s.InsDate,
                     UpdDate = s.UpdDate,
                     DelFlg = s.DelFlg
