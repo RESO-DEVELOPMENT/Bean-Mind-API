@@ -147,6 +147,7 @@ namespace Bean_Mind.API.Service.Implement
                     Id = s.Id,
                     Title = s.Title,
                     Description = s.Description,
+                    Status = s.Status,
                     StartDate = s.StartDate,
                     EndDate = s.EndDate,
                     CurriculumId = s.CurriculumId
