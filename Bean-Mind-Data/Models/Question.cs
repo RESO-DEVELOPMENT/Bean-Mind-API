@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Bean_Mind_Data.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind_Data.Models;
@@ -18,7 +19,7 @@ public partial class Question
 
     public int OrderIndex { get; set; }
 
-    public Guid QuestionTypeId { get; set; }
+    public int QuestionType { get; set; }
 
     public Guid QuestionLevelId { get; set; }
 
@@ -37,7 +38,6 @@ public partial class Question
     [InverseProperty("Questions")]
     public virtual QuestionLevel QuestionLevel { get; set; } = null!;
 
-    [ForeignKey("QuestionTypeId")]
-    [InverseProperty("Questions")]
-    public virtual QuestionType QuestionType { get; set; } = null!;
+    [InverseProperty("Question")]
+    public virtual ICollection<WorksheetQuestion> WorksheetQuestions { get; set; } = new List<WorksheetQuestion>();
 }

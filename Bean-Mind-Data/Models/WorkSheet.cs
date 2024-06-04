@@ -17,7 +17,7 @@ public partial class WorkSheet
 
     public string? Description { get; set; }
 
-    public Guid ActivityId { get; set; }
+    public Guid? ActivityId { get; set; }
 
     public Guid WorksheetTemplateId { get; set; }
 
@@ -31,7 +31,7 @@ public partial class WorkSheet
 
     [ForeignKey("ActivityId")]
     [InverseProperty("WorkSheets")]
-    public virtual Activity Activity { get; set; } = null!;
+    public virtual Activity? Activity { get; set; }
 
     [InverseProperty("Worksheet")]
     public virtual ICollection<WorksheetQuestion> WorksheetQuestions { get; set; } = new List<WorksheetQuestion>();

@@ -18,7 +18,7 @@ public partial class Chapter
     [StringLength(50)]
     public string Description { get; set; } = null!;
 
-    public Guid SubjectId { get; set; }
+    public Guid? SubjectId { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
@@ -30,7 +30,7 @@ public partial class Chapter
 
     [ForeignKey("SubjectId")]
     [InverseProperty("Chapters")]
-    public virtual Subject Subject { get; set; } = null!;
+    public virtual Subject? Subject { get; set; }
 
     [InverseProperty("Chapter")]
     public virtual ICollection<Topic> Topics { get; set; } = new List<Topic>();

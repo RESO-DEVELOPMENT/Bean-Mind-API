@@ -24,6 +24,10 @@ public partial class WorksheetQuestion
 
     public bool? DelFlg { get; set; }
 
+    [ForeignKey("QuestionId")]
+    [InverseProperty("WorksheetQuestions")]
+    public virtual Question Question { get; set; } = null!;
+
     [ForeignKey("WorksheetId")]
     [InverseProperty("WorksheetQuestions")]
     public virtual WorkSheet Worksheet { get; set; } = null!;

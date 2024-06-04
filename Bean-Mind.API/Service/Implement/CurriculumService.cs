@@ -64,7 +64,7 @@ namespace Bean_Mind.API.Service.Implement
                     Description = newCurriculum.Description,
                     StartDate = newCurriculum.StartDate,
                     EndDate = newCurriculum.EndDate,
-                    SchoolId = newCurriculum.SchoolId,
+                    SchoolId = newCurriculum.SchoolId.Value,
                     InsDate = newCurriculum.InsDate,
                     UpdDate = newCurriculum.UpdDate,
                     DelFlg = newCurriculum.DelFlg

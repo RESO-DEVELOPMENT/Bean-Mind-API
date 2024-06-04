@@ -145,5 +145,6 @@
             public const string DocumentIdEmpty = "Không tìm thấy tài liệu";
             public const string UpdateDocumentFailedMessage = "Cập nhật tài liệu thất bại.";
         }
+       
     }
 }
