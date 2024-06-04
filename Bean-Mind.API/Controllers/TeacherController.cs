@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Payload.Request.Teachers;
 using Bean_Mind.API.Payload.Response.Teachers;
-using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
 using Bean_Mind.API.Payload;
 using Bean_Mind.API.Utils;
@@ -55,9 +54,11 @@ namespace Bean_Mind.API.Controllers
         }
         [HttpGet(ApiEndPointConstant.Teacher.GetAll)]
         [ProducesResponseType(typeof(IPaginate<GetTeacherResponse>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllTeachers([FromQuery] int page, [FromQuery] int size)
+        public async Task<IActionResult> GetAllTeachers([FromQuery] int? page, [FromQuery] int? size)
         {
-            var teachers = await _teacherService.GetAllTeachers(page, size);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var teachers = await _teacherService.GetAllTeachers(pageNumber, pageSize);
             return Ok(teachers);
         }
 
@@ -103,7 +104,7 @@ namespace Bean_Mind.API.Controllers
         [HttpPatch(ApiEndPointConstant.Teacher.UpdateTeacher)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
-        public async Task<IActionResult> UpdateTeacherInformation(Guid id, [FromBody] UpdateTecherRequest updateTeacherRequest)
+        public async Task<IActionResult> UpdateTeacherInformation([FromRoute]Guid id, [FromBody] UpdateTecherRequest updateTeacherRequest)
         {
             if (!ModelState.IsValid)
             {

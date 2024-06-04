@@ -1,7 +1,5 @@
-﻿
-using Bean_Mind.API.Constants;
+﻿using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Curriculums;
-using Bean_Mind.API.Payload.Response.Chapters;
 using Bean_Mind.API.Payload.Response.Courses;
 using Bean_Mind.API.Payload.Response.Curriculums;
 using Bean_Mind.API.Service.Implement;
@@ -35,9 +33,11 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.Curriculum.GetAll)]
         [ProducesResponseType(typeof(IPaginate<GetCurriculumResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetListCurriculum([FromQuery] int page, [FromQuery] int size)
+        public async Task<IActionResult> GetListCurriculum([FromQuery] int? page, [FromQuery] int? size)
         {
-            var response = await _curriculumService.getListCurriculum(page, size);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _curriculumService.getListCurriculum(pageNumber, pageSize);
             if (response == null)
             {
                 return Problem(MessageConstant.CurriculumMessage.CurriculumsIsEmpty);
@@ -77,9 +77,11 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.Curriculum.GetCourseInCurriculum)]
         [ProducesResponseType(typeof(IPaginate<GetCourseResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetCourseInCurriculum([FromRoute] Guid id, [FromQuery] int page, [FromQuery] int size)
+        public async Task<IActionResult> GetCourseInCurriculum([FromRoute] Guid id, [FromQuery] int? page, [FromQuery] int? size)
         {
-            var response = await _curriculumService.GetListCourses(id, page, size);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _curriculumService.GetListCourses(id, pageNumber, pageSize);
 
             return Ok(response);
         }

@@ -145,6 +145,19 @@
             public const string DocumentIdEmpty = "Không tìm thấy tài liệu";
             public const string UpdateDocumentFailedMessage = "Cập nhật tài liệu thất bại.";
         }
-       
+
+        public static class WorkSheetMessage
+        {
+            public const string CreateNewWorkSheetFailedMessage = "Tạo mới worksheet thất bại.";
+            public const string WorkSheetNotFound = "Không tìm thấy worksheet nào";
+            public const string WorkSheetIdEmpty = "Không có worksheet nào";
+            public const string UpdateWorkSheetFailedMessage = "Cập nhật worksheet thất bại.";
+        }
+
+        public static class WorkSheetTemplateMessage
+        {
+            public const string WorkSheetTemplateNotFound = "Không có template nào";
+        }
+
     }
 }

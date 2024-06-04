@@ -1,5 +1,4 @@
 ﻿using Bean_Mind.API.Constants;
-using Bean_Mind.API.Payload.Request.Schools;
 using Bean_Mind.API.Payload.Request.Students;
 using Bean_Mind.API.Payload.Response.Students;
 using Bean_Mind.API.Service.Interface;
@@ -35,8 +34,10 @@ namespace Bean_Mind.API.Controllers
             [HttpGet(ApiEndPointConstant.Student.GetAll)]
             [ProducesResponseType(typeof(IPaginate<GetStudentResponse>), StatusCodes.Status200OK)]
             [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetListStudent([FromQuery] int page, [FromQuery] int size) { 
-            var response = await _studentService.getListStudent(page, size);
+        public async Task<IActionResult> GetListStudent([FromQuery] int? page, [FromQuery] int? size) {
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _studentService.getListStudent(pageNumber, pageSize);
             if(response == null)
             {
                 return Problem(MessageConstant.StudentMessage.StudentsIsEmpty);
@@ -64,7 +65,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
-        [HttpPatch(ApiEndPointConstant.Student.GetById)]
+        [HttpPatch(ApiEndPointConstant.Student.UpdateStudent)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<IActionResult> UpdateStudent([FromRoute] Guid id, [FromBody] UpdateStudentRequest request, [FromQuery] Guid schoolId, [FromQuery] Guid parentId)
