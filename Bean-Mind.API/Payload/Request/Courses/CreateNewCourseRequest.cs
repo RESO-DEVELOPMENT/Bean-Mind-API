@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Bean_Mind_Data.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bean_Mind.API.Payload.Request.Courses
 {
@@ -11,6 +12,9 @@ namespace Bean_Mind.API.Payload.Request.Courses
         [Required]
         [StringLength(50)]
         public string Description { get; set; }
+
+        [Required]
+        public StatusEnum Status { get; set; }
 
         [Required]
         public Guid CurriculumId { get; set; }

@@ -7,6 +7,7 @@
         public string? Description { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public int? Status {  get; set; }
         public Guid? CurriculumId { get; set; }
         public DateTime? InsDate { get; set; }
         public DateTime? UpdDate { get; set; }
