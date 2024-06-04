@@ -98,10 +98,7 @@ namespace Bean_Mind.API.Service.Implement
                     Id = a.Id,
                     Title = a.Title,
                     Description = a.Description,
-                    TopicId = a.TopicId,
-                    InsDate = a.InsDate,
-                    UpdDate = a.UpdDate,
-                    DelFlg = a.DelFlg
+                    TopicId = a.TopicId
                 },
                 predicate: a => a.Id.Equals(id) && a.DelFlg == false);
             if(activity == null)
@@ -119,10 +116,7 @@ namespace Bean_Mind.API.Service.Implement
                     Id = a.Id,
                     Title = a.Title,
                     Description = a.Description,
-                    TopicId = a.TopicId,
-                    InsDate = a.InsDate,
-                    UpdDate = a.UpdDate,
-                    DelFlg = a.DelFlg
+                    TopicId = a.TopicId
                 },
                 predicate: a => a.DelFlg == false,
                 page: page,

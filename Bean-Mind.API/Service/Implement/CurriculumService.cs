@@ -64,7 +64,7 @@ namespace Bean_Mind.API.Service.Implement
                     Description = newCurriculum.Description,
                     StartDate = newCurriculum.StartDate,
                     EndDate = newCurriculum.EndDate,
-                    SchoolId = newCurriculum.SchoolId,
+                    SchoolId = newCurriculum.SchoolId.Value,
                     InsDate = newCurriculum.InsDate,
                     UpdDate = newCurriculum.UpdDate,
                     DelFlg = newCurriculum.DelFlg
@@ -142,10 +142,7 @@ namespace Bean_Mind.API.Service.Implement
                     Description = s.Description,
                     StartDate = s.StartDate,
                     EndDate = s.EndDate,
-                    CurriculumId = s.CurriculumId.Value,
-                    InsDate = s.InsDate,
-                    UpdDate = s.UpdDate,
-                    DelFlg = s.DelFlg
+                    CurriculumId = s.CurriculumId
                 },
                 predicate: s => s.CurriculumId.Equals(id) && s.DelFlg != true,
                 page: page,
@@ -169,10 +166,7 @@ namespace Bean_Mind.API.Service.Implement
                      Description = s.Description,
                      StartDate = s.StartDate,
                      EndDate = s.EndDate,
-                     SchoolId = s.SchoolId,
-                     InsDate = s.InsDate,
-                     UpdDate = s.UpdDate,
-                     DelFlg = s.DelFlg,
+                     SchoolId = s.SchoolId
                  },
                  predicate: x => x.Id == Id && x.DelFlg != true
                  );
@@ -190,10 +184,7 @@ namespace Bean_Mind.API.Service.Implement
                       Description = s.Description,
                       StartDate = s.StartDate,
                       EndDate = s.EndDate,
-                      SchoolId = s.SchoolId,
-                      InsDate = s.InsDate,
-                      UpdDate = s.UpdDate,
-                      DelFlg = s.DelFlg,
+                      SchoolId = s.SchoolId
                   },
                   predicate: x => x.DelFlg == false,
                   size: size,

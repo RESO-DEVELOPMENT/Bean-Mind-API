@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using Bean_Mind.API.Constants;
-using Bean_Mind.API.Payload;
-using Bean_Mind.API.Payload.Request.Schools;
 using Bean_Mind.API.Payload.Request.Students;
-using Bean_Mind.API.Payload.Response.Schools;
 using Bean_Mind.API.Payload.Response.Students;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
@@ -11,7 +8,6 @@ using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind.API.Service.Implement
@@ -141,6 +137,14 @@ namespace Bean_Mind.API.Service.Implement
             }
             student.UpdDate = TimeUtils.GetCurrentSEATime();
             student.DelFlg = true;
+            var account = await _unitOfWork.GetRepository<Account>()
+                                            .SingleOrDefaultAsync(predicate: a => a.Id.Equals(student.AccountId) && a.DelFlg != true);
+            if (account != null)
+            {
+                account.DelFlg = true;
+                account.UpdDate = TimeUtils.GetCurrentSEATime();
+                _unitOfWork.GetRepository<Account>().UpdateAsync(account);
+            }
             _unitOfWork.GetRepository<Student>().UpdateAsync(student);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;
