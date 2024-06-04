@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Bean_Mind.API.Constants;
-using Bean_Mind.API.Controllers;
 using Bean_Mind.API.Payload.Request.Chapters;
 using Bean_Mind.API.Payload.Response.Chapters;
 using Bean_Mind.API.Payload.Response.Topics;
@@ -9,7 +8,6 @@ using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
-using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -53,6 +51,7 @@ namespace Bean_Mind.API.Service.Implement
                     Id = newChapter.Id,
                     Title = newChapter.Title,
                     Description = newChapter.Description,
+                    SubjectId = newChapter.SubjectId,
                     DelFlg = newChapter.DelFlg,
                     InsDate = newChapter.InsDate,
                     UpdDate = newChapter.UpdDate
@@ -64,7 +63,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<IPaginate<GetChapterResponse>> GetListChapter(int page, int size)
         {
             var chapters = await _unitOfWork.GetRepository<Chapter>().GetPagingListAsync(
-                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description),
+                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description, s.SubjectId),
                 predicate: s => s.DelFlg != true,
                 page: page,
                 size: size
@@ -82,7 +81,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
             }
             var chapter = await _unitOfWork.GetRepository<Chapter>().SingleOrDefaultAsync(
-                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description),
+                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description, s.SubjectId),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (chapter == null)
             {
@@ -158,8 +157,14 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
             }
+            var chapter = await _unitOfWork.GetRepository<Chapter>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(id) && s.DelFlg != true);
+            if (chapter == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
+            }
             var topics = await _unitOfWork.GetRepository<Topic>().GetPagingListAsync(
-                selector: s => new GetTopicResponse(s.Id, s.Title, s.Description),
+                selector: s => new GetTopicResponse(s.Id, s.Title, s.Description, s.ChapterId),
                 predicate: s => s.ChapterId.Equals(id) && s.DelFlg != true,
                 page: page,
                 size: size

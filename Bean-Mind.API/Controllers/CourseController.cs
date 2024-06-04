@@ -4,10 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Bean_Mind.API.Payload.Request.Courses;
 using Bean_Mind.API.Payload.Response.Courses;
 using Bean_Mind.API.Service.Interface;
-using Bean_Mind_Data.Paginate;
-using Microsoft.AspNetCore.Mvc;
 using Bean_Mind.API.Payload.Response.Subjects;
-using Bean_Mind.API.Service.Implement;
 
 namespace Bean_Mind.API.Controllers
     {
@@ -35,9 +32,11 @@ namespace Bean_Mind.API.Controllers
             [HttpGet(ApiEndPointConstant.Course.GetAll)]
             [ProducesResponseType(typeof(IPaginate<GetCourseResponse>), StatusCodes.Status200OK)]
             [ProducesErrorResponseType(typeof(ProblemDetails))]
-            public async Task<IActionResult> GetListCourse([FromQuery] int page, [FromQuery] int size)
+            public async Task<IActionResult> GetListCourse([FromQuery] int? page, [FromQuery] int? size)
             {
-                var response = await _courseService.GetListCourse(page, size);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _courseService.GetListCourse(pageNumber, pageSize);
                 if (response == null)
                 {
                     return Problem(MessageConstant.CourseMessage.CoursesIsEmpty);
@@ -57,7 +56,7 @@ namespace Bean_Mind.API.Controllers
             }
 
             [HttpDelete(ApiEndPointConstant.Course.DeleteCourse)]
-            [ProducesResponseType(typeof(GetCourseResponse), StatusCodes.Status200OK)]
+            [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
             [ProducesErrorResponseType(typeof(ProblemDetails))]
             public async Task<IActionResult> DeleteCurriculum([FromRoute] Guid id)
             {
@@ -66,7 +65,7 @@ namespace Bean_Mind.API.Controllers
             }
 
             [HttpPatch(ApiEndPointConstant.Course.GetById)]
-            [ProducesResponseType(typeof(GetCourseResponse), StatusCodes.Status200OK)]
+            [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
             [ProducesErrorResponseType(typeof(ProblemDetails))]
             public async Task<IActionResult> UpdateCourse([FromRoute] Guid id, [FromBody] UpdateCourseRequest request, [FromQuery] Guid curriculumId)
             {

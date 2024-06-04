@@ -4,5 +4,6 @@
     {
         public Guid? Id { get; set; }
         public int? Level { get; set; }
+        public Guid? SchoolId { get; set; }
     }
 }

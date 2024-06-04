@@ -6,10 +6,8 @@ using Bean_Mind.API.Payload.Response.Subjects;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
-using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
-using Microsoft.OpenApi.Extensions;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -44,12 +42,11 @@ namespace Bean_Mind.API.Service.Implement
             };
 
             await _unitOfWork.GetRepository<Course>().InsertAsync(newCourse);
-            bool  isSuccessful = await _unitOfWork.CommitAsync() > 0;
-
-            // return isSuccessful ? _mapper.Map<CreateNewCourseResponse>(newCourse) : null;
+            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
 
             CreateNewCourseResponse Response = null;
-            if (isSuccessful) {
+            if (isSuccessful)
+            {
                 Response = new CreateNewCourseResponse()
                 {
                     Id = Guid.NewGuid(),
@@ -74,7 +71,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
             }
-            var course  = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
+            var course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
             if (course == null)
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage
@@ -112,8 +109,6 @@ namespace Bean_Mind.API.Service.Implement
             return isSuccessful;
         }
 
-        
-
         public async Task<GetCourseResponse> GetCourseById(Guid Id)
         {
             var curriculums = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(
@@ -125,10 +120,7 @@ namespace Bean_Mind.API.Service.Implement
                  StartDate = s.StartDate,
                  EndDate = s.EndDate,
                  Status = s.Status,
-                 CurriculumId = s.CurriculumId.Value,
-                 InsDate = s.InsDate,
-                 UpdDate = s.UpdDate,
-                 DelFlg = s.DelFlg,
+                 CurriculumId = s.CurriculumId
              },
              predicate: x => x.Id == Id && x.DelFlg != true
              );
@@ -139,8 +131,6 @@ namespace Bean_Mind.API.Service.Implement
             }
             return curriculums;
         }
-
-       
 
         public async Task<IPaginate<GetCourseResponse>> GetListCourse(int page, int size)
         {
@@ -153,19 +143,14 @@ namespace Bean_Mind.API.Service.Implement
                   StartDate = s.StartDate,
                   EndDate = s.EndDate,
                   Status = s.Status,
-                  CurriculumId = s.CurriculumId.Value,
-                  InsDate = s.InsDate,
-                  UpdDate = s.UpdDate,
-                  DelFlg = s.DelFlg,
+                  CurriculumId = s.CurriculumId
               },
-              predicate: x => x.DelFlg == false,
+            predicate: x => x.DelFlg == false,
               size: size,
               page: page);
 
             return curriculums;
         }
-
-        
 
         public async Task<bool> UpdateCourse(Guid Id, UpdateCourseRequest updateCourseRequest, Guid curriculumId)
         {
@@ -173,14 +158,14 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
             }
-            var course  = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
+            var course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
             if (course == null)
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
             }
             if (curriculumId != Guid.Empty)
             {
-                Curriculum curriculum = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(curriculumId) && s.DelFlg !=true);
+                Curriculum curriculum = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(curriculumId) && s.DelFlg != true);
                 if (curriculum == null)
                 {
                     throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
@@ -188,15 +173,12 @@ namespace Bean_Mind.API.Service.Implement
                 course.CurriculumId = curriculumId;
             }
 
-
             course.Title = string.IsNullOrEmpty(updateCourseRequest.Title) ? course.Title : updateCourseRequest.Title;
             course.Description = string.IsNullOrEmpty(updateCourseRequest.Description) ? course.Description : updateCourseRequest.Description;
             course.Status = updateCourseRequest.Status.HasValue ? (int)updateCourseRequest.Status.Value : course.Status;
             course.StartDate = (updateCourseRequest.StartDate.HasValue && updateCourseRequest.StartDate != DateTime.MinValue) ? updateCourseRequest.StartDate.Value : course.StartDate;
             course.EndDate = (updateCourseRequest.EndDate.HasValue && updateCourseRequest.EndDate != DateTime.MinValue) ? updateCourseRequest.EndDate.Value : course.EndDate;
             course.UpdDate = TimeUtils.GetCurrentSEATime();
-
-            DateTime date;
 
             _unitOfWork.GetRepository<Course>().UpdateAsync(course);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
@@ -208,9 +190,17 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
             }
+            var course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(
+             predicate: x => x.Id == id && x.DelFlg != true
+             );
+
+            if (course == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
+            }
 
             var subjects = await _unitOfWork.GetRepository<Subject>().GetPagingListAsync(
-                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description),
+                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId),
                 predicate: s => s.CourseId.Equals(id) && s.DelFlg != true,
                 page: page,
                 size: size
@@ -223,7 +213,5 @@ namespace Bean_Mind.API.Service.Implement
 
             return subjects;
         }
-
-
     }
 }

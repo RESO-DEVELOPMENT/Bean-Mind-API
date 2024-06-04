@@ -6,13 +6,14 @@
         public string? Title { get; set; } = null!;
         public string? Description { get; set; } = null!;
         public string? Url { get; set; } = null!;
-
-        public GetVideoResponse(Guid id, string title, string description, string url)
+        public Guid? ActivityId { get; set; }
+        public GetVideoResponse(Guid id, string title, string description, string url, Guid? activityId)
         {
             Id = id;
             Title = title;
             Description = description;
             Url = url;
+            ActivityId = activityId;
         }
     }
 }

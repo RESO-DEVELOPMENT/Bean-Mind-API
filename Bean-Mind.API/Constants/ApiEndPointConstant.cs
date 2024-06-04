@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Routing;
+﻿    using Microsoft.AspNetCore.Routing;
 
 namespace Bean_Mind.API.Constants
 {
@@ -33,6 +33,7 @@ namespace Bean_Mind.API.Constants
             public const string DeleteSchool = SchoolEndpoint + "/{id}";
             public const string UpdateSchool = SchoolEndpoint + "/{id}";
             public const string GetCurriculumInSchool = SchoolEndpoint + "/{id}/curriculums";
+            public const string GetQuestionLevelInSchool = SchoolEndpoint + "/{id}/questionlevels";
         }
 
         public static class Teacher
@@ -160,6 +161,15 @@ namespace Bean_Mind.API.Constants
             public const string GetById = QuestionLevelEndpoint + "/{id}";
             public const string UpdateQuestionLevel = QuestionLevelEndpoint + "/{id}";
             public const string DeleteQuestionLevel = QuestionLevelEndpoint + "/{id}";
+        }
+        public static class WorkSheet
+        {
+            public const string WorkSheetEndPoint = ApiEndpoint + "/worksheets";
+            public const string Create = WorkSheetEndPoint;
+            public const string GetAll = WorkSheetEndPoint;
+            public const string GetById = WorkSheetEndPoint + "/{id}";
+            public const string UpdateWorkSheet = WorkSheetEndPoint + "/{id}";
+            public const string DeleteWorkSheet = WorkSheetEndPoint + "/{id}";
         }
     }
 }

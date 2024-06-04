@@ -1,9 +1,6 @@
-﻿
-using Bean_Mind.API.Constants;
+﻿using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Topics;
-using Bean_Mind.API.Payload.Response.Students;
 using Bean_Mind.API.Payload.Response.Topics;
-using Bean_Mind.API.Service.Implement;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
 using Microsoft.AspNetCore.Mvc;
@@ -35,9 +32,11 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.Topic.GetAll)]
         [ProducesResponseType(typeof(IPaginate<GetTopicResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> getAll([FromQuery] int page, [FromQuery] int size)
+        public async Task<IActionResult> getAll([FromQuery] int? page, [FromQuery] int? size)
         {
-            var response = await _topicService.GetListTopic(page, size);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _topicService.GetListTopic(pageNumber, pageSize);
             if(response == null)
             {
                 return Problem(MessageConstant.TopicMessage.ListIsEmpty);
@@ -66,9 +65,9 @@ namespace Bean_Mind.API.Controllers
         [HttpPatch(ApiEndPointConstant.Topic.UpdateTopic)]
         [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> UpdateTopic([FromRoute] Guid topicId, [FromQuery] Guid chapterId, UpdateTopicRequest request)
+        public async Task<IActionResult> UpdateTopic([FromRoute] Guid id, [FromQuery] Guid chapterId, UpdateTopicRequest request)
         {
-            var response = await _topicService.UpdateTopic(topicId, chapterId, request);
+            var response = await _topicService.UpdateTopic(id, chapterId, request);
             if(response == false)
             {
                 return Problem(MessageConstant.TopicMessage.UpdateTopicFailedMessage);

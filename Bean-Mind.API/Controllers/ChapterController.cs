@@ -2,7 +2,6 @@
 using Bean_Mind.API.Payload.Request.Chapters;
 using Bean_Mind.API.Payload.Response.Chapters;
 using Bean_Mind.API.Payload.Response.Topics;
-using Bean_Mind.API.Service.Implement;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
 using Microsoft.AspNetCore.Mvc;
@@ -35,9 +34,11 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.Chapter.GetAll)]
         [ProducesResponseType(typeof(IPaginate<GetChapterResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetListChapter([FromQuery] int page, [FromQuery] int size)
+        public async Task<IActionResult> GetListChapter([FromQuery] int? page, [FromQuery] int? size)
         {
-            var response = await _chapterService.GetListChapter(page, size);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _chapterService.GetListChapter(pageNumber, pageSize);
             if (response == null)
             {
                 return Problem(MessageConstant.ChapterMessage.ChaptersIsEmpty);
@@ -85,9 +86,11 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.Chapter.GetTopicInChapter)]
         [ProducesResponseType(typeof(IPaginate<GetTopicResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetTopicInChaper([FromRoute] Guid id, [FromQuery] int page, [FromQuery] int size)
+        public async Task<IActionResult> GetTopicInChaper([FromRoute] Guid id, [FromQuery] int? page, [FromQuery] int? size)
         {
-            var response = await _chapterService.GetListTopic(id, page, size);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _chapterService.GetListTopic(id, pageNumber, pageSize);
 
             return Ok(response);
         }

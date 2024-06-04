@@ -52,8 +52,10 @@ namespace Bean_Mind.API.Service.Implement
                     Title = newVideo.Title,
                     Description = newVideo.Description,
                     Url = newVideo.Url,
-                    InsDate = newVideo.InsDate.Value,
-                    UpdDate = newVideo.UpdDate.Value
+                    ActivityId = newVideo.ActivityId,
+                    InsDate = newVideo.InsDate,
+                    UpdDate = newVideo.UpdDate,
+                    DelFlg = false
                 };
             }
             return createNewVideoResponse;
@@ -62,7 +64,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<IPaginate<GetVideoResponse>> GetListVideo(int page, int size)
         {
             var videos = await _unitOfWork.GetRepository<Video>().GetPagingListAsync(
-                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url),
+                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId),
                 predicate: s => s.DelFlg != true,
                 page: page,
                 size: size
@@ -81,7 +83,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.VideoMessage.VideoNotFound);
             }
             var video = await _unitOfWork.GetRepository<Video>().SingleOrDefaultAsync(
-                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url),
+                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true
                 );
             if (video == null)
