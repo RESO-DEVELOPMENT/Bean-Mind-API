@@ -123,7 +123,7 @@ namespace Bean_Mind.API.Constants
 
         public static class Activity
         {
-            public const string ActivityEndPoint = ApiEndpoint + "/activity";
+            public const string ActivityEndPoint = ApiEndpoint + "/activities";
             public const string Create = ActivityEndPoint;
             public const string GetAll = ActivityEndPoint;
             public const string GetById = ActivityEndPoint + "/{id}";
@@ -150,6 +150,16 @@ namespace Bean_Mind.API.Constants
             public const string GetById = DocumentEndpoint + "/{id}";
             public const string UpdateDocument = DocumentEndpoint + "/{id}";
             public const string DeleteDocument = DocumentEndpoint + "/{id}";        
+        }
+
+        public static class QuestionLevel
+        {
+            public const string QuestionLevelEndpoint = ApiEndpoint + "/questionlevels";
+            public const string Create = QuestionLevelEndpoint;
+            public const string GetAll = QuestionLevelEndpoint;
+            public const string GetById = QuestionLevelEndpoint + "/{id}";
+            public const string UpdateQuestionLevel = QuestionLevelEndpoint + "/{id}";
+            public const string DeleteQuestionLevel = QuestionLevelEndpoint + "/{id}";
         }
     }
 }

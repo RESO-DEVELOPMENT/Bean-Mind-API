@@ -13,9 +13,9 @@ namespace Bean_Mind.API.Service.Implement
 {
     public class SubjectService : BaseService<SubjectService>, ISubjectService
     {
-        public SubjectService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<SubjectService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, logger, mapper, httpContextAccessor)
-        {
-        }
+            public SubjectService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<SubjectService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, logger, mapper, httpContextAccessor)
+            {
+            }
 
         public async Task<CreateNewSubjectResponse> CreateNewSubject(CreateNewSubjectRequest request, Guid courseId)
         {

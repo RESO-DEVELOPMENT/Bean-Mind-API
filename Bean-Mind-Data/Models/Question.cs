@@ -18,7 +18,7 @@ public partial class Question
 
     public int OrderIndex { get; set; }
 
-    public Guid QuestionTypeId { get; set; }
+    public int QuestionType { get; set; }
 
     public Guid QuestionLevelId { get; set; }
 

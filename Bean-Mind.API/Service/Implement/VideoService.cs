@@ -111,7 +111,7 @@ namespace Bean_Mind.API.Service.Implement
             return isSuccessful;
         }
 
-        public async Task<bool> UpdateVideo(Guid videoId, Guid activtyId, UpdateVideoRequest request)
+        public async Task<bool> UpdateVideo(Guid videoId, Guid activityId, UpdateVideoRequest request)
         {
             if (videoId == Guid.Empty)
             {
@@ -123,14 +123,14 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.VideoMessage.VideoNotFound);
             }
 
-            if (activtyId != Guid.Empty)
+            if (activityId != Guid.Empty)
             {
-                var activity = await _unitOfWork.GetRepository<Activity>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(activtyId) && c.DelFlg != true);
+                var activity = await _unitOfWork.GetRepository<Activity>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(activityId) && c.DelFlg != true);
                 if (activity == null)
                 {
                     throw new BadHttpRequestException(MessageConstant.ActivityMessage.ActivityNotFound);
                 }
-                video.ActivityId = activtyId;
+                video.ActivityId = activityId;
             }
 
             video.Title = string.IsNullOrEmpty(request.Title) ? video.Title : request.Title;

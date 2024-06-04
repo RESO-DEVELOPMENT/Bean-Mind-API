@@ -166,6 +166,10 @@ public partial class BeanMindContext : DbContext
             entity.Property(e => e.DelFlg).HasDefaultValue(false);
             entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.School).WithMany(p => p.QuestionLevels)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_QuestionLevel_School");
         });
 
         modelBuilder.Entity<School>(entity =>
