@@ -84,7 +84,7 @@ namespace Bean_Mind.API.Service.Implement
         {
             var questions = await _unitOfWork.GetRepository<Question>().GetPagingListAsync(
                 selector: q => q,
-                predicate:  q => q.WorksheetQuestions.ToList(),
+                predicate: null,
                 orderBy: null,
                 include: null,
                 page: page,
