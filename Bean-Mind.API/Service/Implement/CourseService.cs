@@ -18,14 +18,14 @@ namespace Bean_Mind.API.Service.Implement
         public CourseService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<CourseService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, logger, mapper, httpContextAccessor)
         {
         }
-        public async Task<CreateNewCourseResponse> CreateNewCourse(CreateNewCourseRequest createNewCourseRequest)
+        public async Task<CreateNewCourseResponse> CreateNewCourse(CreateNewCourseRequest createNewCourseRequest, Guid curriculumId )
         {
             _logger.LogInformation($"Creating new Course with title: {createNewCourseRequest.Title}");
 
-            var curriculum = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: c => c.Id == createNewCourseRequest.CurriculumId && c.DelFlg != true);
+            var curriculum = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(predicate: c => c.Id == curriculumId && c.DelFlg != true);
             if (curriculum == null)
             {
-                _logger.LogError($"Curriculum with id {createNewCourseRequest.CurriculumId} not found.");
+                _logger.LogError($"Curriculum with id {curriculumId} not found.");
                 return null;
             }
 
@@ -36,7 +36,6 @@ namespace Bean_Mind.API.Service.Implement
                 Description = createNewCourseRequest.Description,
                 StartDate = createNewCourseRequest.StartDate,
                 EndDate = createNewCourseRequest.EndDate,
-                CurriculumId = createNewCourseRequest.CurriculumId,
                 Status = (int)(createNewCourseRequest.Status),
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
@@ -58,7 +57,7 @@ namespace Bean_Mind.API.Service.Implement
                     StartDate = newCourse.StartDate,
                     EndDate = newCourse.EndDate,
                     Status = newCourse.Status,
-                    CurriculumId = newCourse.CurriculumId.Value,
+                    CurriculumId = curriculumId,
                     InsDate = newCourse.InsDate,
                     UpdDate = newCourse.UpdDate,
                     DelFlg = false
