@@ -8,6 +8,7 @@ using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -138,11 +139,14 @@ namespace Bean_Mind.API.Service.Implement
             worksheetTemplate.UpdDate = TimeUtils.GetCurrentSEATime();
             worksheetTemplate.DelFlg = true;
 
-            var worksheets = await _unitOfWork.GetRepository<WorkSheet>().GetListAsync(predicate: s => s.WorksheetTemplateId.Equals(id) && s.DelFlg != true);
+            var worksheets = await _unitOfWork.GetRepository<WorkSheet>().GetListAsync(
+                predicate: s => s.WorksheetTemplateId.Equals(id) && s.DelFlg != true,
+                include: s => s.Include(s => s.WorksheetQuestions)
+                );
 
             foreach ( var worksheet in worksheets)
             {
-                var worksheetQuestions = worksheet.WorksheetQuestions.ToList();
+                var worksheetQuestions = worksheet.WorksheetQuestions.Where(s => s.DelFlg != true).ToList();
                 foreach (var worksheetQuestion in worksheetQuestions)
                 {
                     worksheetQuestion.UpdDate = TimeUtils.GetCurrentSEATime();

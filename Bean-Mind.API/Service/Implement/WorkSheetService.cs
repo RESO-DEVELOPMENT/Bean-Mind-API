@@ -7,6 +7,7 @@ using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
+using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 
 namespace Bean_Mind.API.Service.Implement
@@ -75,13 +76,24 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.WorkSheetMessage.WorkSheetNotFound);
             }
-            var workSheet = await _unitOfWork.GetRepository<WorkSheet>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true);
+            var workSheet = await _unitOfWork.GetRepository<WorkSheet>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(id) && s.DelFlg != true,
+                include: s => s.Include(s => s.WorksheetQuestions)
+                );
             if (workSheet == null)
             {
                 throw new BadHttpRequestException(MessageConstant.WorkSheetMessage.WorkSheetNotFound);
             }
             workSheet.DelFlg = true;
             workSheet.UpdDate = TimeUtils.GetCurrentSEATime();
+
+            var worksheetQuestions = workSheet.WorksheetQuestions.Where(x => x.DelFlg != true).ToList();
+            foreach (var worksheetQuestion in worksheetQuestions)
+            {
+                worksheetQuestion.UpdDate = TimeUtils.GetCurrentSEATime();
+                worksheetQuestion.DelFlg = true;
+                _unitOfWork.GetRepository<WorksheetQuestion>().UpdateAsync(worksheetQuestion);
+            }
 
             _unitOfWork.GetRepository<WorkSheet>().UpdateAsync(workSheet);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
