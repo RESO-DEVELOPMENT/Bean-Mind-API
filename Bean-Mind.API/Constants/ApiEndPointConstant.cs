@@ -172,6 +172,16 @@ namespace Bean_Mind.API.Constants
             public const string UpdateWorkSheet = WorkSheetEndPoint + "/{id}";
             public const string DeleteWorkSheet = WorkSheetEndPoint + "/{id}";
         }
+
+        public static class WorkSheetTemplate
+        {
+            public const string WorkSheetTemplateEndPoint = ApiEndpoint + "/worksheettemplates";
+            public const string Create = WorkSheetTemplateEndPoint;
+            public const string GetAll = WorkSheetTemplateEndPoint;
+            public const string GetById = WorkSheetTemplateEndPoint + "/{id}";
+            public const string UpdateWorkSheetTemplate = WorkSheetTemplateEndPoint + "/{id}";
+            public const string DeleteWorkSheetTemplate = WorkSheetTemplateEndPoint + "/{id}";
+        }
     }
 }
     

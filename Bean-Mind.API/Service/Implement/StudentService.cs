@@ -150,7 +150,7 @@ namespace Bean_Mind.API.Service.Implement
             return isSuccessful;
         }
 
-        public async Task<bool> UpdateStudent(Guid Id, UpdateStudentRequest request, Guid schoolId, Guid parentId)
+        public async Task<bool> UpdateStudent(Guid Id, UpdateStudentRequest request, Guid parentId)
         {
             if (Id == Guid.Empty)
             {
@@ -161,15 +161,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.StudentMessage.StudentNotFound);
             }
-            if (schoolId != Guid.Empty)
-            {
-                School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(schoolId) && s.DelFlg != true);
-                if (school == null)
-                {
-                    throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
-                }
-                student.SchoolId = schoolId;
-            }
+            
             if (parentId != Guid.Empty)
             {
                 Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Id.Equals(parentId) && p.DelFlg != true);

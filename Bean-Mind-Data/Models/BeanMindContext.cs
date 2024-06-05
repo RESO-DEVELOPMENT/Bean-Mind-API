@@ -282,7 +282,11 @@ public partial class BeanMindContext : DbContext
         modelBuilder.Entity<WorksheetTemplate>(entity =>
         {
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.DelFlg).HasDefaultValue(false);
             entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.Subject).WithMany(p => p.WorksheetTemplates).HasConstraintName("FK_WorksheetTemplate_Subject");
         });
 
         OnModelCreatingPartial(modelBuilder);

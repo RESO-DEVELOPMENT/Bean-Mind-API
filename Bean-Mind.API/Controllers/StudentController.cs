@@ -68,9 +68,9 @@ namespace Bean_Mind.API.Controllers
         [HttpPatch(ApiEndPointConstant.Student.UpdateStudent)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> UpdateStudent([FromRoute] Guid id, [FromBody] UpdateStudentRequest request, [FromQuery] Guid schoolId, [FromQuery] Guid parentId)
+        public async Task<IActionResult> UpdateStudent([FromRoute] Guid id, [FromBody] UpdateStudentRequest request, [FromQuery] Guid parentId)
         {
-            var response = await _studentService.UpdateStudent(id, request, schoolId, parentId);
+            var response = await _studentService.UpdateStudent(id, request, parentId);
             return Ok(response);
         }
     }
