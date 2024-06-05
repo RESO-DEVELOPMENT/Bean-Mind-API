@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Schools;
-using Bean_Mind.API.Payload.Response.Chapters;
 using Bean_Mind.API.Payload.Response.Curriculums;
+using Bean_Mind.API.Payload.Response.QuestionLevels;
 using Bean_Mind.API.Payload.Response.Schools;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
@@ -36,7 +35,7 @@ namespace Bean_Mind.API.Service.Implement
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false,
             };
-            
+
             await _unitOfWork.GetRepository<School>().InsertAsync(newSchool);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             Account account = new Account()
@@ -63,6 +62,9 @@ namespace Bean_Mind.API.Service.Implement
                     Logo = newSchool.Logo,
                     Description = newSchool.Description,
                     Email = newSchool.Email,
+                    InsDate = newSchool.InsDate,
+                    UpdDate = newSchool.UpdDate,
+                    DelFlg = newSchool.DelFlg
                 };
             }
 
@@ -71,24 +73,24 @@ namespace Bean_Mind.API.Service.Implement
 
         public async Task<bool> deleteSchool(Guid Id)
         {
-            if(Id == Guid.Empty)
+            if (Id == Guid.Empty)
             {
                 throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
             }
             var school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(
                 predicate: s => s.Id.Equals(Id) && s.DelFlg != true);
-            if(school == null)
+            if (school == null)
             {
                 throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
             }
-            
+
             var parents = await _unitOfWork.GetRepository<Parent>().GetListAsync(
                 predicate: p => p.SchoolId.Equals(Id) && p.DelFlg == false);
-            foreach(var parent in parents)
+            foreach (var parent in parents)
             {
                 var students = await _unitOfWork.GetRepository<Student>().GetListAsync(
-                    predicate: s => s.ParentId.Equals(parent.Id)  && s.DelFlg == false);
-                foreach(var student in students)
+                    predicate: s => s.ParentId.Equals(parent.Id) && s.DelFlg == false);
+                foreach (var student in students)
                 {
                     var accountS = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
                         predicate: a => a.Id.Equals(student.AccountId) && a.DelFlg == false);
@@ -115,19 +117,19 @@ namespace Bean_Mind.API.Service.Implement
             {
                 var courses = await _unitOfWork.GetRepository<Course>().GetListAsync(
                     predicate: c => c.CurriculumId.Equals(currilum.Id) && c.DelFlg == false);
-                foreach(var course in courses)
+                foreach (var course in courses)
                 {
                     var subjects = await _unitOfWork.GetRepository<Subject>().GetListAsync(
                         predicate: s => s.CourseId.Equals(course.Id) && s.DelFlg == false);
-                    foreach(var subject in subjects)
+                    foreach (var subject in subjects)
                     {
                         var chapters = await _unitOfWork.GetRepository<Chapter>().GetListAsync(
                             predicate: c => c.SubjectId.Equals(subject.Id) && c.DelFlg == false);
-                        foreach(var chapter in chapters)
+                        foreach (var chapter in chapters)
                         {
                             var topics = await _unitOfWork.GetRepository<Topic>().GetListAsync(
                                 predicate: t => t.ChapterId.Equals(chapter.Id) && t.DelFlg == false);
-                            foreach(var topic in topics)
+                            foreach (var topic in topics)
                             {
                                 topic.DelFlg = true;
                                 topic.UpdDate = TimeUtils.GetCurrentSEATime();
@@ -146,7 +148,7 @@ namespace Bean_Mind.API.Service.Implement
                     _unitOfWork.GetRepository<Course>().UpdateAsync(course);
                 }
                 currilum.DelFlg = true;
-                currilum.UpdDate= TimeUtils.GetCurrentSEATime();
+                currilum.UpdDate = TimeUtils.GetCurrentSEATime();
                 _unitOfWork.GetRepository<Curriculum>().UpdateAsync(currilum);
             }
             school.UpdDate = TimeUtils.GetCurrentSEATime();
@@ -162,6 +164,12 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
             }
+            var school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true);
+            if (school == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
+            }
+
             var curriculums = await _unitOfWork.GetRepository<Curriculum>().GetPagingListAsync(
                 selector: s => new GetCurriculumResponse
                 {
@@ -170,10 +178,7 @@ namespace Bean_Mind.API.Service.Implement
                     Description = s.Description,
                     StartDate = s.StartDate,
                     EndDate = s.EndDate,
-                    SchoolId = s.SchoolId,
-                    InsDate = s.InsDate,
-                    UpdDate = s.UpdDate,
-                    DelFlg = s.DelFlg,
+                    SchoolId = s.SchoolId
                 },
                 predicate: s => s.SchoolId.Equals(id) && s.DelFlg != true,
                 page: page,
@@ -184,6 +189,32 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumsIsEmpty);
             }
             return curriculums;
+        }
+
+        public async Task<IPaginate<GetQuestionLevelResponse>> GetListQuestionLevel(Guid id, int page, int size)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
+            }
+            var school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true);
+            if (school == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
+            }
+
+            var questionLevels = await _unitOfWork.GetRepository<QuestionLevel>().GetPagingListAsync(
+              selector: s => new GetQuestionLevelResponse
+              {
+                  Id = s.Id,
+                  Level = s.Level,
+                  SchoolId = s.SchoolId
+              },
+            predicate: x => x.SchoolId.Equals(id) && x.DelFlg != true,
+              size: size,
+              page: page);
+
+            return questionLevels;
         }
 
         public async Task<IPaginate<GetSchoolResponse>> getListSchool(int page, int size)

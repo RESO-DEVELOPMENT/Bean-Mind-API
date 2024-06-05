@@ -7,6 +7,9 @@
         public string? Phone { get; set; }
         public string? Logo { get; set; }
         public string? Description { get; set; }
-        public string? Email { get; set; } = null!;
+        public string? Email { get; set; }
+        public DateTime? InsDate { get; set; }
+        public DateTime? UpdDate { get; set; }
+        public bool? DelFlg {  get; set; } 
     }
 }

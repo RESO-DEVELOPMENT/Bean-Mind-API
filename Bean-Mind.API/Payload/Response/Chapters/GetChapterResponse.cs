@@ -5,11 +5,13 @@
         public Guid? Id { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
-        public GetChapterResponse(Guid id, string? title, string description)
+        public Guid? SubjectId { get; set; }
+        public GetChapterResponse(Guid id, string? title, string description, Guid? subjectId)
         {
             Id = id;
             Title = title;
             Description = description;
+            SubjectId = subjectId;
         }
     }
 }

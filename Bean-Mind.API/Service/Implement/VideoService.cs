@@ -52,8 +52,10 @@ namespace Bean_Mind.API.Service.Implement
                     Title = newVideo.Title,
                     Description = newVideo.Description,
                     Url = newVideo.Url,
-                    InsDate = newVideo.InsDate.Value,
-                    UpdDate = newVideo.UpdDate.Value
+                    ActivityId = newVideo.ActivityId,
+                    InsDate = newVideo.InsDate,
+                    UpdDate = newVideo.UpdDate,
+                    DelFlg = false
                 };
             }
             return createNewVideoResponse;
@@ -62,7 +64,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<IPaginate<GetVideoResponse>> GetListVideo(int page, int size)
         {
             var videos = await _unitOfWork.GetRepository<Video>().GetPagingListAsync(
-                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url),
+                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId),
                 predicate: s => s.DelFlg != true,
                 page: page,
                 size: size
@@ -81,7 +83,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.VideoMessage.VideoNotFound);
             }
             var video = await _unitOfWork.GetRepository<Video>().SingleOrDefaultAsync(
-                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url),
+                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true
                 );
             if (video == null)
@@ -111,7 +113,7 @@ namespace Bean_Mind.API.Service.Implement
             return isSuccessful;
         }
 
-        public async Task<bool> UpdateVideo(Guid videoId, Guid activtyId, UpdateVideoRequest request)
+        public async Task<bool> UpdateVideo(Guid videoId, Guid activityId, UpdateVideoRequest request)
         {
             if (videoId == Guid.Empty)
             {
@@ -123,14 +125,14 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.VideoMessage.VideoNotFound);
             }
 
-            if (activtyId != Guid.Empty)
+            if (activityId != Guid.Empty)
             {
-                var activity = await _unitOfWork.GetRepository<Activity>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(activtyId) && c.DelFlg != true);
+                var activity = await _unitOfWork.GetRepository<Activity>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(activityId) && c.DelFlg != true);
                 if (activity == null)
                 {
                     throw new BadHttpRequestException(MessageConstant.ActivityMessage.ActivityNotFound);
                 }
-                video.ActivityId = activtyId;
+                video.ActivityId = activityId;
             }
 
             video.Title = string.IsNullOrEmpty(request.Title) ? video.Title : request.Title;

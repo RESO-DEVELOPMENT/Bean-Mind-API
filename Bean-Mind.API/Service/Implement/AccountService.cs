@@ -6,7 +6,6 @@ using Bean_Mind_Data.Enums;
 using Bean_Mind.API.Utils;
 using Bean_Mind.API.Payload.Response.Accounts;
 using Bean_Mind.API.Payload;
-using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Bean_Mind.API.Payload.Request;
 

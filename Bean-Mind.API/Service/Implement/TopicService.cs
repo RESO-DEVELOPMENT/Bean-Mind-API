@@ -47,10 +47,10 @@ namespace Bean_Mind.API.Service.Implement
                     Id = topic.Id,
                     Title = topic.Title,
                     Description = topic.Description,
+                    ChapterId = topic.ChapterId,
                     InsDate = topic.InsDate,
                     UpdDate = topic.UpdDate,
-                    DelFlg = topic.DelFlg,
-                    ChapterId = topic.ChapterId
+                    DelFlg = topic.DelFlg
                 };
             }
             return response;
@@ -73,7 +73,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<IPaginate<GetTopicResponse>> GetListTopic(int page, int size)
         {
             var topics = await _unitOfWork.GetRepository<Topic>().GetPagingListAsync(
-                    selector: t => new GetTopicResponse(t.Id, t.Title, t.Description),
+                    selector: t => new GetTopicResponse(t.Id, t.Title, t.Description, t.ChapterId),
                     include: t => t.Include(t => t.Chapter),
                     predicate: t => t.DelFlg == false,
                     page: page,
@@ -84,7 +84,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<GetTopicResponse> GetTopicById(Guid id)
         {
             var topic = await _unitOfWork.GetRepository<Topic>().SingleOrDefaultAsync(
-                selector: t => new GetTopicResponse(t.Id, t.Title, t.Description),
+                selector: t => new GetTopicResponse(t.Id, t.Title, t.Description, t.ChapterId),
                 predicate: t => t.Id.Equals(id) && t.DelFlg != true,
                 include: t => t.Include(t => t.Chapter)
             );

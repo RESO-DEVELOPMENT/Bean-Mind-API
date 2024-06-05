@@ -98,10 +98,7 @@ namespace Bean_Mind.API.Service.Implement
                     Id = a.Id,
                     Title = a.Title,
                     Description = a.Description,
-                    TopicId = a.TopicId,
-                    InsDate = a.InsDate,
-                    UpdDate = a.UpdDate,
-                    DelFlg = a.DelFlg
+                    TopicId = a.TopicId
                 },
                 predicate: a => a.Id.Equals(id) && a.DelFlg == false);
             if(activity == null)
@@ -119,10 +116,7 @@ namespace Bean_Mind.API.Service.Implement
                     Id = a.Id,
                     Title = a.Title,
                     Description = a.Description,
-                    TopicId = a.TopicId,
-                    InsDate = a.InsDate,
-                    UpdDate = a.UpdDate,
-                    DelFlg = a.DelFlg
+                    TopicId = a.TopicId
                 },
                 predicate: a => a.DelFlg == false,
                 page: page,
@@ -135,7 +129,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<IPaginate<GetDocumentResponse>> GetListDocument(Guid id, int page, int size)
         {
             var documents = await _unitOfWork.GetRepository<Document>().GetPagingListAsync(
-                selector: d => new GetDocumentResponse(d.Id, d.Title, d.Description, d.Url),
+                selector: d => new GetDocumentResponse(d.Id, d.Title, d.Description, d.Url, d.ActivityId),
                 predicate: d => d.ActivityId.Equals(id) && d.DelFlg == false,
                 page: page,
                 size: size
@@ -146,7 +140,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<IPaginate<GetVideoResponse>> GetListVideo(Guid id, int page, int size)
         {
             var videos = await _unitOfWork.GetRepository<Video>().GetPagingListAsync(
-                selector: v => new GetVideoResponse(v.Id, v.Description, v.Title, v.Url),
+                selector: v => new GetVideoResponse(v.Id, v.Description, v.Title, v.Url, v.ActivityId),
                 predicate: d => d.ActivityId.Equals(id) && d.DelFlg == false,
                 page: page,
                 size: size

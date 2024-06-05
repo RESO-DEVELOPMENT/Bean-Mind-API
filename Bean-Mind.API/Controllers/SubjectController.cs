@@ -33,9 +33,11 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.Subject.GetAll)]
         [ProducesResponseType(typeof(IPaginate<GetSubjectResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetListSubject([FromQuery] int page, [FromQuery] int size)
+        public async Task<IActionResult> GetListSubject([FromQuery] int? page, [FromQuery] int? size)
         {
-            var response = await _subjectService.getListSubject(page, size);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _subjectService.getListSubject(pageNumber, pageSize);
             if (response == null)
             {
                 return Problem(MessageConstant.SubjectMessage.SubjectsIsEmpty);
@@ -83,9 +85,11 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.Subject.GetChapterInSubject)]
         [ProducesResponseType(typeof(IPaginate<GetChapterResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetChapterInSubject([FromRoute] Guid id, [FromQuery] int page, [FromQuery] int size)
+        public async Task<IActionResult> GetChapterInSubject([FromRoute] Guid id, [FromQuery] int? page, [FromQuery] int? size)
         {
-            var response = await _subjectService.GetListChapter(id, page, size);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _subjectService.GetListChapter(id, pageNumber, pageSize);
 
             return Ok(response);
         }

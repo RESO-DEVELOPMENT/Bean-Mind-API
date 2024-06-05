@@ -14,6 +14,8 @@ public partial class QuestionLevel
 
     public int Level { get; set; }
 
+    public Guid SchoolId { get; set; }
+
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
 
@@ -24,4 +26,8 @@ public partial class QuestionLevel
 
     [InverseProperty("QuestionLevel")]
     public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
+
+    [ForeignKey("SchoolId")]
+    [InverseProperty("QuestionLevels")]
+    public virtual School School { get; set; } = null!;
 }
