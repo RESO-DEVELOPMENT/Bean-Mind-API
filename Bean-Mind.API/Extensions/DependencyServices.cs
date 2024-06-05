@@ -69,6 +69,8 @@ namespace Bean_Mind.API.Extensions
             services.AddScoped<IVideoService, VideoService>();
             //Document
             services.AddScoped<IDocumentService, DocumentService>();
+            //Question
+            services.AddScoped<IQuestionService, QuestionService>();
             //QuestionLevel
             services.AddScoped<IQuestionLevelService, QuestionLevelService>();
             //WorkSheet

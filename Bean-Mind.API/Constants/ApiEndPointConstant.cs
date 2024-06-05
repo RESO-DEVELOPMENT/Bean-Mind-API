@@ -152,6 +152,18 @@ namespace Bean_Mind.API.Constants
             public const string UpdateDocument = DocumentEndpoint + "/{id}";
             public const string DeleteDocument = DocumentEndpoint + "/{id}";        
         }
+      
+        public static class Question
+        {
+            public const string QuestionEndpoint = ApiEndpoint + "/questions";
+            public const string Create = QuestionEndpoint;
+            public const string GetAll = QuestionEndpoint;
+            public const string GetById = QuestionEndpoint + "/{id}";
+            public const string UpdateQuestion = QuestionEndpoint + "/{id}";
+            public const string DeleteQuestion = QuestionEndpoint + "/{id}";
+            public const string GetAnswerInQuestion = QuestionEndpoint + "/{id}/answers";
+        }
+
 
         public static class QuestionLevel
         {

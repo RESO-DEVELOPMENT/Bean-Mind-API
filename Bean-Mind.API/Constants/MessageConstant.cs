@@ -146,6 +146,17 @@
             public const string UpdateDocumentFailedMessage = "Cập nhật tài liệu thất bại.";
         }
 
+        public static class QuestionMessage
+        {
+            public const string QuestionNotFound = "Không tìm thấy câu hỏi.";
+            public const string QuestionLevelNotFound = "Không tìm thấy cấp độ của câu hỏi.";
+            public const string NoQuestionFound = "Không có câu hỏi nào được tìm thấy.";
+            public const string EmptyQuestion = "Nội dung câu hỏi không được để trống.";
+            public const string CreateQuestionFailed = "Tạo câu hỏi thất bại.";
+            public const string NotAnswerForQuestion = "câu hỏi không có câu tar lời.";
+        }
+
+
         public static class WorkSheetMessage
         {
             public const string CreateNewWorkSheetFailedMessage = "Tạo mới worksheet thất bại.";
@@ -166,5 +177,6 @@
             public const string QuestionLevelIsEmpty = "Không tìm thấy cấp độ câu hỏi";
             public const string UpdateQuestionLevelFailedMessage = "Cập nhật cấp độ câu hỏi thất bại.";
         }
+
     }
 }
