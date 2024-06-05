@@ -142,8 +142,15 @@ namespace Bean_Mind.API.Service.Implement
 
             foreach ( var worksheet in worksheets)
             {
-                worksheetTemplate.UpdDate = TimeUtils.GetCurrentSEATime();
-                worksheetTemplate.DelFlg = true;
+                var worksheetQuestions = worksheet.WorksheetQuestions.ToList();
+                foreach (var worksheetQuestion in worksheetQuestions)
+                {
+                    worksheetQuestion.UpdDate = TimeUtils.GetCurrentSEATime();
+                    worksheetQuestion.DelFlg = true;
+                    _unitOfWork.GetRepository<WorksheetQuestion>().UpdateAsync(worksheetQuestion);
+                }
+                worksheet.UpdDate = TimeUtils.GetCurrentSEATime();
+                worksheet.DelFlg = true;
                 _unitOfWork.GetRepository<WorkSheet>().UpdateAsync(worksheet);
             }
 
