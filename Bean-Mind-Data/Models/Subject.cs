@@ -33,4 +33,7 @@ public partial class Subject
     [ForeignKey("CourseId")]
     [InverseProperty("Subjects")]
     public virtual Course? Course { get; set; }
+
+    [InverseProperty("Subject")]
+    public virtual ICollection<WorksheetTemplate> WorksheetTemplates { get; set; } = new List<WorksheetTemplate>();
 }

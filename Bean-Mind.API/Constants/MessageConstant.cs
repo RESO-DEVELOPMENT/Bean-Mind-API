@@ -167,7 +167,10 @@
 
         public static class WorkSheetTemplateMessage
         {
-            public const string WorkSheetTemplateNotFound = "Không có template nào";
+            public const string CreateNewWorkSheetTemplateFailedMessage = "Tạo mới worksheet template thất bại.";
+            public const string WorkSheetTemplateNotFound = "Không tìm thấy worksheet template";
+            public const string WorkSheetTemplateIsEmpty = "Không có worksheet template nào";
+            public const string UpdateWorkSheetTemplateFailedMessage = "Cập nhật worksheet template thất bại";
         }
 
         public static class QuestionLevelMessage

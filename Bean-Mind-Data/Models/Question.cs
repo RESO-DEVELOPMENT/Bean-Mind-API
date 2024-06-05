@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Bean_Mind_Data.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind_Data.Models;
