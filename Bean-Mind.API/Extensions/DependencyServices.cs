@@ -1,4 +1,5 @@
-﻿using Bean_Mind.API.Service.Implement;
+﻿using Bean_Mind.API.Service;
+using Bean_Mind.API.Service.Implement;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Business.Repository.Implement;
 using Bean_Mind_Business.Repository.Interface;
@@ -77,6 +78,8 @@ namespace Bean_Mind.API.Extensions
             services.AddScoped<IWorkSheetService, WorkSheetService>();
             //WorkSheetTemplate
             services.AddScoped<IWorkSheetTemplateService, WorkSheetTemplateService>();
+            //Gg drive
+            services.AddScoped<GoogleDriveService>();
 
             return services;
         }

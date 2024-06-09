@@ -5,6 +5,9 @@ using Bean_Mind.API.Converter;
 using Bean_Mind.API.Extensions;
 using Bean_Mind.API.Middlewares;
 using Bean_Mind.API.Service;
+using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Builder.Extensions;
+using Microsoft.Extensions.Configuration;
 
 var logger = NLog.LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"))
     .GetCurrentClassLogger();

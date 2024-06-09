@@ -8,12 +8,16 @@ using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
 
+
 namespace Bean_Mind.API.Service.Implement
 {
+   
     public class DocumentService : BaseService<DocumentService>, IDocumentService
     {
-        public DocumentService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<DocumentService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, logger, mapper, httpContextAccessor)
+        private readonly GoogleDriveService _driveService;
+        public DocumentService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<DocumentService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor, GoogleDriveService driveService) : base(unitOfWork, logger, mapper, httpContextAccessor)
         {
+            _driveService = driveService;
         }
         public async Task<CreateNewDocumentResponse> CreateNewDocument(CreateNewDocumentRequest request, Guid activityId)
         {
@@ -27,13 +31,13 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.DocumentMessage.DocumentNotFound);
             }
-
-            Document  newDocument  = new Document()
+            string url = await _driveService.UploadToGoogleDriveAsync(request.Url);
+            Document newDocument = new Document()
             {
                 Id = Guid.NewGuid(),
                 Title = request.Title,
                 Description = request.Description,
-                Url = request.Url,
+                Url = url,
                 ActivityId = activityId,
                 DelFlg = false,
                 InsDate = TimeUtils.GetCurrentSEATime(),

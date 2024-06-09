@@ -12,6 +12,7 @@ namespace Bean_Mind_Business.Repository.Implement
         public UnitOfWork(TContext context)
         {
             Context = context;
+           
         }
 
         public IGenericRepository<TEntity> GetRepository<TEntity>() where TEntity : class

@@ -18,9 +18,9 @@ namespace Bean_Mind.API.Controllers
             [HttpPost(ApiEndPointConstant.Course.Create)]
             [ProducesResponseType(typeof(CreateNewCourseResponse), StatusCodes.Status200OK)]
             [ProducesErrorResponseType(typeof(ProblemDetails))]
-            public async Task<IActionResult> CreateCourse([FromBody] CreateNewCourseRequest createNewCourseRequest)
+            public async Task<IActionResult> CreateCourse([FromBody] CreateNewCourseRequest createNewCourseRequest, [FromQuery] Guid curriculumId)
             {
-                CreateNewCourseResponse response = await _courseService.CreateNewCourse(createNewCourseRequest);
+                CreateNewCourseResponse response = await _courseService.CreateNewCourse(createNewCourseRequest, curriculumId);
                 if (response == null)
                 {
                     return Problem(MessageConstant.CourseMessage.CreateNewCourseFailedMessage);

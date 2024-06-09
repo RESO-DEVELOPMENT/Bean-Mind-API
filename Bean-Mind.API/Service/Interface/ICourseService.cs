@@ -7,7 +7,7 @@ namespace Bean_Mind.API.Service.Interface
 {
     public interface ICourseService
     {
-        Task<CreateNewCourseResponse> CreateNewCourse(CreateNewCourseRequest createNewCourseRequest);
+        Task<CreateNewCourseResponse> CreateNewCourse(CreateNewCourseRequest createNewCourseRequest, Guid curriculumId);
         Task<GetCourseResponse> GetCourseById(Guid id);
         Task<IPaginate<GetCourseResponse>> GetListCourse(int page, int size);
         Task<bool> UpdateCourse(Guid id, UpdateCourseRequest updateCourseRequest, Guid curriculumId);

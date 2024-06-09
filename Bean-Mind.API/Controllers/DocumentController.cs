@@ -17,7 +17,7 @@ namespace Bean_Mind.API.Controllers
         [HttpPost(ApiEndPointConstant.Document.Create)]
         [ProducesResponseType(typeof(CreateNewDocumentResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> CreateDocument([FromBody] CreateNewDocumentRequest createNewDocumentRequest, [FromQuery] Guid activityId)
+        public async Task<IActionResult> CreateDocument([FromForm] CreateNewDocumentRequest createNewDocumentRequest, [FromQuery] Guid activityId)
         {
             CreateNewDocumentResponse response = await _documentService.CreateNewDocument(createNewDocumentRequest, activityId);
             if (response == null)
