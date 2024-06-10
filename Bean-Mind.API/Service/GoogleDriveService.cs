@@ -18,7 +18,7 @@ namespace Bean_Mind.API.Service
             GoogleCredential credential;
 
             // Đọc đường dẫn đến tệp Beanmind.json từ cấu hình ứng dụng
-            string credentialsPath = _configuration["Authentication:GoogleDriveKey:filePath"];
+            string credentialsPath = _configuration["Authentication:GoogleDrive:CredentialsPath"];
 
             // Chuyển đổi đường dẫn tương đối thành đường dẫn tuyệt đối
             string absoluteCredentialsPath = Path.Combine(Directory.GetCurrentDirectory(), credentialsPath);
