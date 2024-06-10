@@ -7,13 +7,16 @@ using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
+using Google.Apis.Drive.v3;
 
 namespace Bean_Mind.API.Service.Implement
 {
     public class VideoService : BaseService<VideoService>, IVideoService
     {
-        public VideoService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<VideoService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, logger, mapper, httpContextAccessor)
+        private readonly GoogleDriveService _driveService;
+        public VideoService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<VideoService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor, GoogleDriveService driveService) : base(unitOfWork, logger, mapper, httpContextAccessor)
         {
+            _driveService = driveService;
         }
 
         public async Task<CreateNewVideoResponse> CreateNewVideo(CreateNewVideoRequest request, Guid activityId)
@@ -28,13 +31,13 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.ActivityMessage.ActivityNotFound);
             }
-
-            Video newVideo = new Video() 
-            { 
+            string url = await _driveService.UploadToGoogleDriveAsync(request.Url);
+            Video newVideo = new Video()
+            {
                 Id = Guid.NewGuid(),
                 Title = request.Title,
                 Description = request.Description,
-                Url = request.Url,
+                Url = url,
                 ActivityId = activityId,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),

@@ -19,7 +19,7 @@ namespace Bean_Mind.API.Controllers
         [HttpPost(ApiEndPointConstant.Video.Create)]
         [ProducesResponseType(typeof(CreateNewVideoResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> CreateVideo([FromBody] CreateNewVideoRequest createNewVideoRequest, [FromQuery] Guid activityId)
+        public async Task<IActionResult> CreateVideo([FromForm] CreateNewVideoRequest createNewVideoRequest, [FromQuery] Guid activityId)
         {
             CreateNewVideoResponse response = await _videoService.CreateNewVideo(createNewVideoRequest, activityId);
             if (response == null)
