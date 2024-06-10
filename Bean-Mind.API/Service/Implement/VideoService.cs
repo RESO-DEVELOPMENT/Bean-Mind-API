@@ -141,8 +141,19 @@ namespace Bean_Mind.API.Service.Implement
             video.Title = string.IsNullOrEmpty(request.Title) ? video.Title : request.Title;
             video.Description = string.IsNullOrEmpty(request.Description) ? video.Description : request.Description;
             video.UpdDate = TimeUtils.GetCurrentSEATime();
-            video.Url = string.IsNullOrEmpty(request.Url) ? video.Url : request.Url;
-
+            if( request.Url != null ) 
+            {
+                try
+                {
+                    string newUrl = await _driveService.UploadToGoogleDriveAsync(request.Url);
+                    video.Url = newUrl;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error uploading file to Google Drive: {ex.Message}");
+                    throw new BadHttpRequestException("Error uploading file video to Google Drive.");
+                }
+            }
             _unitOfWork.GetRepository<Video>().UpdateAsync(video);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
 

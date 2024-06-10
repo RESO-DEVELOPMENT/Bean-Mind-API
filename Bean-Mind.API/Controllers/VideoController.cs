@@ -67,7 +67,7 @@ namespace Bean_Mind.API.Controllers
         [HttpPatch(ApiEndPointConstant.Video.UpdateVideo)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> UpdateVideo([FromBody] UpdateVideoRequest request, [FromRoute] Guid id, [FromQuery] Guid activityId)
+        public async Task<IActionResult> UpdateVideo([FromForm] UpdateVideoRequest request, [FromRoute] Guid id, [FromQuery] Guid activityId)
         {
 
             var response = await _videoService.UpdateVideo(id, activityId, request);

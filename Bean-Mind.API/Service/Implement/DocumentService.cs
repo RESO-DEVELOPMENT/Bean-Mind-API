@@ -7,6 +7,7 @@ using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
+using Microsoft.IdentityModel.Tokens;
 
 
 namespace Bean_Mind.API.Service.Implement
@@ -98,7 +99,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.DocumentMessage.DocumentNotFound);
             }
-            var document  = await _unitOfWork.GetRepository<Document>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true);
+            var document = await _unitOfWork.GetRepository<Document>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (document == null)
             {
                 throw new BadHttpRequestException(MessageConstant.DocumentMessage.DocumentNotFound);
@@ -106,7 +107,7 @@ namespace Bean_Mind.API.Service.Implement
 
             if (activityId != Guid.Empty)
             {
-                var activity  = await _unitOfWork.GetRepository<Activity>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(activityId) && c.DelFlg != true);
+                var activity = await _unitOfWork.GetRepository<Activity>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(activityId) && c.DelFlg != true);
                 if (activity == null)
                 {
                     throw new BadHttpRequestException(MessageConstant.ActivityMessage.ActivityNotFound);
@@ -114,10 +115,24 @@ namespace Bean_Mind.API.Service.Implement
                 document.ActivityId = activityId;
             }
 
-
             document.Title = string.IsNullOrEmpty(request.Title) ? document.Title : request.Title;
             document.Description = string.IsNullOrEmpty(request.Description) ? document.Description : request.Description;
-            document.Url =string.IsNullOrEmpty(request.Url) ? document.Url : request.Url;
+
+            if (request.Url != null )
+            {
+                try
+                {
+                    // Assuming request.Url is the new file to be uploaded
+                    string newUrl = await _driveService.UploadToGoogleDriveAsync(request.Url);
+                    document.Url = newUrl;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error uploading file to Google Drive: {ex.Message}");
+                    throw new BadHttpRequestException("Error uploading file to Google Drive.");
+                }
+            }
+
             document.UpdDate = TimeUtils.GetCurrentSEATime();
 
             _unitOfWork.GetRepository<Document>().UpdateAsync(document);
@@ -125,6 +140,8 @@ namespace Bean_Mind.API.Service.Implement
 
             return isSuccessful;
         }
+
+        
         public async Task<bool> RemoveDocument(Guid id)
         {
             if (id == Guid.Empty)

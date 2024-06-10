@@ -68,7 +68,7 @@ namespace Bean_Mind.API.Controllers
         [HttpPatch(ApiEndPointConstant.Document.UpdateDocument)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> UpdateDocument([FromBody] UpdateDocumentRequest request, [FromRoute] Guid id, [FromQuery] Guid activityId)
+        public async Task<IActionResult> UpdateDocument([FromForm] UpdateDocumentRequest request, [FromRoute] Guid id, [FromQuery] Guid activityId)
         {
 
             var response = await _documentService.UpdateDocument(id, request, activityId);
