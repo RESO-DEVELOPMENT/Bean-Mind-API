@@ -17,16 +17,25 @@ namespace Bean_Mind.API.Service
         {
             GoogleCredential credential;
 
-            // Đọc đường dẫn đến tệp Beanmind.json từ cấu hình ứng dụng
-            string credentialsPath = _configuration["Authentication:GoogleDrive:CredentialsPath"];
+            //// Đọc đường dẫn đến tệp Beanmind.json từ cấu hình ứng dụng
+            //string credentialsPath = _configuration["Authentication:GoogleDrive:CredentialsPath"];
 
-            // Chuyển đổi đường dẫn tương đối thành đường dẫn tuyệt đối
-            string absoluteCredentialsPath = Path.Combine(Directory.GetCurrentDirectory(), credentialsPath);
+            //// Chuyển đổi đường dẫn tương đối thành đường dẫn tuyệt đối
+            //string absoluteCredentialsPath = Path.Combine(Directory.GetCurrentDirectory(), credentialsPath);
+
+            var credentialsSection = _configuration.GetSection("Authentication:GoogleDrive:CredentialsPath");
+            var credentialsJson = credentialsSection.GetChildren().ToDictionary(x => x.Key, x => x.Value);
+            var credentialsJsonString = Newtonsoft.Json.JsonConvert.SerializeObject(credentialsJson);
 
             try
             {
                 // Đọc thông tin xác thực từ tệp Beanmind.json
-                using (var stream = new FileStream(absoluteCredentialsPath, FileMode.Open, FileAccess.Read))
+                //using (var stream = new FileStream(absoluteCredentialsPath, FileMode.Open, FileAccess.Read))
+                //{
+                //    credential = GoogleCredential.FromStream(stream).CreateScoped(new[] { DriveService.ScopeConstants.DriveFile });
+                //}
+
+                using (var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(credentialsJsonString)))
                 {
                     credential = GoogleCredential.FromStream(stream).CreateScoped(new[] { DriveService.ScopeConstants.DriveFile });
                 }
@@ -42,7 +51,7 @@ namespace Bean_Mind.API.Service
                 var fileMetaData = new Google.Apis.Drive.v3.Data.File()
                 {
                     Name = fileToUpload.FileName,
-                    Parents = new List<string> { "1sFih0Ciu8E-itSd59tSCpZtUFaTmgdaM" }
+                    Parents = new List<string> { _configuration["Authentication:GoogleDrive:FolderId"] }
                 };
 
                 // Tải tệp lên Google Drive
