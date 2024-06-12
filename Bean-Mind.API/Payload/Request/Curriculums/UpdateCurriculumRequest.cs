@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Bean_Mind.API.Converter;
+using System;
+using System.Text.Json.Serialization;
 
 namespace Bean_Mind.API.Payload.Request.Curriculums
 {
@@ -6,7 +8,9 @@ namespace Bean_Mind.API.Payload.Request.Curriculums
     {
         public string? Title { get; set; }
         public string? Description { get; set; }
+        [JsonConverter(typeof(NullableDateTimeConverter))]
         public DateTime? StartDate { get; set; }
+        [JsonConverter(typeof(NullableDateTimeConverter))]
         public DateTime? EndDate { get; set; }
         
     }

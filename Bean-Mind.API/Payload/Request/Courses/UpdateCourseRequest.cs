@@ -1,4 +1,6 @@
-﻿using Bean_Mind_Data.Enums;
+﻿using Bean_Mind.API.Converter;
+using Bean_Mind_Data.Enums;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Bean_Mind.API.Payload.Request.Courses
@@ -9,7 +11,9 @@ namespace Bean_Mind.API.Payload.Request.Courses
         public string? Description { get; set; }
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public StatusEnum? Status { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        [JsonConverter(typeof(NullableDateTimeConverter))]
+        public DateTime? StartDate { get; set; } // Nullable DateTime
+        [JsonConverter(typeof(NullableDateTimeConverter))]
+        public DateTime? EndDate { get; set; } // Nullable DateTime
     }
 }

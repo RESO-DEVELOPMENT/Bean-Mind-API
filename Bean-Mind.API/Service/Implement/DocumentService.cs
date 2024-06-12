@@ -22,30 +22,37 @@ namespace Bean_Mind.API.Service.Implement
         }
         public async Task<CreateNewDocumentResponse> CreateNewDocument(CreateNewDocumentRequest request, Guid activityId)
         {
-            _logger.LogInformation($"Create new Document with {request.Title}");
-            if (activityId == Guid.Empty)
-            {
-                throw new BadHttpRequestException(MessageConstant.DocumentMessage.DocumentNotFound);
-            }
-            Activity activity = await _unitOfWork.GetRepository<Activity>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(activityId) && s.DelFlg != true);
-            if (activity == null)
-            {
-                throw new BadHttpRequestException(MessageConstant.DocumentMessage.DocumentNotFound);
-            }
-            string url = await _driveService.UploadToGoogleDriveAsync(request.Url);
-            Document newDocument = new Document()
+            _logger.LogInformation($"Creating new Document with title: {request.Title}");
+
+            var newDocument = new Document()
             {
                 Id = Guid.NewGuid(),
                 Title = request.Title,
                 Description = request.Description,
-                Url = url,
-                ActivityId = activityId,
-                DelFlg = false,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
+                DelFlg = false
             };
+
+            if (activityId != Guid.Empty)
+            {
+                var activity = await _unitOfWork.GetRepository<Activity>().SingleOrDefaultAsync(
+                    predicate: s => s.Id.Equals(activityId) && s.DelFlg != true );
+
+                if (activity == null)
+                {
+                    throw new BadHttpRequestException(MessageConstant.DocumentMessage.DocumentNotFound);
+                }
+
+                newDocument.ActivityId = activityId;
+            }
+
+            string url = await _driveService.UploadToGoogleDriveAsync(request.Url);
+            newDocument.Url = url;
+
             await _unitOfWork.GetRepository<Document>().InsertAsync(newDocument);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+
             CreateNewDocumentResponse createNewDocumentResponse = null;
             if (isSuccessful)
             {
@@ -64,6 +71,7 @@ namespace Bean_Mind.API.Service.Implement
 
             return createNewDocumentResponse;
         }
+
         public async Task<IPaginate<GetDocumentResponse>> GetListDocument(int page, int size)
         {
             var documents = await _unitOfWork.GetRepository<Document>().GetPagingListAsync(

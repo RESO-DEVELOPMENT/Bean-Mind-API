@@ -226,8 +226,8 @@ namespace Bean_Mind.API.Service.Implement
                 curriculum.Description = string.IsNullOrEmpty(updateCurriculumRequest.Description) ? curriculum.Description : updateCurriculumRequest.Description;
 
 
-                curriculum.StartDate = (updateCurriculumRequest.StartDate.HasValue && updateCurriculumRequest.StartDate != DateTime.MinValue) ? updateCurriculumRequest.StartDate.Value : curriculum.StartDate;
-                curriculum.EndDate = (updateCurriculumRequest.EndDate.HasValue && updateCurriculumRequest.EndDate != DateTime.MinValue) ? updateCurriculumRequest.EndDate.Value : curriculum.EndDate;
+                curriculum.StartDate = updateCurriculumRequest.StartDate ?? curriculum.StartDate;
+                curriculum.EndDate = updateCurriculumRequest.EndDate ?? curriculum.EndDate;
                 curriculum.UpdDate = TimeUtils.GetCurrentSEATime();
 
                 _unitOfWork.GetRepository<Curriculum>().UpdateAsync(curriculum);

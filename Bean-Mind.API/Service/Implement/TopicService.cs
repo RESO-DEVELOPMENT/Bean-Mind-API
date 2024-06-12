@@ -18,44 +18,53 @@ namespace Bean_Mind.API.Service.Implement
         {
         }
 
-        public async Task<CreateNewTopicResponse> CreateNewTopic(CreateNewTopicRequest request, Guid chapterId)
+        public async Task<CreateNewTopicResponse> CreateNewTopic(CreateNewTopicRequest Request, Guid chapterId)
         {
-            _logger.LogInformation($"Create new Topic with {request.Title}");
-            var chapter = await _unitOfWork.GetRepository<Chapter>().SingleOrDefaultAsync(
-                predicate: c => c.Id.Equals(chapterId) && c.DelFlg != true);
-            if(chapter == null)
-            {
-                throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
-            }
-            Topic topic = new Topic()
+            _logger.LogInformation($"Creating new Topic with title: {Request.Title}");
+
+            var newTopic = new Topic
             {
                 Id = Guid.NewGuid(),
-                Title = request.Title,
-                Description = request.Description,
+                Title = Request.Title,
+                Description = Request.Description,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
-                DelFlg = false,
-                ChapterId = chapterId
+                DelFlg = false
             };
-            await _unitOfWork.GetRepository<Topic>().InsertAsync(topic);
-            bool isSuccess = await _unitOfWork.CommitAsync() > 0;
+
+            if (chapterId != Guid.Empty)
+            {
+                var chapter = await _unitOfWork.GetRepository<Chapter>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(chapterId) && c.DelFlg != true);
+                if (chapter == null)
+                {
+                    _logger.LogError($"Chapter with id {chapterId} not found.");
+                    return null;
+                }
+
+                newTopic.ChapterId = chapterId;
+            }
+
+            await _unitOfWork.GetRepository<Topic>().InsertAsync(newTopic);
+            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+
             CreateNewTopicResponse response = null;
-            if (isSuccess)
+            if (isSuccessful)
             {
                 response = new CreateNewTopicResponse()
                 {
-                    Id = topic.Id,
-                    Title = topic.Title,
-                    Description = topic.Description,
-                    ChapterId = topic.ChapterId,
-                    InsDate = topic.InsDate,
-                    UpdDate = topic.UpdDate,
-                    DelFlg = topic.DelFlg
+                    Id = newTopic.Id,
+                    Title = newTopic.Title,
+                    Description = newTopic.Description,
+                    ChapterId = newTopic.ChapterId,
+                    InsDate = newTopic.InsDate,
+                    UpdDate = newTopic.UpdDate,
+                    DelFlg = newTopic.DelFlg
                 };
             }
-            return response;
 
+            return response;
         }
+
 
         public async Task<bool> DeleteTopic(Guid id)
         {
