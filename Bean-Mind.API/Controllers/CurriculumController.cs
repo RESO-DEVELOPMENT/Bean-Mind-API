@@ -2,7 +2,6 @@
 using Bean_Mind.API.Payload.Request.Curriculums;
 using Bean_Mind.API.Payload.Response.Courses;
 using Bean_Mind.API.Payload.Response.Curriculums;
-using Bean_Mind.API.Service.Implement;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
 using Microsoft.AspNetCore.Mvc;

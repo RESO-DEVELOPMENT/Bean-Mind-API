@@ -27,7 +27,7 @@ namespace Bean_Mind.API.Controllers
         [HttpPost(ApiEndPointConstant.Teacher.Create)]
         [ProducesResponseType(typeof(CreateNewTeacherResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
-        public async Task<IActionResult> CreateTeacher([FromBody] CreateNewTeacherResquest newTeacherRequest, [FromQuery] Guid schoolId)
+        public async Task<IActionResult> CreateTeacher([FromBody] CreateNewTeacherResquest newTeacherRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -39,7 +39,7 @@ namespace Bean_Mind.API.Controllers
                 });
             }
 
-            var response = await _teacherService.CreateTeacher(newTeacherRequest, schoolId);
+            var response = await _teacherService.CreateTeacher(newTeacherRequest);
             if (response == null)
             {
                 return BadRequest(new ErrorResponse()

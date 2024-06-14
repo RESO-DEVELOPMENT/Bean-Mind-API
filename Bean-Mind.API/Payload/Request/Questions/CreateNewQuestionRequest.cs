@@ -1,7 +1,5 @@
 ﻿using Bean_Mind.API.Payload.Request.QuestionAnswers;
 using Bean_Mind_Data.Enums;
-using Bean_Mind_Data.Models;
-using System.Collections.Generic;
 
 namespace Bean_Mind.API.Payload.Request.Questions
 {

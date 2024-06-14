@@ -7,7 +7,6 @@ using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
-using Google.Apis.Drive.v3;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -21,31 +20,37 @@ namespace Bean_Mind.API.Service.Implement
 
         public async Task<CreateNewVideoResponse> CreateNewVideo(CreateNewVideoRequest request, Guid activityId)
         {
-            _logger.LogInformation($"Create new Video with {request.Title}");
-            if (activityId == Guid.Empty)
-            {
-                throw new BadHttpRequestException(MessageConstant.ActivityMessage.ActivityNotFound);
-            }
-            Activity activity = await _unitOfWork.GetRepository<Activity>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(activityId) && s.DelFlg != true);
-            if (activity == null)
-            {
-                throw new BadHttpRequestException(MessageConstant.ActivityMessage.ActivityNotFound);
-            }
-            string url = await _driveService.UploadToGoogleDriveAsync(request.Url);
-            Video newVideo = new Video()
+            _logger.LogInformation($"Creating new Video with title: {request.Title}");
+
+            var newVideo = new Video()
             {
                 Id = Guid.NewGuid(),
                 Title = request.Title,
                 Description = request.Description,
-                Url = url,
-                ActivityId = activityId,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false
             };
 
+            if (activityId != Guid.Empty)
+            {
+                var activity = await _unitOfWork.GetRepository<Activity>().SingleOrDefaultAsync(
+                    predicate: s => s.Id.Equals(activityId) && s.DelFlg != true);
+
+                if (activity == null)
+                {
+                    throw new BadHttpRequestException(MessageConstant.ActivityMessage.ActivityNotFound);
+                }
+
+                newVideo.ActivityId = activityId;
+            }
+
+            string url = await _driveService.UploadToGoogleDriveAsync(request.Url);
+            newVideo.Url = url;
+
             await _unitOfWork.GetRepository<Video>().InsertAsync(newVideo);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+
             CreateNewVideoResponse createNewVideoResponse = null;
             if (isSuccessful)
             {
@@ -58,11 +63,13 @@ namespace Bean_Mind.API.Service.Implement
                     ActivityId = newVideo.ActivityId,
                     InsDate = newVideo.InsDate,
                     UpdDate = newVideo.UpdDate,
-                    DelFlg = false
+                    DelFlg = newVideo.DelFlg
                 };
             }
+
             return createNewVideoResponse;
         }
+
 
         public async Task<IPaginate<GetVideoResponse>> GetListVideo(int page, int size)
         {

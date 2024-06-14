@@ -64,12 +64,12 @@ namespace Bean_Mind.API.Controllers
                 return Ok(response);
             }
 
-            [HttpPatch(ApiEndPointConstant.Course.GetById)]
+            [HttpPatch(ApiEndPointConstant.Course.UpdateCourse)]
             [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
             [ProducesErrorResponseType(typeof(ProblemDetails))]
             public async Task<IActionResult> UpdateCourse([FromRoute] Guid id, [FromBody] UpdateCourseRequest request, [FromQuery] Guid curriculumId)
             {
-                var response = await _courseService.UpdateCourse(id, request, curriculumId);
+            var response = await _courseService.UpdateCourse(id, request, curriculumId);
                 return Ok(response);
             }
             [HttpGet(ApiEndPointConstant.Course.GetSubjectsInCourse)]

@@ -20,17 +20,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<CreateNewSubjectResponse> CreateNewSubject(CreateNewSubjectRequest request, Guid courseId)
         {
             _logger.LogInformation($"Create new Subject with {request.Title}");
-            if (courseId == Guid.Empty)
-            {
-                throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
-            }
-            Course course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(courseId) && s.DelFlg != true);
-            if (course == null)
-            {
-                throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
-            }
-
-            Subject newSubject = new Subject()
+            var  newSubject = new Subject
             {
                 Id = Guid.NewGuid(),
                 Title = request.Title,
@@ -38,9 +28,22 @@ namespace Bean_Mind.API.Service.Implement
                 DelFlg = false,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
-                CourseId = courseId,
+                
 
             };
+            if (courseId != Guid.Empty)
+            {
+
+                var  course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(courseId) && s.DelFlg != true);
+                if (course == null)
+                {
+                    _logger.LogError($"CourseId with id {courseId} not found.");
+                    return null;
+                }
+                newSubject.CourseId = courseId ;
+            }
+
+            
             await _unitOfWork.GetRepository<Subject>().InsertAsync(newSubject);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             CreateNewSubjectResponse createNewSubjectResponse = null;

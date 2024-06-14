@@ -8,7 +8,6 @@ using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -20,55 +19,69 @@ namespace Bean_Mind.API.Service.Implement
 
         public async Task<CreateNewWorkSheetResponse> CreateNewWorkSheet(CreateNewWorkSheetRequest request, Guid activityId, Guid worksheetTemplateId)
         {
-            _logger.LogInformation($"Create new WorkSheet with {request.Title}");
-            if (activityId == Guid.Empty)
-            {
-                throw new BadHttpRequestException(MessageConstant.ActivityMessage.ActivityNotFound);
-            }
+            _logger.LogInformation($"Creating new WorkSheet with title: {request.Title}");
+
+            // Kiểm tra worksheetTemplateId trước, vì nó bắt buộc phải có
             if (worksheetTemplateId == Guid.Empty)
             {
                 throw new BadHttpRequestException(MessageConstant.WorkSheetTemplateMessage.WorkSheetTemplateNotFound);
             }
-            Activity activity = await _unitOfWork.GetRepository<Activity>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(activityId) && s.DelFlg != true);
-            if (activity == null)
+
+            var newWorkSheet = new WorkSheet
             {
-                throw new BadHttpRequestException(MessageConstant.ActivityMessage.ActivityNotFound);
-            }
-            WorksheetTemplate template = await _unitOfWork.GetRepository<WorksheetTemplate>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(worksheetTemplateId) && s.DelFlg != true);
-            if (template == null)
-            {
-                throw new BadHttpRequestException(MessageConstant.WorkSheetTemplateMessage.WorkSheetTemplateNotFound);
-            }
-            WorkSheet workSheet = new WorkSheet
-            {
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 Title = request.Title,
                 Description = request.Description,
-                ActivityId = activityId,
-                WorksheetTemplateId = worksheetTemplateId,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false
             };
-            await _unitOfWork.GetRepository<WorkSheet>().InsertAsync(workSheet);
+
+            if (activityId != Guid.Empty)
+            {
+                var activity = await _unitOfWork.GetRepository<Activity>().SingleOrDefaultAsync(
+                    predicate: s => s.Id.Equals(activityId) && s.DelFlg != true);
+
+                if (activity == null)
+                {
+                    throw new BadHttpRequestException(MessageConstant.ActivityMessage.ActivityNotFound);
+                }
+
+                newWorkSheet.ActivityId = activityId;
+            }
+
+            var template = await _unitOfWork.GetRepository<WorksheetTemplate>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(worksheetTemplateId) && s.DelFlg != true);
+
+            if (template == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.WorkSheetTemplateMessage.WorkSheetTemplateNotFound);
+            }
+
+            newWorkSheet.WorksheetTemplateId = worksheetTemplateId;
+
+            await _unitOfWork.GetRepository<WorkSheet>().InsertAsync(newWorkSheet);
             bool isSuccess = await _unitOfWork.CommitAsync() > 0;
+
             CreateNewWorkSheetResponse response = null;
-            if(isSuccess)
+            if (isSuccess)
             {
                 response = new CreateNewWorkSheetResponse()
                 {
-                    Id = workSheet.Id,
-                    Title = workSheet.Title,
-                    Description = workSheet.Description,
-                    ActivityId = workSheet.ActivityId,
-                    WorksheetTemplateId = workSheet.WorksheetTemplateId,
-                    InsDate = workSheet.InsDate,
-                    UpdDate = workSheet.UpdDate,
-                    DelFlg = workSheet.DelFlg
+                    Id = newWorkSheet.Id,
+                    Title = newWorkSheet.Title,
+                    Description = newWorkSheet.Description,
+                    ActivityId = newWorkSheet.ActivityId,
+                    WorksheetTemplateId = newWorkSheet.WorksheetTemplateId,
+                    InsDate = newWorkSheet.InsDate,
+                    UpdDate = newWorkSheet.UpdDate,
+                    DelFlg = newWorkSheet.DelFlg
                 };
             }
+
             return response;
         }
+
 
         public async Task<bool> DeleteWorkSheet(Guid id)
         {

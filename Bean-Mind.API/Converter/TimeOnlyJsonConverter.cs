@@ -27,4 +27,27 @@ namespace Bean_Mind.API.Converter
             writer.WritePropertyName(isoTime);
         }
     }
+
+    public class NullableDateTimeConverter : JsonConverter<DateTime?>
+    {
+        public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TokenType == JsonTokenType.Null)
+                return null;
+
+            string dateString = reader.GetString();
+
+            if (string.IsNullOrEmpty(dateString))
+                return null;
+
+            return DateTime.Parse(dateString);
+        }
+        public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options)
+        {
+            if (value == null)
+                writer.WriteNullValue();
+            else
+                writer.WriteStringValue(value.Value.ToString());
+        }
+    }
 }

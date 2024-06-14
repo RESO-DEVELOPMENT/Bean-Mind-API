@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Bean_Mind.API.Payload.Response.Documents
 {
     public class GetDocumentResponse

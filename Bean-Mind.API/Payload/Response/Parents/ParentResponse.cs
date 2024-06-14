@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Bean_Mind.API.Payload.Response.Parents
+﻿namespace Bean_Mind.API.Payload.Response.Parents
 {
     public class ParentResponse
     {

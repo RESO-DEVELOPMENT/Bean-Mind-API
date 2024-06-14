@@ -1,6 +1,4 @@
-﻿using Bean_Mind_Data.Models;
-
-namespace Bean_Mind.API.Payload.Response.Curriculums
+﻿namespace Bean_Mind.API.Payload.Response.Curriculums
 {
     public class GetCurriculumResponse
     {

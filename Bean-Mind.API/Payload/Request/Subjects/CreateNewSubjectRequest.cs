@@ -1,8 +1,4 @@
-﻿using Bean_Mind_Data.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace Bean_Mind.API.Payload.Request.Subjects
+﻿namespace Bean_Mind.API.Payload.Request.Subjects
 {
     public class CreateNewSubjectRequest
     {

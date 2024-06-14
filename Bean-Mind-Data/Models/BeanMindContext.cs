@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind_Data.Models;
 
@@ -130,10 +128,6 @@ public partial class BeanMindContext : DbContext
             entity.HasOne(d => d.Account).WithMany(p => p.Parents)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Parent_Account ");
-
-            entity.HasOne(d => d.School).WithMany(p => p.Parents)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Parent_School");
         });
 
         modelBuilder.Entity<Question>(entity =>
@@ -194,10 +188,6 @@ public partial class BeanMindContext : DbContext
             entity.HasOne(d => d.Parent).WithMany(p => p.Students)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Student_Parent");
-
-            entity.HasOne(d => d.School).WithMany(p => p.Students)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Student_School");
         });
 
         modelBuilder.Entity<Subject>(entity =>
@@ -222,10 +212,6 @@ public partial class BeanMindContext : DbContext
             entity.HasOne(d => d.Account).WithMany(p => p.Teachers)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Teacher_Account");
-
-            entity.HasOne(d => d.School).WithMany(p => p.Teachers)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Teacher_School");
         });
 
         modelBuilder.Entity<Topic>(entity =>

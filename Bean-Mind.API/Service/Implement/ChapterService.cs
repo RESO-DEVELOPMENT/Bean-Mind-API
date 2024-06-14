@@ -17,49 +17,53 @@ namespace Bean_Mind.API.Service.Implement
         {
         }
 
-        public async Task<CreateNewChapterResponse> CreateNewChapter(CreateNewChapterRequest request, Guid subjectId)
+        public async Task<CreateNewChapterResponse> CreateNewChapter(CreateNewChapterRequest Request, Guid subjectId)
         {
-            _logger.LogInformation($"Create new Chapter with {request.Title}");
-            if (subjectId == Guid.Empty)
-            {
-                throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
-            }
-            Subject subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(subjectId) && s.DelFlg != true);
-            if (subject == null)
-            {
-                throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
-            }
+            _logger.LogInformation($"Creating new Chapter with title: {Request.Title}");
 
-            Chapter newChapter = new Chapter()
+            var newChapter = new Chapter
             {
                 Id = Guid.NewGuid(),
-                Title = request.Title,
-                Description = request.Description,
-                DelFlg = false,
+                Title = Request.Title,
+                Description = Request.Description,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
-                SubjectId = subjectId,
-
+                DelFlg = false
             };
+
+            if (subjectId != Guid.Empty)
+            {
+                var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(predicate: s => s.Id == subjectId && s.DelFlg != true);
+                if (subject == null)
+                {
+                    _logger.LogError($"Subject with id {subjectId} not found.");
+                    return null;
+                }
+
+                newChapter.SubjectId = subjectId;
+            }
+
             await _unitOfWork.GetRepository<Chapter>().InsertAsync(newChapter);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
-            CreateNewChapterResponse createNewChapterResponse = null;
+
+            CreateNewChapterResponse response = null;
             if (isSuccessful)
             {
-                createNewChapterResponse = new CreateNewChapterResponse()
+                response = new CreateNewChapterResponse()
                 {
                     Id = newChapter.Id,
                     Title = newChapter.Title,
                     Description = newChapter.Description,
                     SubjectId = newChapter.SubjectId,
-                    DelFlg = newChapter.DelFlg,
                     InsDate = newChapter.InsDate,
-                    UpdDate = newChapter.UpdDate
+                    UpdDate = newChapter.UpdDate,
+                    DelFlg = newChapter.DelFlg
                 };
             }
 
-            return createNewChapterResponse;
+            return response;
         }
+
         public async Task<IPaginate<GetChapterResponse>> GetListChapter(int page, int size)
         {
             var chapters = await _unitOfWork.GetRepository<Chapter>().GetPagingListAsync(

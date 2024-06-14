@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Bean_Mind.API.Payload.Response.WorkSheetTemplates
+﻿namespace Bean_Mind.API.Payload.Response.WorkSheetTemplates
 {
     public class CreateNewWorkSheetTemplateResponse
     {

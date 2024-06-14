@@ -1,6 +1,5 @@
 ﻿using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Schools;
-using Bean_Mind.API.Payload.Response.Chapters;
 using Bean_Mind.API.Payload.Response.Curriculums;
 using Bean_Mind.API.Payload.Response.QuestionLevels;
 using Bean_Mind.API.Payload.Response.Schools;

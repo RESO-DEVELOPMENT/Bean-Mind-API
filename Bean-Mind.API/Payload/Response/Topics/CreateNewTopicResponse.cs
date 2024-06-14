@@ -1,6 +1,4 @@
-﻿using Bean_Mind_Data.Models;
-
-namespace Bean_Mind.API.Payload.Response.Topics
+﻿namespace Bean_Mind.API.Payload.Response.Topics
 {
     public class CreateNewTopicResponse
     {

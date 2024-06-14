@@ -1,7 +1,4 @@
-﻿using Bean_Mind_Data.Enums;
-using Bean_Mind_Data.Models;
-
-namespace Bean_Mind.API.Payload.Response.Question
+﻿namespace Bean_Mind.API.Payload.Response.Question
 {
     public class CreateNewQuestionResponse
     {

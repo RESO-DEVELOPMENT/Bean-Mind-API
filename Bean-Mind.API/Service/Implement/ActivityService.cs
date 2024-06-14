@@ -21,27 +21,37 @@ namespace Bean_Mind.API.Service.Implement
 
         public async Task<CreateNewActivityResponse> CreateNewActivity(CreateNewActivityRequest request, Guid topicId)
         {
-            _logger.LogInformation($"Creating new activity with {request.Title}");
-            Topic topic = await _unitOfWork.GetRepository<Topic>().SingleOrDefaultAsync(
-                predicate: t => t.Id.Equals(topicId) && t.DelFlg == false);
-            if(topic == null)
-            {
-                throw new BadHttpRequestException(MessageConstant.TopicMessage.TopicNotFound);
-            }
-            Activity activity = new Activity()
+            _logger.LogInformation($"Creating new activity with title: {request.Title}");
+
+            var activity = new Activity()
             {
                 Id = Guid.NewGuid(),
                 Title = request.Title,
                 Description = request.Description,
-                TopicId = topicId,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false
             };
+
+            if (topicId != Guid.Empty)
+            {
+                var topic = await _unitOfWork.GetRepository<Topic>().SingleOrDefaultAsync(
+                    predicate: t => t.Id.Equals(topicId) && t.DelFlg != true);
+
+                if (topic == null)
+                {
+                    throw new BadHttpRequestException(MessageConstant.TopicMessage.TopicNotFound);
+                }
+
+                activity.TopicId = topicId;
+            }
+
             await _unitOfWork.GetRepository<Activity>().InsertAsync(activity);
             var isSuccess = await _unitOfWork.CommitAsync() > 0;
+
             CreateNewActivityResponse createNewActivityResponse = null;
-            if(isSuccess) { 
+            if (isSuccess)
+            {
                 createNewActivityResponse = new CreateNewActivityResponse()
                 {
                     Id = activity.Id,
@@ -53,9 +63,10 @@ namespace Bean_Mind.API.Service.Implement
                     DelFlg = activity.DelFlg
                 };
             }
-            return createNewActivityResponse;
 
+            return createNewActivityResponse;
         }
+
 
         public async Task<bool> DeleteActivity(Guid id)
         {

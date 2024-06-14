@@ -8,7 +8,6 @@ using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
-using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -18,16 +17,25 @@ namespace Bean_Mind.API.Service.Implement
         {
         }
 
-        public async Task<CreateNewStudentResponse> CreateNewStudent(CreateNewStudentRequest request, Guid schoolId, Guid parentId)
+        public async Task<CreateNewStudentResponse> CreateNewStudent(CreateNewStudentRequest request, Guid parentId)
         {
             _logger.LogInformation($"Create new Student with {request.FirstName}  {request.LastName}");
 
-            School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(schoolId) && s.DelFlg != true);
-            if (school == null)
+            //Check School and Parent
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var accountExist = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (accountExist == null)
+                throw new Exception("Account or SchoolId is null");
+
+            Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Id.Equals(parentId) && p.DelFlg != true);
+            if (parent == null)
             {
-                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
+                throw new BadHttpRequestException(MessageConstant.ParentMessage.ParentNotFound);
             }
 
+            //Create Account
             var accountS = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
                 predicate: account => account.UserName.Equals(request.UserName) && account.DelFlg != true
                 );
@@ -44,7 +52,7 @@ namespace Bean_Mind.API.Service.Implement
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false,
                 Role = RoleEnum.Student.GetDescriptionFromEnum(),
-                SchoolId = schoolId
+                SchoolId = accountExist.SchoolId
             };
             await _unitOfWork.GetRepository<Account>().InsertAsync(account);
             var successAccount = await _unitOfWork.CommitAsync() > 0;
@@ -53,12 +61,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.AccountMessage.CreateStudentAccountFailMessage);
             }
 
-            
-            Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Id.Equals(parentId) && p.DelFlg != true);
-            if (parent == null)
-            {
-                throw new BadHttpRequestException(MessageConstant.ParentMessage.ParentNotFound);
-            }
+            //Create Student
             Student newStudent = new Student()
             {
                 Id = Guid.NewGuid(),
@@ -70,7 +73,6 @@ namespace Bean_Mind.API.Service.Implement
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 ParentId = parentId,
-                SchoolId = schoolId,
                 AccountId = account.Id,
             };
             await _unitOfWork.GetRepository<Student>().InsertAsync(newStudent);
@@ -172,7 +174,7 @@ namespace Bean_Mind.API.Service.Implement
                 student.ParentId = parentId;
             }
 
-            student.DateOfBirth = (request.DateOfBirth.HasValue && request.DateOfBirth != DateTime.MinValue) ? request.DateOfBirth.Value : student.DateOfBirth;
+            student.DateOfBirth = request.DateOfBirth ?? student.DateOfBirth;
             student.FirstName = string.IsNullOrEmpty(request.FirstName) ? student.FirstName : request.FirstName;
             student.LastName = string.IsNullOrEmpty(request.LastName) ? student.LastName : request.LastName;
             student.ImgUrl = string.IsNullOrEmpty(request.ImgUrl) ? student.ImgUrl : request.ImgUrl;
