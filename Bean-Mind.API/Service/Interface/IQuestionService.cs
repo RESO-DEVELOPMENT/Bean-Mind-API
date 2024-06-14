@@ -2,10 +2,6 @@
 using Bean_Mind.API.Payload.Response.Question;
 using Bean_Mind.API.Payload.Response.QuestionAnswers;
 using Bean_Mind.API.Payload.Response.Questions;
-using Bean_Mind_Data.Models;
-using Bean_Mind_Data.Paginate;
-using System;
-using System.Threading.Tasks;
 
 namespace Bean_Mind.API.Service.Interface
 {

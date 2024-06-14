@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace Bean_Mind.API.Payload.Response.Students
+﻿namespace Bean_Mind.API.Payload.Response.Students
 {
     public class CreateNewStudentResponse
     {

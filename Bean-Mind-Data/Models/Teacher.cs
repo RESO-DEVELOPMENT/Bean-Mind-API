@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind_Data.Models;
 
@@ -29,8 +26,6 @@ public partial class Teacher
     [StringLength(50)]
     public string Phone { get; set; } = null!;
 
-    public Guid SchoolId { get; set; }
-
     public Guid AccountId { get; set; }
 
     [Column(TypeName = "datetime")]
@@ -44,8 +39,4 @@ public partial class Teacher
     [ForeignKey("AccountId")]
     [InverseProperty("Teachers")]
     public virtual Account Account { get; set; } = null!;
-
-    [ForeignKey("SchoolId")]
-    [InverseProperty("Teachers")]
-    public virtual School School { get; set; } = null!;
 }

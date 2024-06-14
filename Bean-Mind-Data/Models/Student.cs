@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind_Data.Models;
 
@@ -23,8 +20,6 @@ public partial class Student
 
     public string ImgUrl { get; set; } = null!;
 
-    public Guid SchoolId { get; set; }
-
     public Guid ParentId { get; set; }
 
     public Guid AccountId { get; set; }
@@ -44,8 +39,4 @@ public partial class Student
     [ForeignKey("ParentId")]
     [InverseProperty("Students")]
     public virtual Parent Parent { get; set; } = null!;
-
-    [ForeignKey("SchoolId")]
-    [InverseProperty("Students")]
-    public virtual School School { get; set; } = null!;
 }

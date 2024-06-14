@@ -8,8 +8,6 @@ using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -23,6 +21,13 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<CreateNewParentResponse> AddParent(CreateNewParentResquest newParentRequest)
         {
             _logger.LogInformation($"Creating new parent with {newParentRequest.FirstName} {newParentRequest.LastName}");
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var accountExist = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (accountExist == null)
+                throw new Exception("Account or SchoolId is null");
+
             var accounts = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(predicate: account => account.UserName.Equals(newParentRequest.UserName) && account.DelFlg != true);
             if (accounts != null)
             {
@@ -39,7 +44,7 @@ namespace Bean_Mind.API.Service.Implement
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false,
                 Role = RoleEnum.Parent.GetDescriptionFromEnum(),
-
+                SchoolId = accountExist.SchoolId
             };
 
             await _unitOfWork.GetRepository<Account>().InsertAsync(account);

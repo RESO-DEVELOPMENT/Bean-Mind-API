@@ -10,6 +10,7 @@ using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -38,6 +39,15 @@ namespace Bean_Mind.API.Service.Implement
 
             await _unitOfWork.GetRepository<School>().InsertAsync(newSchool);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+
+            var accountS = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: account => account.UserName.Equals(createNewSchoolRequest.UserName) && account.DelFlg != true
+                );
+            if (accountS != null)
+            {
+                throw new BadHttpRequestException(MessageConstant.AccountMessage.UsernameExisted);
+            }
+
             Account account = new Account()
             {
                 Id = Guid.NewGuid(),
@@ -85,7 +95,9 @@ namespace Bean_Mind.API.Service.Implement
             }
 
             var parents = await _unitOfWork.GetRepository<Parent>().GetListAsync(
-                predicate: p => p.SchoolId.Equals(Id) && p.DelFlg == false);
+                predicate: p => p.Account.SchoolId.Equals(Id) && p.DelFlg == false,
+                include: p => p.Include(p => p.Account)
+                );
             foreach (var parent in parents)
             {
                 var students = await _unitOfWork.GetRepository<Student>().GetListAsync(

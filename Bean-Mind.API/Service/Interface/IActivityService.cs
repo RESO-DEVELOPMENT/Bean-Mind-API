@@ -1,6 +1,5 @@
 ﻿using Bean_Mind.API.Payload.Request.Activities;
 using Bean_Mind.API.Payload.Response.Activities;
-using Bean_Mind.API.Payload.Response.Courses;
 using Bean_Mind.API.Payload.Response.Documents;
 using Bean_Mind.API.Payload.Response.Videos;
 using Bean_Mind_Data.Paginate;

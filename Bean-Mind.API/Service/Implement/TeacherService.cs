@@ -18,15 +18,16 @@ namespace Bean_Mind.API.Service.Implement
 
 
        
-        public async Task<CreateNewTeacherResponse> CreateTeacher(CreateNewTeacherResquest newTeacherRequest, Guid schoolId)
+        public async Task<CreateNewTeacherResponse> CreateTeacher(CreateNewTeacherResquest newTeacherRequest)
         {
             _logger.LogInformation($"Create new teacher with {newTeacherRequest.FirstName} {newTeacherRequest.LastName}");
 
-            School school = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(schoolId) && s.DelFlg != true);
-            if (school == null)
-            {
-                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolNotFound);
-            }
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var accountExist = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (accountExist == null)
+                throw new Exception("Account or SchoolId is null");
 
             var accountS = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
                 predicate: account => account.UserName.Equals(newTeacherRequest.UserName) && account.DelFlg != true
@@ -44,7 +45,7 @@ namespace Bean_Mind.API.Service.Implement
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false,
                 Role = RoleEnum.Teacher.GetDescriptionFromEnum(),
-                SchoolId = schoolId
+                SchoolId = accountExist.SchoolId
             };
 
             await _unitOfWork.GetRepository<Account>().InsertAsync(account);
@@ -63,7 +64,6 @@ namespace Bean_Mind.API.Service.Implement
                 ImgUrl = newTeacherRequest.ImgUrl,
                 Email = newTeacherRequest.Email,
                 Phone = newTeacherRequest.Phone,
-                SchoolId = schoolId,
                 AccountId = account.Id,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),

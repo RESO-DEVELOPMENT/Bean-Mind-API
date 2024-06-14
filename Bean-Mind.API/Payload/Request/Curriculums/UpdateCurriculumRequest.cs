@@ -1,5 +1,4 @@
 ﻿using Bean_Mind.API.Converter;
-using System;
 using System.Text.Json.Serialization;
 
 namespace Bean_Mind.API.Payload.Request.Curriculums

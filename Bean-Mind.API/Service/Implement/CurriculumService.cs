@@ -1,22 +1,14 @@
 ﻿using AutoMapper;
-using AutoMapper;
-using Azure.Core;
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Curriculums;
-using Bean_Mind.API.Payload.Response.Chapters;
 using Bean_Mind.API.Payload.Response.Courses;
 using Bean_Mind.API.Payload.Response.Curriculums;
-using Bean_Mind.API.Payload.Response.Schools;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client.Extensibility;
-using System.Data;
-using System.Drawing;
-using System.Security.Claims;
+
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -43,7 +35,7 @@ namespace Bean_Mind.API.Service.Implement
                 Description = createNewCurriculumRequest.Description,
                 StartDate = createNewCurriculumRequest.StartDate,
                 EndDate = createNewCurriculumRequest.EndDate,
-                SchoolId = account.SchoolId.Value,//Account Id for School in these Case not null and .value same as get real value for it  
+                SchoolId = account.SchoolId,//Account Id for School in these Case not null and .value same as get real value for it  
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false

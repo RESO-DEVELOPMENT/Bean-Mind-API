@@ -8,7 +8,6 @@ using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing;
 
 namespace Bean_Mind.API.Service.Implement
 {

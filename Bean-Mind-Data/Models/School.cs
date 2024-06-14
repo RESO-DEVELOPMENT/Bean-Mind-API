@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind_Data.Models;
 
@@ -44,14 +41,5 @@ public partial class School
     public virtual ICollection<Curriculum> Curricula { get; set; } = new List<Curriculum>();
 
     [InverseProperty("School")]
-    public virtual ICollection<Parent> Parents { get; set; } = new List<Parent>();
-
-    [InverseProperty("School")]
     public virtual ICollection<QuestionLevel> QuestionLevels { get; set; } = new List<QuestionLevel>();
-
-    [InverseProperty("School")]
-    public virtual ICollection<Student> Students { get; set; } = new List<Student>();
-
-    [InverseProperty("School")]
-    public virtual ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
 }

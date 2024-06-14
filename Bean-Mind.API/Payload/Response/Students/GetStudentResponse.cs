@@ -1,7 +1,4 @@
-﻿using Bean_Mind.API.Payload.Response;
-using Bean_Mind_Data.Models;
-
-namespace Bean_Mind.API.Payload.Response.Students
+﻿namespace Bean_Mind.API.Payload.Response.Students
 {
     public class GetStudentResponse
     {

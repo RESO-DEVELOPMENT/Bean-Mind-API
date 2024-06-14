@@ -9,8 +9,6 @@ using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 
 namespace Bean_Mind.API.Service.Implement

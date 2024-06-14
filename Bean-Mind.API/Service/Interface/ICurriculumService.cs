@@ -1,5 +1,4 @@
 ﻿using Bean_Mind.API.Payload.Request.Curriculums;
-using Bean_Mind.API.Payload.Response.Chapters;
 using Bean_Mind.API.Payload.Response.Courses;
 using Bean_Mind.API.Payload.Response.Curriculums;
 using Bean_Mind_Data.Paginate;

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Components.Sections;
-using Microsoft.AspNetCore.Http;
 
 namespace Bean_Mind.API.Utils
 {

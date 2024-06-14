@@ -20,9 +20,9 @@ namespace Bean_Mind.API.Controllers
         [HttpPost(ApiEndPointConstant.Student.Create)]
         [ProducesResponseType(typeof(CreateNewStudentResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> CreateStudent([FromBody] CreateNewStudentRequest createNewStudentRequest, [FromQuery] Guid schoolId, [FromQuery] Guid parentId)
+        public async Task<IActionResult> CreateStudent([FromBody] CreateNewStudentRequest createNewStudentRequest, [FromQuery] Guid parentId)
         {
-            CreateNewStudentResponse response = await _studentService.CreateNewStudent(createNewStudentRequest, schoolId, parentId);
+            CreateNewStudentResponse response = await _studentService.CreateNewStudent(createNewStudentRequest, parentId);
             if (response == null)
             {
                 return Problem(MessageConstant.StudentMessage.CreateNewStudentFailedMessage);

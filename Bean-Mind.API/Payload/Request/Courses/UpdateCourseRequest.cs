@@ -1,6 +1,5 @@
 ﻿using Bean_Mind.API.Converter;
 using Bean_Mind_Data.Enums;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Bean_Mind.API.Payload.Request.Courses

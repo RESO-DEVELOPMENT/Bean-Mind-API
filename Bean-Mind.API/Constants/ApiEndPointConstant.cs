@@ -1,6 +1,4 @@
-﻿    using Microsoft.AspNetCore.Routing;
-
-namespace Bean_Mind.API.Constants
+﻿namespace Bean_Mind.API.Constants
 {
     public static class ApiEndPointConstant
     {
