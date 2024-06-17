@@ -8,8 +8,9 @@
         public int? MediumCount { get; set; }
         public int? HardCount { get; set; }
         public Guid? SubjectId { get; set; }
+        public Guid? SchoolId { get; set; }
 
-        public GetWorkSheetTemplateResponse(Guid? id, string? title, int? easyCount, int? mediumCount, int? hardCount, Guid? subjectId)
+        public GetWorkSheetTemplateResponse(Guid? id, string? title, int? easyCount, int? mediumCount, int? hardCount, Guid? subjectId, Guid? schoolId)
         {
             Id = id;
             Title = title;
@@ -17,6 +18,7 @@
             MediumCount = mediumCount;
             HardCount = hardCount;
             SubjectId = subjectId;
+            SchoolId = schoolId;
         }
     }
 }

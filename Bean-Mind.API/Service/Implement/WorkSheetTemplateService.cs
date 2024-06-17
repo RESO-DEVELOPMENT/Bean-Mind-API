@@ -20,6 +20,13 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<CreateNewWorkSheetTemplateResponse> CreateNewWorkSheetTemplate(CreateNewWorkSheetTemplateRequest request, Guid subjectId)
         {
             _logger.LogInformation($"Create new WorkSheet Template with {request.Title}");
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             if (subjectId == Guid.Empty)
             {
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
@@ -38,6 +45,7 @@ namespace Bean_Mind.API.Service.Implement
                 MediumCount = request.MediumCount,
                 HardCount = request.HardCount,
                 SubjectId = subjectId,
+                SchoolId = account.SchoolId.Value,
                 DelFlg = false,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime()
@@ -55,6 +63,7 @@ namespace Bean_Mind.API.Service.Implement
                     MediumCount = worksheetTemplate.MediumCount,
                     HardCount = worksheetTemplate.HardCount,
                     SubjectId = worksheetTemplate.SubjectId,
+                    SchoolId = worksheetTemplate.SchoolId,
                     DelFlg = worksheetTemplate.DelFlg,
                     InsDate = worksheetTemplate.InsDate,
                     UpdDate= worksheetTemplate.UpdDate
@@ -64,9 +73,16 @@ namespace Bean_Mind.API.Service.Implement
         }
         public async Task<IPaginate<GetWorkSheetTemplateResponse>> GetListWorkSheetTemplate(int page, int size)
         {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             var worksheetTemplates = await _unitOfWork.GetRepository<WorksheetTemplate>().GetPagingListAsync(
-                selector: s => new GetWorkSheetTemplateResponse(s.Id, s.Title, s.EasyCount, s.MediumCount, s.HardCount, s.SubjectId),
-                predicate: s => s.DelFlg != true,
+                selector: s => new GetWorkSheetTemplateResponse(s.Id, s.Title, s.EasyCount, s.MediumCount, s.HardCount, s.SubjectId,s.SchoolId),
+                predicate: s => s.DelFlg != true && s.SchoolId.Equals(account.SchoolId),
                 page: page,
                 size: size
                 );
@@ -83,7 +99,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.WorkSheetTemplateMessage.WorkSheetTemplateNotFound);
             }
             var worksheetTemplate = await _unitOfWork.GetRepository<WorksheetTemplate>().SingleOrDefaultAsync(
-                selector: s => new GetWorkSheetTemplateResponse(s.Id, s.Title, s.EasyCount, s.MediumCount, s.HardCount, s.SubjectId),
+                selector: s => new GetWorkSheetTemplateResponse(s.Id, s.Title, s.EasyCount, s.MediumCount, s.HardCount, s.SubjectId,s.SchoolId),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (worksheetTemplate == null)
             {

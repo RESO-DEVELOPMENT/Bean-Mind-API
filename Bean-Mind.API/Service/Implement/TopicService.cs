@@ -21,12 +21,19 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<CreateNewTopicResponse> CreateNewTopic(CreateNewTopicRequest Request, Guid chapterId)
         {
             _logger.LogInformation($"Creating new Topic with title: {Request.Title}");
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
 
             var newTopic = new Topic
             {
                 Id = Guid.NewGuid(),
                 Title = Request.Title,
                 Description = Request.Description,
+                SchoolId = account.SchoolId.Value,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false
@@ -56,6 +63,7 @@ namespace Bean_Mind.API.Service.Implement
                     Title = newTopic.Title,
                     Description = newTopic.Description,
                     ChapterId = newTopic.ChapterId,
+                    SchoolId = account.SchoolId,
                     InsDate = newTopic.InsDate,
                     UpdDate = newTopic.UpdDate,
                     DelFlg = newTopic.DelFlg
@@ -70,7 +78,7 @@ namespace Bean_Mind.API.Service.Implement
         {
             var topic = await _unitOfWork.GetRepository<Topic>().SingleOrDefaultAsync(
                 predicate: t => t.Id.Equals(id) && t.DelFlg != true);
-            if(topic == null)
+            if (topic == null)
                 throw new BadHttpRequestException(MessageConstant.TopicMessage.ListIsEmpty);
             topic.DelFlg = true;
             topic.UpdDate = TimeUtils.GetCurrentSEATime();
@@ -81,10 +89,17 @@ namespace Bean_Mind.API.Service.Implement
 
         public async Task<IPaginate<GetTopicResponse>> GetListTopic(int page, int size)
         {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             var topics = await _unitOfWork.GetRepository<Topic>().GetPagingListAsync(
+
                     selector: t => new GetTopicResponse(t.Id, t.Title, t.Description, t.ChapterId, t.SchoolId),
-                    include: t => t.Include(t => t.Chapter),
-                    predicate: t => t.DelFlg == false,
+                    predicate: t => t.DelFlg == false && t.SchoolId.Equals(account.SchoolId),
                     page: page,
                     size: size);
             return topics;
@@ -94,11 +109,10 @@ namespace Bean_Mind.API.Service.Implement
         {
             var topic = await _unitOfWork.GetRepository<Topic>().SingleOrDefaultAsync(
                 selector: t => new GetTopicResponse(t.Id, t.Title, t.Description, t.ChapterId, t.SchoolId),
-                predicate: t => t.Id.Equals(id) && t.DelFlg != true,
-                include: t => t.Include(t => t.Chapter)
+                predicate: t => t.Id.Equals(id) && t.DelFlg != true
             );
-                
-            if(topic == null)
+
+            if (topic == null)
                 throw new BadHttpRequestException(MessageConstant.TopicMessage.TopicNotFound);
 
             return topic;

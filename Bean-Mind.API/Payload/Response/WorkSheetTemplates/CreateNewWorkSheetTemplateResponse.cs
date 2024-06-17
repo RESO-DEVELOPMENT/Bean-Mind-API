@@ -8,6 +8,7 @@
         public int? MediumCount { get; set; }
         public int? HardCount { get; set; }
         public Guid? SubjectId { get; set; }
+        public Guid? SchoolId { get; set; }
         public DateTime? InsDate { get; set; }
         public DateTime? UpdDate { get; set; }
         public bool? DelFlg { get; set; }
