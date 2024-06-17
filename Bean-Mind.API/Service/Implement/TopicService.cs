@@ -82,7 +82,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<IPaginate<GetTopicResponse>> GetListTopic(int page, int size)
         {
             var topics = await _unitOfWork.GetRepository<Topic>().GetPagingListAsync(
-                    selector: t => new GetTopicResponse(t.Id, t.Title, t.Description, t.ChapterId),
+                    selector: t => new GetTopicResponse(t.Id, t.Title, t.Description, t.ChapterId, t.SchoolId),
                     include: t => t.Include(t => t.Chapter),
                     predicate: t => t.DelFlg == false,
                     page: page,
@@ -93,7 +93,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<GetTopicResponse> GetTopicById(Guid id)
         {
             var topic = await _unitOfWork.GetRepository<Topic>().SingleOrDefaultAsync(
-                selector: t => new GetTopicResponse(t.Id, t.Title, t.Description, t.ChapterId),
+                selector: t => new GetTopicResponse(t.Id, t.Title, t.Description, t.ChapterId, t.SchoolId),
                 predicate: t => t.Id.Equals(id) && t.DelFlg != true,
                 include: t => t.Include(t => t.Chapter)
             );

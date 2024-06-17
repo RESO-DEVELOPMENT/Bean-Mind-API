@@ -20,6 +20,13 @@ namespace Bean_Mind.API.Service.Implement
         {
             _logger.LogInformation($"Creating new Course with title: {createNewCourseRequest.Title}");
 
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             var newCourse = new Course
             {
                 Id = Guid.NewGuid(),
@@ -28,6 +35,7 @@ namespace Bean_Mind.API.Service.Implement
                 StartDate = createNewCourseRequest.StartDate,
                 EndDate = createNewCourseRequest.EndDate,
                 Status = (int)(createNewCourseRequest.Status),
+                SchoolId = account.SchoolId.Value,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false
@@ -63,6 +71,7 @@ namespace Bean_Mind.API.Service.Implement
                     EndDate = newCourse.EndDate,
                     Status = newCourse.Status,
                     CurriculumId = newCourse.CurriculumId,
+                    SchoolId = newCourse.SchoolId,
                     InsDate = newCourse.InsDate,
                     UpdDate = newCourse.UpdDate,
                     DelFlg = newCourse.DelFlg
@@ -128,7 +137,8 @@ namespace Bean_Mind.API.Service.Implement
                  StartDate = s.StartDate,
                  EndDate = s.EndDate,
                  Status = s.Status,
-                 CurriculumId = s.CurriculumId
+                 CurriculumId = s.CurriculumId,
+                 SchoolId = s.SchoolId                 
              },
              predicate: x => x.Id == Id && x.DelFlg != true
              );
@@ -142,6 +152,13 @@ namespace Bean_Mind.API.Service.Implement
 
         public async Task<IPaginate<GetCourseResponse>> GetListCourse(int page, int size)
         {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             var curriculums = await _unitOfWork.GetRepository<Course>().GetPagingListAsync(
               selector: s => new GetCourseResponse
               {
@@ -151,9 +168,10 @@ namespace Bean_Mind.API.Service.Implement
                   StartDate = s.StartDate,
                   EndDate = s.EndDate,
                   Status = s.Status,
-                  CurriculumId = s.CurriculumId
+                  CurriculumId = s.CurriculumId,
+                  SchoolId = s.SchoolId,
               },
-            predicate: x => x.DelFlg == false,
+            predicate: x => x.DelFlg == false && x.SchoolId.Equals(account.SchoolId),
               size: size,
               page: page);
 
@@ -208,7 +226,7 @@ namespace Bean_Mind.API.Service.Implement
             }
 
             var subjects = await _unitOfWork.GetRepository<Subject>().GetPagingListAsync(
-                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId),
+                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId, s.SchoolId),
                 predicate: s => s.CourseId.Equals(id) && s.DelFlg != true,
                 page: page,
                 size: size

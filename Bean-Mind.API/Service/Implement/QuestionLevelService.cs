@@ -64,6 +64,13 @@ namespace Bean_Mind.API.Service.Implement
         }
         public async Task<IPaginate<GetQuestionLevelResponse>> GetListQuestionLevel(int page, int size)
         {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             var questionLevels = await _unitOfWork.GetRepository<QuestionLevel>().GetPagingListAsync(
                 selector: s => new GetQuestionLevelResponse() 
                 { 
@@ -71,7 +78,7 @@ namespace Bean_Mind.API.Service.Implement
                     Level = s.Level,  
                     SchoolId= s.SchoolId,
                 },
-                predicate: s => s.DelFlg != true,
+                predicate: s => s.DelFlg != true && s.SchoolId.Equals(account.SchoolId),
                 page: page,
                 size: size
                 );

@@ -8,6 +8,7 @@ using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -93,6 +94,13 @@ namespace Bean_Mind.API.Service.Implement
         }
         public async Task<IPaginate<ParentResponse>> GetAllParents(int page, int size)
         {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             var parents = await _unitOfWork.GetRepository<Parent>().GetPagingListAsync(
                 selector: x => new ParentResponse()
                 {
@@ -103,7 +111,8 @@ namespace Bean_Mind.API.Service.Implement
                     Phone = x.Phone,
                     Address = x.Address
                 },
-                predicate: x => x.DelFlg == false,
+                include: x => x.Include(x => x.Account),
+                predicate: x => x.DelFlg == false && x.Account.SchoolId.Equals(account.SchoolId),
                 size: size,
                 page: page);
             return parents;

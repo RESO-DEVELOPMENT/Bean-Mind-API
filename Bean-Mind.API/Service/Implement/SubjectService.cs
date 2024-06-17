@@ -66,7 +66,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<IPaginate<GetSubjectResponse>> getListSubject(int page, int size)
         {
             var subjects = await _unitOfWork.GetRepository<Subject>().GetPagingListAsync(
-                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId),
+                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId, s.SchoolId),
                 predicate: s => s.DelFlg != true,
                 page: page,
                 size: size
@@ -84,7 +84,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
             var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(
-                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId),
+                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId, s.SchoolId),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (subject == null)
             {
@@ -172,7 +172,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
             var chapters = await _unitOfWork.GetRepository<Chapter>().GetPagingListAsync(
-                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description, s.SubjectId),
+                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description, s.SubjectId, s.SchoolId),
                 predicate: s => s.SubjectId.Equals(id) && s.DelFlg != true,
                 page: page,
                 size: size

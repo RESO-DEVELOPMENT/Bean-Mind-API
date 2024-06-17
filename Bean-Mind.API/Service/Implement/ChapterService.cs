@@ -83,7 +83,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new Exception("Account or SchoolId is null");
 
             var chapters = await _unitOfWork.GetRepository<Chapter>().GetPagingListAsync(
-                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description, s.SubjectId),
+                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description, s.SubjectId, s.SchoolId),
                 predicate: s => s.DelFlg != true && s.SchoolId.Equals(account.SchoolId),
                 page: page,
                 size: size
@@ -102,7 +102,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
             }
             var chapter = await _unitOfWork.GetRepository<Chapter>().SingleOrDefaultAsync(
-                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description, s.SubjectId),
+                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description, s.SubjectId, s.SchoolId),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (chapter == null)
             {
@@ -186,7 +186,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
             }
             var topics = await _unitOfWork.GetRepository<Topic>().GetPagingListAsync(
-                selector: s => new GetTopicResponse(s.Id, s.Title, s.Description, s.ChapterId),
+                selector: s => new GetTopicResponse(s.Id, s.Title, s.Description, s.ChapterId, s.SchoolId),
                 predicate: s => s.ChapterId.Equals(id) && s.DelFlg != true,
                 page: page,
                 size: size

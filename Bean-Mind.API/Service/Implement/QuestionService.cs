@@ -22,6 +22,14 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<CreateNewQuestionResponse> CreateNewQuestion(CreateNewQuestionRequest request, Guid questionLevelId)
         {
             _logger.LogInformation($"Create new Question with {request.Text}");
+
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             if (questionLevelId == Guid.Empty)
             {
                 throw new BadHttpRequestException(MessageConstant.QuestionMessage.EmptyQuestion);
@@ -39,6 +47,7 @@ namespace Bean_Mind.API.Service.Implement
                 OrderIndex = request.OrderIndex,
                 QuestionType = (int)request.QuestionType,
                 QuestionLevelId = questionLevelId,
+                SchoolId = account.SchoolId.Value,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false,
@@ -71,7 +80,12 @@ namespace Bean_Mind.API.Service.Implement
                     Text = newQuestion.Text,
                     Image = newQuestion.Image,
                     OrderIndex = newQuestion.OrderIndex,
-                    QuestionType = newQuestion.QuestionType
+                    QuestionType = newQuestion.QuestionType,
+                    QuestionLevelId = newQuestion.QuestionLevelId,
+                    SchoolId = newQuestion.SchoolId,
+                    InsDate = newQuestion.InsDate,
+                    UpdDate = newQuestion.UpdDate,
+                    DelFlg = newQuestion.DelFlg
                 };
             }
 
@@ -80,11 +94,16 @@ namespace Bean_Mind.API.Service.Implement
         }
         public async Task<List<GetQuestionResponse>> GetAllQuestion(int page, int size)
         {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             var questions = await _unitOfWork.GetRepository<Question>().GetPagingListAsync(
                 selector: q => q,
-                predicate: null,
-                orderBy: null,
-                include: null,
+                predicate: s => s.DelFlg != true && s.SchoolId.Equals(account.SchoolId),
                 page: page,
                 size: size
             );
@@ -108,7 +127,9 @@ namespace Bean_Mind.API.Service.Implement
                         Id = a.Id,
                         Text = a.Text,
                         IsCorrect = a.IsCorrect
-                    }).ToList()
+                    }).ToList(),
+                    QuestionLevelId = question.QuestionLevelId,
+                    SchoolId = question.SchoolId,
                 };
 
                 questionResponses.Add(questionResponse);
@@ -122,7 +143,7 @@ namespace Bean_Mind.API.Service.Implement
                 predicate: q => q.QuestionId == id
             );
 
-            
+
             var questionAnswerResponses = questionAnswers.Select(a => new GetQuestionAnswerResponse
             {
                 Id = a.Id,
@@ -132,10 +153,6 @@ namespace Bean_Mind.API.Service.Implement
 
             return questionAnswerResponses;
         }
-
-
-
-
     }
 }
 

@@ -74,7 +74,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<IPaginate<GetVideoResponse>> GetListVideo(int page, int size)
         {
             var videos = await _unitOfWork.GetRepository<Video>().GetPagingListAsync(
-                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId),
+                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId, s.SchoolId),
                 predicate: s => s.DelFlg != true,
                 page: page,
                 size: size
@@ -93,7 +93,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.VideoMessage.VideoNotFound);
             }
             var video = await _unitOfWork.GetRepository<Video>().SingleOrDefaultAsync(
-                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId),
+                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId, s.SchoolId),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true
                 );
             if (video == null)
