@@ -97,7 +97,6 @@ namespace Bean_Mind.API.Service.Implement
                 throw new Exception("Account or SchoolId is null");
 
             var topics = await _unitOfWork.GetRepository<Topic>().GetPagingListAsync(
-
                     selector: t => new GetTopicResponse(t.Id, t.Title, t.Description, t.ChapterId, t.SchoolId),
                     predicate: t => t.DelFlg == false && t.SchoolId.Equals(account.SchoolId),
                     page: page,
@@ -108,7 +107,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<GetTopicResponse> GetTopicById(Guid id)
         {
             var topic = await _unitOfWork.GetRepository<Topic>().SingleOrDefaultAsync(
-                selector: t => new GetTopicResponse(t.Id, t.Title, t.Description, t.ChapterId, t.SchoolId),
+                selector: t => new GetTopicResponse(t.Id, t.Title, t.Description, t.ChapterId,t.SchoolId),
                 predicate: t => t.Id.Equals(id) && t.DelFlg != true
             );
 
