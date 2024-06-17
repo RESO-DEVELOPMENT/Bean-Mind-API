@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Bean_Mind.API.Payload.Response.Question;
 using Bean_Mind.API.Payload.Response.Questions;
 using Bean_Mind_Data.Models;
+using Bean_Mind.API.Payload.Request.QuestionAnswers;
+using Bean_Mind_Data.Enums;
+using Newtonsoft.Json;
 
 namespace Bean_Mind.API.Controllers
 {
@@ -24,9 +27,10 @@ namespace Bean_Mind.API.Controllers
         [HttpPost(ApiEndPointConstant.Question.Create)]
         [ProducesResponseType(typeof(CreateNewQuestionResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> CreateQuestion([FromBody] CreateNewQuestionRequest createNewQuestionRequest, [FromQuery] Guid questionLevelId)
+        public async Task<IActionResult> CreateQuestion([FromForm] CreateNewQuestionRequest request, [FromQuery] Guid questionLevelId)
         {
-            CreateNewQuestionResponse response = await _questionService.CreateNewQuestion(createNewQuestionRequest,questionLevelId);
+            var answers = JsonConvert.DeserializeObject<List<CreateNewQuestionAnswerRequest>>(request.Answers);
+            CreateNewQuestionResponse response = await _questionService.CreateNewQuestion(request.Image, request.Text, request.OrderIndex, answers, request.QuestionType,questionLevelId);
             if (response == null)
             {
                 return Problem(MessageConstant.QuestionMessage.CreateQuestionFailed);

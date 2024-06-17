@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Bean_Mind.API.Constants;
+using Bean_Mind.API.Payload.Request.QuestionAnswers;
 using Bean_Mind.API.Payload.Request.Questions;
 using Bean_Mind.API.Payload.Response.Question;
 using Bean_Mind.API.Payload.Response.QuestionAnswers;
@@ -15,13 +16,15 @@ namespace Bean_Mind.API.Service.Implement
 {
     public class QuestionService : BaseService<QuestionService>, IQuestionService
     {
-        public QuestionService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<QuestionService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, logger, mapper, httpContextAccessor)
+        private readonly GoogleDriveService _driveService;
+        public QuestionService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<QuestionService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor, GoogleDriveService driveService) : base(unitOfWork, logger, mapper, httpContextAccessor)
         {
+            _driveService = driveService;
         }
 
-        public async Task<CreateNewQuestionResponse> CreateNewQuestion(CreateNewQuestionRequest request, Guid questionLevelId)
+        public async Task<CreateNewQuestionResponse> CreateNewQuestion(IFormFile img, string text, int orderIndex, List<CreateNewQuestionAnswerRequest> answerRequests, QuestionType questionType, Guid questionLevelId)
         {
-            _logger.LogInformation($"Create new Question with {request.Text}");
+            _logger.LogInformation($"Create new Question with {text}");
 
             Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
             var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
@@ -39,13 +42,19 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.QuestionMessage.QuestionLevelNotFound);
             }
+            string url = null;
+            if(img != null)
+            {
+                url = await _driveService.UploadToGoogleDriveAsync(img);
+               
+            }
             Question newQuestion = new Question
             {
                 Id = Guid.NewGuid(),
-                Text = request.Text,
-                Image = request.Image,
-                OrderIndex = request.OrderIndex,
-                QuestionType = (int)request.QuestionType,
+                Text = text,
+                Image = url,
+                OrderIndex = orderIndex,
+                QuestionType = (int)questionType,
                 QuestionLevelId = questionLevelId,
                 SchoolId = account.SchoolId.Value,
                 InsDate = TimeUtils.GetCurrentSEATime(),
@@ -54,12 +63,13 @@ namespace Bean_Mind.API.Service.Implement
                 QuestionAnswers = new List<QuestionAnswer>()
             };
 
-            foreach (var answerText in request.Answers)
+            foreach (var answerText in answerRequests)
             {
                 QuestionAnswer newAnswer = new QuestionAnswer()
                 {
                     Id = Guid.NewGuid(),
                     Text = answerText.Text,
+                    QuestionId = newQuestion.Id,
                     IsCorrect = answerText.IsCorrect,
                     IndDate = TimeUtils.GetCurrentSEATime(),
                     UpdDate = TimeUtils.GetCurrentSEATime(),
