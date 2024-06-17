@@ -35,7 +35,7 @@ namespace Bean_Mind.API.Service.Implement
                 Description = createNewCurriculumRequest.Description,
                 StartDate = createNewCurriculumRequest.StartDate,
                 EndDate = createNewCurriculumRequest.EndDate,
-                SchoolId = account.SchoolId,//Account Id for School in these Case not null and .value same as get real value for it  
+                SchoolId = account.SchoolId.Value,//Account Id for School in these Case not null and .value same as get real value for it  
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false
@@ -56,7 +56,7 @@ namespace Bean_Mind.API.Service.Implement
                     Description = newCurriculum.Description,
                     StartDate = newCurriculum.StartDate,
                     EndDate = newCurriculum.EndDate,
-                    SchoolId = newCurriculum.SchoolId.Value,
+                    SchoolId = newCurriculum.SchoolId,
                     InsDate = newCurriculum.InsDate,
                     UpdDate = newCurriculum.UpdDate,
                     DelFlg = newCurriculum.DelFlg

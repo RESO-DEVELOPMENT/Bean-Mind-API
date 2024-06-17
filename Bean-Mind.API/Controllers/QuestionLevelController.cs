@@ -28,7 +28,7 @@ namespace Bean_Mind.API.Controllers
             {
                 return Problem(MessageConstant.QuestionLevelMessage.CreateNewQuestionLevelFailedMessage);
             }
-            return CreatedAtAction(nameof(CreateNewQuestionLevelResponse), response);
+            return CreatedAtAction(nameof(CreateNewQuestionLevel), response);
         }
 
         [HttpGet(ApiEndPointConstant.QuestionLevel.GetAll)]

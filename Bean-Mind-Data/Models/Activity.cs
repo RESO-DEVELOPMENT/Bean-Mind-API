@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind_Data.Models;
 
@@ -14,7 +17,9 @@ public partial class Activity
 
     public string Description { get; set; } = null!;
 
-    public Guid TopicId { get; set; }
+    public Guid? TopicId { get; set; }
+
+    public Guid SchoolId { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
@@ -29,7 +34,7 @@ public partial class Activity
 
     [ForeignKey("TopicId")]
     [InverseProperty("Activities")]
-    public virtual Topic Topic { get; set; } = null!;
+    public virtual Topic? Topic { get; set; }
 
     [InverseProperty("Activity")]
     public virtual ICollection<Video> Videos { get; set; } = new List<Video>();

@@ -27,6 +27,14 @@ namespace Bean_Mind.API.Service.Implement
             if (account == null || account.SchoolId == null)
                 throw new Exception("Account or SchoolId is null");
 
+            QuestionLevel questionLevelExisted = await _unitOfWork.GetRepository<QuestionLevel>().SingleOrDefaultAsync(
+                predicate: s => s.Level == request.Level && s.DelFlg != true && s.SchoolId.Equals(account.SchoolId)
+                );
+            if (questionLevelExisted != null)
+            {
+                throw new Exception("This level already exists");
+            }
+
             QuestionLevel questionLevel = new QuestionLevel()
             {
                 Id = Guid.NewGuid(),

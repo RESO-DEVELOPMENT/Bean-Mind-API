@@ -7,13 +7,15 @@
         public string? Description { get; set; } = null!;
         public string? Url { get; set; } = null!;
         public Guid? ActivityId { get; set; }
-        public GetVideoResponse(Guid id, string title, string description, string url, Guid? activityId)
+        public Guid? SchoolId { get; set; }
+        public GetVideoResponse(Guid id, string title, string description, string url, Guid? activityId, Guid? schoolId)
         {
             Id = id;
             Title = title;
             Description = description;
             Url = url;
             ActivityId = activityId;
+            SchoolId = schoolId;
         }
     }
 }
