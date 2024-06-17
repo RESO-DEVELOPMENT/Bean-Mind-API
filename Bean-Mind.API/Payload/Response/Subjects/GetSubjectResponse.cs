@@ -6,12 +6,14 @@
         public string? Title { get; set; }
         public string? Description { get; set; }
         public Guid? CourseId { get; set; }
-        public GetSubjectResponse(Guid id, string? title, string description, Guid? courseId)
+        public Guid? SchoolId { get; set; }
+        public GetSubjectResponse(Guid id, string? title, string description, Guid? courseId, Guid? schoolId)
         {
             Id = id;
             Title = title;
             Description = description;
             CourseId = courseId;
+            SchoolId = schoolId;
         }
     }
 }
