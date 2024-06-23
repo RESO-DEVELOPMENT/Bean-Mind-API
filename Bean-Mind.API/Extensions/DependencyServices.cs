@@ -80,6 +80,8 @@ namespace Bean_Mind.API.Extensions
             services.AddScoped<IWorkSheetTemplateService, WorkSheetTemplateService>();
             //Gg drive
             services.AddScoped<GoogleDriveService>();
+            //Azure DB
+            services.AddScoped<AzureDatabaseService>();
 
             return services;
         }

@@ -8,6 +8,8 @@ using Bean_Mind.API.Service;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Builder.Extensions;
 using Microsoft.Extensions.Configuration;
+using Bean_Mind.API.Service.Implement;
+using Bean_Mind_Business.Infrastructure;
 
 var logger = NLog.LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"))
     .GetCurrentClassLogger();
@@ -15,7 +17,6 @@ var logger = NLog.LogManager.LoadConfiguration(string.Concat(Directory.GetCurren
 try
 {
     var builder = WebApplication.CreateBuilder(args);
-
 
     builder.Logging.ClearProviders();
     builder.Host.UseNLog();
@@ -30,6 +31,7 @@ try
         x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         x.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
     });
+    builder.Services.AddInfrastructure();
     builder.Services.AddDatabase();
     builder.Services.AddUnitOfWork();
     builder.Services.AddServices(builder.Configuration);
