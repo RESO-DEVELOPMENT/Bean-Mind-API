@@ -37,5 +37,8 @@ public partial class Subject
     public virtual Course? Course { get; set; }
 
     [InverseProperty("Subject")]
+    public virtual ICollection<TeacherTeachable> TeacherTeachables { get; set; } = new List<TeacherTeachable>();
+
+    [InverseProperty("Subject")]
     public virtual ICollection<WorksheetTemplate> WorksheetTemplates { get; set; } = new List<WorksheetTemplate>();
 }

@@ -94,6 +94,13 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.CourseMessage
                     .CourseNotFound);
             }
+            var studentInCourses = await _unitOfWork.GetRepository<StudentInCourse>().GetListAsync(predicate: s => s.CourseId.Equals(Id) && s.DelFlg != true);
+            foreach (var studentInCourse in studentInCourses)
+            {
+                studentInCourse.DelFlg = true;
+                studentInCourse.UpdDate = TimeUtils.GetCurrentSEATime();
+                _unitOfWork.GetRepository<StudentInCourse>().UpdateAsync(studentInCourse);
+            }
             var subjects = await _unitOfWork.GetRepository<Subject>().GetListAsync(
                         predicate: s => s.CourseId.Equals(Id) && s.DelFlg == false);
             foreach (var subject in subjects)

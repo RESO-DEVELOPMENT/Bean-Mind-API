@@ -6,10 +6,10 @@ namespace Bean_Mind.API.Service.Interface
 {
     public interface IStudentService
     {
-        public Task<CreateNewStudentResponse> CreateNewStudent(CreateNewStudentRequest request, Guid parentId);
+        public Task<CreateNewStudentResponse> CreateNewStudent(CreateNewStudentRequest request, Guid parentId, Guid courseId);
         public Task<IPaginate<GetStudentResponse>> getListStudent(int page, int size);
         public Task<GetStudentResponse> getStudentById(Guid id);
-        Task<bool> UpdateStudent(Guid id, UpdateStudentRequest request, Guid parentId);
+        Task<bool> UpdateStudent(Guid id, UpdateStudentRequest request, Guid parentId, Guid courseId);
         Task<bool> RemoveStudent(Guid id);
     }
 }

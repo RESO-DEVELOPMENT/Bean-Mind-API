@@ -42,4 +42,7 @@ public partial class Student
     [ForeignKey("ParentId")]
     [InverseProperty("Students")]
     public virtual Parent Parent { get; set; } = null!;
+
+    [InverseProperty("Student")]
+    public virtual ICollection<StudentInCourse> StudentInCourses { get; set; } = new List<StudentInCourse>();
 }

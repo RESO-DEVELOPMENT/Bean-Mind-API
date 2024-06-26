@@ -39,9 +39,13 @@ public partial class BeanMindContext : DbContext
 
     public virtual DbSet<Student> Students { get; set; }
 
+    public virtual DbSet<StudentInCourse> StudentInCourses { get; set; }
+
     public virtual DbSet<Subject> Subjects { get; set; }
 
     public virtual DbSet<Teacher> Teachers { get; set; }
+
+    public virtual DbSet<TeacherTeachable> TeacherTeachables { get; set; }
 
     public virtual DbSet<Topic> Topics { get; set; }
 
@@ -192,6 +196,22 @@ public partial class BeanMindContext : DbContext
                 .HasConstraintName("FK_Student_Parent");
         });
 
+        modelBuilder.Entity<StudentInCourse>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.DelFlg).HasDefaultValue(false);
+            entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.Course).WithMany(p => p.StudentInCourses)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StudentInCourse_Course");
+
+            entity.HasOne(d => d.Student).WithMany(p => p.StudentInCourses)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StudentInCourse_Student");
+        });
+
         modelBuilder.Entity<Subject>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_Subjects");
@@ -214,6 +234,22 @@ public partial class BeanMindContext : DbContext
             entity.HasOne(d => d.Account).WithMany(p => p.Teachers)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Teacher_Account");
+        });
+
+        modelBuilder.Entity<TeacherTeachable>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.DelFlg).HasDefaultValue(false);
+            entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.Subject).WithMany(p => p.TeacherTeachables)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_TeacherTeachable_Subject");
+
+            entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherTeachables)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_TeacherTeachable_Teacher");
         });
 
         modelBuilder.Entity<Topic>(entity =>

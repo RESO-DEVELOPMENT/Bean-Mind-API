@@ -18,7 +18,7 @@ namespace Bean_Mind.API.Service.Implement
         {
         }
 
-        public async Task<CreateNewStudentResponse> CreateNewStudent(CreateNewStudentRequest request, Guid parentId)
+        public async Task<CreateNewStudentResponse> CreateNewStudent(CreateNewStudentRequest request, Guid parentId, Guid courseId)
         {
             _logger.LogInformation($"Create new Student with {request.FirstName}  {request.LastName}");
 
@@ -56,6 +56,11 @@ namespace Bean_Mind.API.Service.Implement
                 SchoolId = accountExist.SchoolId
             };
             await _unitOfWork.GetRepository<Account>().InsertAsync(account);
+            var course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(courseId) && c.DelFlg != true);
+            if (course == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
+            }
             var successAccount = await _unitOfWork.CommitAsync() > 0;
             if (!successAccount)
             {
@@ -77,6 +82,16 @@ namespace Bean_Mind.API.Service.Implement
                 AccountId = account.Id,
             };
             await _unitOfWork.GetRepository<Student>().InsertAsync(newStudent);
+            StudentInCourse studentInCourse = new StudentInCourse()
+            {
+                Id = Guid.NewGuid(),
+                StudentId = newStudent.Id,
+                CourseId = courseId,
+                InsDate = TimeUtils.GetCurrentSEATime(),
+                UpdDate = TimeUtils.GetCurrentSEATime(),
+                DelFlg = false
+            };
+            await _unitOfWork.GetRepository<StudentInCourse>().InsertAsync(studentInCourse);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             CreateNewStudentResponse createNewStudentResponse = null;
             if (isSuccessful)
@@ -156,12 +171,19 @@ namespace Bean_Mind.API.Service.Implement
                 account.UpdDate = TimeUtils.GetCurrentSEATime();
                 _unitOfWork.GetRepository<Account>().UpdateAsync(account);
             }
+            var studentInCourses = await _unitOfWork.GetRepository<StudentInCourse>().GetListAsync(predicate: s => s.StudentId.Equals(studentId) && s.DelFlg != true);
+            foreach(var studentInCourse in studentInCourses)
+            {
+                studentInCourse.DelFlg = true;
+                studentInCourse.UpdDate= TimeUtils.GetCurrentSEATime();
+                _unitOfWork.GetRepository<StudentInCourse>().UpdateAsync(studentInCourse);
+            }
             _unitOfWork.GetRepository<Student>().UpdateAsync(student);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;
         }
 
-        public async Task<bool> UpdateStudent(Guid Id, UpdateStudentRequest request, Guid parentId)
+        public async Task<bool> UpdateStudent(Guid Id, UpdateStudentRequest request, Guid parentId, Guid courseId)
         {
             if (Id == Guid.Empty)
             {
@@ -181,6 +203,18 @@ namespace Bean_Mind.API.Service.Implement
                     throw new BadHttpRequestException("Không tìm thấy dữ liệu của phụ huynh");
                 }
                 student.ParentId = parentId;
+            }
+            if(courseId != Guid.Empty)
+            {
+                Course course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(predicate: c => c.Id.Equals(courseId) && c.DelFlg != true);
+                if (course == null)
+                {
+                    throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
+                }
+                var studentInCourse = await _unitOfWork.GetRepository<StudentInCourse>().SingleOrDefaultAsync(predicate: s => s.StudentId.Equals(Id) && s.DelFlg != true);
+                studentInCourse.CourseId = courseId;
+                studentInCourse.UpdDate = TimeUtils.GetCurrentSEATime();
+                _unitOfWork.GetRepository<StudentInCourse>().UpdateAsync(studentInCourse);
             }
 
             student.DateOfBirth = request.DateOfBirth ?? student.DateOfBirth;

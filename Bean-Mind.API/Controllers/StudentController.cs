@@ -20,9 +20,9 @@ namespace Bean_Mind.API.Controllers
         [HttpPost(ApiEndPointConstant.Student.Create)]
         [ProducesResponseType(typeof(CreateNewStudentResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> CreateStudent([FromBody] CreateNewStudentRequest createNewStudentRequest, [FromQuery] Guid parentId)
+        public async Task<IActionResult> CreateStudent([FromBody] CreateNewStudentRequest createNewStudentRequest, [FromQuery] Guid parentId, [FromQuery] Guid courseId)
         {
-            CreateNewStudentResponse response = await _studentService.CreateNewStudent(createNewStudentRequest, parentId);
+            CreateNewStudentResponse response = await _studentService.CreateNewStudent(createNewStudentRequest, parentId, courseId);
             if (response == null)
             {
                 return Problem(MessageConstant.StudentMessage.CreateNewStudentFailedMessage);
@@ -68,9 +68,9 @@ namespace Bean_Mind.API.Controllers
         [HttpPatch(ApiEndPointConstant.Student.UpdateStudent)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> UpdateStudent([FromRoute] Guid id, [FromBody] UpdateStudentRequest request, [FromQuery] Guid parentId)
+        public async Task<IActionResult> UpdateStudent([FromRoute] Guid id, [FromBody] UpdateStudentRequest request, [FromQuery] Guid parentId, [FromQuery] Guid courseId)
         {
-            var response = await _studentService.UpdateStudent(id, request, parentId);
+            var response = await _studentService.UpdateStudent(id, request, parentId, courseId);
             return Ok(response);
         }
     }
