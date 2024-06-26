@@ -42,4 +42,7 @@ public partial class Teacher
     [ForeignKey("AccountId")]
     [InverseProperty("Teachers")]
     public virtual Account Account { get; set; } = null!;
+
+    [InverseProperty("Teacher")]
+    public virtual ICollection<TeacherTeachable> TeacherTeachables { get; set; } = new List<TeacherTeachable>();
 }

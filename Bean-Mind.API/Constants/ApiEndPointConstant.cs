@@ -192,6 +192,17 @@
             public const string UpdateWorkSheetTemplate = WorkSheetTemplateEndPoint + "/{id}";
             public const string DeleteWorkSheetTemplate = WorkSheetTemplateEndPoint + "/{id}";
         }
+        public static class TeacherTeachable
+        {
+            public const string TeacherTeachableEndpoint = ApiEndpoint + "/teacherteachables";
+            public const string Create = TeacherTeachableEndpoint;
+            public const string GetAll = TeacherTeachableEndpoint;
+            
+            public const string GetTeacherTeachablesByTeacher = TeacherTeachableEndpoint +"teacher/{teacherId}";
+            public const string GetTeacherTeachablesBySubject = TeacherTeachableEndpoint +"subject/{subjectId}";
+            public const string DeleteTeacherTeachable = TeacherTeachableEndpoint + "/{id}";
+            public const string UpdateTeacherTeachable = TeacherTeachableEndpoint + "/{teacherId}/{subjectId}";
+        }
     }
 }
     
