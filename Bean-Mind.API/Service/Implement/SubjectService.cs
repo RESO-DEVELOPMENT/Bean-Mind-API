@@ -20,11 +20,18 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<CreateNewSubjectResponse> CreateNewSubject(CreateNewSubjectRequest request, Guid courseId)
         {
             _logger.LogInformation($"Create new Subject with {request.Title}");
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
             var  newSubject = new Subject
             {
                 Id = Guid.NewGuid(),
                 Title = request.Title,
                 Description = request.Description,
+                SchoolId = account.SchoolId.Value,
                 DelFlg = false,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
@@ -55,6 +62,7 @@ namespace Bean_Mind.API.Service.Implement
                     Title = newSubject.Title,
                     Description = newSubject.Description,
                     CourseId = newSubject.CourseId,
+                    SchoolId = account.SchoolId,
                     DelFlg = newSubject.DelFlg,
                     InsDate = newSubject.InsDate,
                     UpdDate = newSubject.UpdDate
@@ -65,9 +73,16 @@ namespace Bean_Mind.API.Service.Implement
         }
         public async Task<IPaginate<GetSubjectResponse>> getListSubject(int page, int size)
         {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             var subjects = await _unitOfWork.GetRepository<Subject>().GetPagingListAsync(
-                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId),
-                predicate: s => s.DelFlg != true,
+                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId, s.SchoolId),
+                predicate: s => s.DelFlg != true && s.SchoolId.Equals(account.SchoolId),
                 page: page,
                 size: size
                 );
@@ -84,7 +99,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
             var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(
-                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId),
+                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId, s.SchoolId),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (subject == null)
             {
@@ -172,7 +187,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
             var chapters = await _unitOfWork.GetRepository<Chapter>().GetPagingListAsync(
-                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description, s.SubjectId),
+                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description, s.SubjectId, s.SchoolId),
                 predicate: s => s.SubjectId.Equals(id) && s.DelFlg != true,
                 page: page,
                 size: size

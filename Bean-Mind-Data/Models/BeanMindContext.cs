@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind_Data.Models;
 
@@ -74,9 +76,7 @@ public partial class BeanMindContext : DbContext
             entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
 
-            entity.HasOne(d => d.Topic).WithMany(p => p.Activities)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Activity_Topic");
+            entity.HasOne(d => d.Topic).WithMany(p => p.Activities).HasConstraintName("FK_Activity_Topic");
         });
 
         modelBuilder.Entity<Chapter>(entity =>
@@ -106,7 +106,9 @@ public partial class BeanMindContext : DbContext
             entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
 
-            entity.HasOne(d => d.School).WithMany(p => p.Curricula).HasConstraintName("FK_Curriculum_School");
+            entity.HasOne(d => d.School).WithMany(p => p.Curricula)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Curriculum_School");
         });
 
         modelBuilder.Entity<Document>(entity =>

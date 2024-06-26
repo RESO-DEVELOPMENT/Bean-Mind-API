@@ -21,11 +21,19 @@ namespace Bean_Mind.API.Service.Implement
         {
             _logger.LogInformation($"Creating new Chapter with title: {Request.Title}");
 
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             var newChapter = new Chapter
             {
                 Id = Guid.NewGuid(),
                 Title = Request.Title,
                 Description = Request.Description,
+                SchoolId = account.SchoolId.Value,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false
@@ -55,6 +63,7 @@ namespace Bean_Mind.API.Service.Implement
                     Title = newChapter.Title,
                     Description = newChapter.Description,
                     SubjectId = newChapter.SubjectId,
+                    SchoolId = newChapter.SchoolId,
                     InsDate = newChapter.InsDate,
                     UpdDate = newChapter.UpdDate,
                     DelFlg = newChapter.DelFlg
@@ -66,9 +75,16 @@ namespace Bean_Mind.API.Service.Implement
 
         public async Task<IPaginate<GetChapterResponse>> GetListChapter(int page, int size)
         {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             var chapters = await _unitOfWork.GetRepository<Chapter>().GetPagingListAsync(
-                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description, s.SubjectId),
-                predicate: s => s.DelFlg != true,
+                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description, s.SubjectId, s.SchoolId),
+                predicate: s => s.DelFlg != true && s.SchoolId.Equals(account.SchoolId),
                 page: page,
                 size: size
                 );
@@ -78,6 +94,7 @@ namespace Bean_Mind.API.Service.Implement
             }
             return chapters;
         }
+
         public async Task<GetChapterResponse> GetChapterById(Guid id)
         {
             if (id == Guid.Empty)
@@ -85,7 +102,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
             }
             var chapter = await _unitOfWork.GetRepository<Chapter>().SingleOrDefaultAsync(
-                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description, s.SubjectId),
+                selector: s => new GetChapterResponse(s.Id, s.Title, s.Description, s.SubjectId, s.SchoolId),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (chapter == null)
             {
@@ -93,6 +110,7 @@ namespace Bean_Mind.API.Service.Implement
             }
             return chapter;
         }
+
         public async Task<bool> UpdateChapter(Guid id, UpdateChapterRequest request, Guid subjectId)
         {
             if (id == Guid.Empty)
@@ -168,7 +186,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.ChapterMessage.ChapterNotFound);
             }
             var topics = await _unitOfWork.GetRepository<Topic>().GetPagingListAsync(
-                selector: s => new GetTopicResponse(s.Id, s.Title, s.Description, s.ChapterId),
+                selector: s => new GetTopicResponse(s.Id, s.Title, s.Description, s.ChapterId, s.SchoolId),
                 predicate: s => s.ChapterId.Equals(id) && s.DelFlg != true,
                 page: page,
                 size: size

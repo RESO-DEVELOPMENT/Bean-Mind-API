@@ -8,6 +8,7 @@ using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
+using Microsoft.EntityFrameworkCore;
 namespace Bean_Mind.API.Service.Implement
 {
     public class TeacherService : BaseService<TeacherService>, ITeacherService
@@ -94,6 +95,13 @@ namespace Bean_Mind.API.Service.Implement
 
         public async Task<IPaginate<GetTeacherResponse>> GetAllTeachers(int page, int size )
         {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             var teachers = await _unitOfWork.GetRepository<Teacher>().GetPagingListAsync(
             selector: x => new GetTeacherResponse()
             {
@@ -105,7 +113,8 @@ namespace Bean_Mind.API.Service.Implement
                 DateOfBirth = x.DateOfBirth,
                 ImgUrl = x.ImgUrl,
             },
-            predicate: x => x.DelFlg == false,
+            include: s => s.Include(s => s.Account),
+            predicate: x => x.DelFlg == false && x.Account.SchoolId.Equals(account.SchoolId),
             size: size,
             page: page);
             return teachers;

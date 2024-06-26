@@ -10,6 +10,7 @@ namespace Bean_Mind.API.Payload.Response.Documents
         public string? Description { get; set; } = null!;
         public string? Url { get; set; } = null!;
         public Guid? ActivityId { get; set; }
+        public Guid? SchoolId { get; set; }
         public DateTime? InsDate { get; set; }
         public DateTime? UpdDate { get; set; }
         public bool? DelFlg { get; set; }

@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind_Data.Models;
 
@@ -17,6 +20,8 @@ public partial class Video
     public string Url { get; set; } = null!;
 
     public Guid? ActivityId { get; set; }
+
+    public Guid SchoolId { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }

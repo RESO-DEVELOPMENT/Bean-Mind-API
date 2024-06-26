@@ -10,6 +10,8 @@ namespace Bean_Mind.API.Payload.Response.Questions
         public string? Image { get; set; }
         public int? OrderIndex { get; set; }
         public QuestionType? QuestionType { get; set; }
+        public Guid? QuestionLevelId { get; set; }
+        public Guid? SchoolId { get; set; }
         public List<GetQuestionAnswerResponse>? Answers { get; set; }
     }
 }

@@ -9,5 +9,6 @@
         public DateTime? EndDate { get; set; }
         public int? Status {  get; set; }
         public Guid? CurriculumId { get; set; }
+        public Guid? SchoolId { get; set; }
     }
 }

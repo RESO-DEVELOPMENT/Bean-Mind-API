@@ -8,6 +8,7 @@ using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -99,9 +100,17 @@ namespace Bean_Mind.API.Service.Implement
 
         public async Task<IPaginate<GetStudentResponse>> getListStudent(int page, int size)
         {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             var students = await _unitOfWork.GetRepository<Student>().GetPagingListAsync(
                 selector: s => new GetStudentResponse(s.Id, s.FirstName, s.LastName, s.DateOfBirth, s.ImgUrl),
-                predicate: s => s.DelFlg != true,
+                include: s => s.Include(s => s.Account),
+                predicate: s => s.DelFlg != true && s.Account.SchoolId.Equals(account.SchoolId),
                 page: page,
                 size: size
                 );
@@ -163,7 +172,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.StudentMessage.StudentNotFound);
             }
-            
+
             if (parentId != Guid.Empty)
             {
                 Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Id.Equals(parentId) && p.DelFlg != true);

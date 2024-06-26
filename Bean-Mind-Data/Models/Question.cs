@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bean_Mind_Data.Models;
 
@@ -18,6 +21,8 @@ public partial class Question
     public int QuestionType { get; set; }
 
     public Guid QuestionLevelId { get; set; }
+
+    public Guid SchoolId { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }

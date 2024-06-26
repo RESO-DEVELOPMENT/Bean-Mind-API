@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Bean_Mind.API.Constants;
+using Bean_Mind.API.Payload.Request.QuestionAnswers;
 using Bean_Mind.API.Payload.Request.Questions;
 using Bean_Mind.API.Payload.Response.Question;
 using Bean_Mind.API.Payload.Response.QuestionAnswers;
@@ -15,13 +16,23 @@ namespace Bean_Mind.API.Service.Implement
 {
     public class QuestionService : BaseService<QuestionService>, IQuestionService
     {
-        public QuestionService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<QuestionService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, logger, mapper, httpContextAccessor)
+        private readonly GoogleDriveService _driveService;
+        public QuestionService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<QuestionService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor, GoogleDriveService driveService) : base(unitOfWork, logger, mapper, httpContextAccessor)
         {
+            _driveService = driveService;
         }
 
-        public async Task<CreateNewQuestionResponse> CreateNewQuestion(CreateNewQuestionRequest request, Guid questionLevelId)
+        public async Task<CreateNewQuestionResponse> CreateNewQuestion(IFormFile img, string text, int orderIndex, List<CreateNewQuestionAnswerRequest> answerRequests, QuestionType questionType, Guid questionLevelId)
         {
-            _logger.LogInformation($"Create new Question with {request.Text}");
+            _logger.LogInformation($"Create new Question with {text}");
+
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             if (questionLevelId == Guid.Empty)
             {
                 throw new BadHttpRequestException(MessageConstant.QuestionMessage.EmptyQuestion);
@@ -31,26 +42,34 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.QuestionMessage.QuestionLevelNotFound);
             }
+            string url = null;
+            if(img != null)
+            {
+                url = await _driveService.UploadToGoogleDriveAsync(img);
+               
+            }
             Question newQuestion = new Question
             {
                 Id = Guid.NewGuid(),
-                Text = request.Text,
-                Image = request.Image,
-                OrderIndex = request.OrderIndex,
-                QuestionType = (int)request.QuestionType,
+                Text = text,
+                Image = url,
+                OrderIndex = orderIndex,
+                QuestionType = (int)questionType,
                 QuestionLevelId = questionLevelId,
+                SchoolId = account.SchoolId.Value,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false,
                 QuestionAnswers = new List<QuestionAnswer>()
             };
 
-            foreach (var answerText in request.Answers)
+            foreach (var answerText in answerRequests)
             {
                 QuestionAnswer newAnswer = new QuestionAnswer()
                 {
                     Id = Guid.NewGuid(),
                     Text = answerText.Text,
+                    QuestionId = newQuestion.Id,
                     IsCorrect = answerText.IsCorrect,
                     IndDate = TimeUtils.GetCurrentSEATime(),
                     UpdDate = TimeUtils.GetCurrentSEATime(),
@@ -71,7 +90,12 @@ namespace Bean_Mind.API.Service.Implement
                     Text = newQuestion.Text,
                     Image = newQuestion.Image,
                     OrderIndex = newQuestion.OrderIndex,
-                    QuestionType = newQuestion.QuestionType
+                    QuestionType = newQuestion.QuestionType,
+                    QuestionLevelId = newQuestion.QuestionLevelId,
+                    SchoolId = newQuestion.SchoolId,
+                    InsDate = newQuestion.InsDate,
+                    UpdDate = newQuestion.UpdDate,
+                    DelFlg = newQuestion.DelFlg
                 };
             }
 
@@ -80,11 +104,16 @@ namespace Bean_Mind.API.Service.Implement
         }
         public async Task<List<GetQuestionResponse>> GetAllQuestion(int page, int size)
         {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             var questions = await _unitOfWork.GetRepository<Question>().GetPagingListAsync(
                 selector: q => q,
-                predicate: null,
-                orderBy: null,
-                include: null,
+                predicate: s => s.DelFlg != true && s.SchoolId.Equals(account.SchoolId),
                 page: page,
                 size: size
             );
@@ -108,7 +137,9 @@ namespace Bean_Mind.API.Service.Implement
                         Id = a.Id,
                         Text = a.Text,
                         IsCorrect = a.IsCorrect
-                    }).ToList()
+                    }).ToList(),
+                    QuestionLevelId = question.QuestionLevelId,
+                    SchoolId = question.SchoolId,
                 };
 
                 questionResponses.Add(questionResponse);
@@ -122,7 +153,7 @@ namespace Bean_Mind.API.Service.Implement
                 predicate: q => q.QuestionId == id
             );
 
-            
+
             var questionAnswerResponses = questionAnswers.Select(a => new GetQuestionAnswerResponse
             {
                 Id = a.Id,
@@ -132,10 +163,6 @@ namespace Bean_Mind.API.Service.Implement
 
             return questionAnswerResponses;
         }
-
-
-
-
     }
 }
 

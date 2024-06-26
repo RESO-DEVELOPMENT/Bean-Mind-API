@@ -15,6 +15,17 @@ namespace Bean_Mind.API.Service
 
         public async Task<string> UploadToGoogleDriveAsync(IFormFile fileToUpload)
         {
+            var allowedExtensions = new List<string> { ".docx", ".pdf", ".mov", ".xlsx", ".mp4", ".pdf" };
+
+            // Lấy đuôi file từ file được tải lên
+            var fileExtension = Path.GetExtension(fileToUpload.FileName).ToLower();
+
+            // Kiểm tra xem đuôi file có trong danh sách được phép không
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                throw new InvalidOperationException("Chỉ các định dạng tệp .docx, .pdf, và .mov được phép tải lên.");
+            }
+
             GoogleCredential credential;
 
             //// Đọc đường dẫn đến tệp Beanmind.json từ cấu hình ứng dụng

@@ -21,12 +21,19 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<CreateNewVideoResponse> CreateNewVideo(CreateNewVideoRequest request, Guid activityId)
         {
             _logger.LogInformation($"Creating new Video with title: {request.Title}");
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
 
             var newVideo = new Video()
             {
                 Id = Guid.NewGuid(),
                 Title = request.Title,
                 Description = request.Description,
+                SchoolId = account.SchoolId.Value,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false
@@ -61,6 +68,7 @@ namespace Bean_Mind.API.Service.Implement
                     Description = newVideo.Description,
                     Url = newVideo.Url,
                     ActivityId = newVideo.ActivityId,
+                    SchoolId = account.SchoolId,
                     InsDate = newVideo.InsDate,
                     UpdDate = newVideo.UpdDate,
                     DelFlg = newVideo.DelFlg
@@ -73,9 +81,16 @@ namespace Bean_Mind.API.Service.Implement
 
         public async Task<IPaginate<GetVideoResponse>> GetListVideo(int page, int size)
         {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             var videos = await _unitOfWork.GetRepository<Video>().GetPagingListAsync(
-                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId),
-                predicate: s => s.DelFlg != true,
+                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId, s.SchoolId),
+                predicate: s => s.DelFlg != true && s.SchoolId.Equals(account.SchoolId),
                 page: page,
                 size: size
                 );
@@ -93,7 +108,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.VideoMessage.VideoNotFound);
             }
             var video = await _unitOfWork.GetRepository<Video>().SingleOrDefaultAsync(
-                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId),
+                selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId, s.SchoolId),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true
                 );
             if (video == null)
@@ -148,7 +163,7 @@ namespace Bean_Mind.API.Service.Implement
             video.Title = string.IsNullOrEmpty(request.Title) ? video.Title : request.Title;
             video.Description = string.IsNullOrEmpty(request.Description) ? video.Description : request.Description;
             video.UpdDate = TimeUtils.GetCurrentSEATime();
-            if( request.Url != null ) 
+            if (request.Url != null)
             {
                 try
                 {
