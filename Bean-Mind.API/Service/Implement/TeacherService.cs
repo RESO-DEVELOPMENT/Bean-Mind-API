@@ -150,6 +150,16 @@ namespace Bean_Mind.API.Service.Implement
 
             teachers.UpdDate = TimeUtils.GetCurrentSEATime();
             teachers.DelFlg = true;
+            
+            var teacherTeachables = await _unitOfWork.GetRepository<TeacherTeachable>().GetListAsync(
+                predicate: tt => tt.TeacherId.Equals(id) && tt.DelFlg != true
+            );
+            foreach (var teacherTeachable in teacherTeachables)
+            {
+                teacherTeachable.DelFlg = true;
+                teacherTeachable.UpdDate = TimeUtils.GetCurrentSEATime();
+                _unitOfWork.GetRepository<TeacherTeachable>().UpdateAsync(teacherTeachable);
+            }
             var account = await _unitOfWork.GetRepository<Account>()
                                             .SingleOrDefaultAsync(predicate: a => a.Id.Equals(teachers.AccountId) && a.DelFlg != true);
             if (account != null)
