@@ -201,7 +201,7 @@
             public const string GetTeacherTeachablesByTeacher = TeacherTeachableEndpoint +"teacher/{teacherId}";
             public const string GetTeacherTeachablesBySubject = TeacherTeachableEndpoint +"subject/{subjectId}";
             public const string DeleteTeacherTeachable = TeacherTeachableEndpoint + "/{id}";
-            public const string UpdateTeacherTeachable = TeacherTeachableEndpoint + "/{teacherId}/{subjectId}";
+            public const string UpdateTeacherTeachable = TeacherTeachableEndpoint + "/{id}";
         }
     }
 }

@@ -91,9 +91,9 @@ namespace Bean_Mind.API.Service.Implement
             return teacherTeachables;
         }
 
-        public async Task<ICollection<GetTeacherTeachableResponse>> GetTeacherTeachablesByTeacher(Guid teacherId)
+        public async Task<IPaginate<GetTeacherTeachableResponse>> GetTeacherTeachablesByTeacher(Guid teacherId, int page, int size)
         {
-            var teacherTeachables = await _unitOfWork.GetRepository<TeacherTeachable>().GetListAsync(
+            var teacherTeachables = await _unitOfWork.GetRepository<TeacherTeachable>().GetPagingListAsync(
                 selector: x => new GetTeacherTeachableResponse()
                 {
                     Id = x.Id,
@@ -106,9 +106,9 @@ namespace Bean_Mind.API.Service.Implement
             return teacherTeachables;
         }
 
-        public async Task<ICollection<GetTeacherTeachableResponse>> GetTeacherTeachablesBySubject(Guid subjectId)
+        public async Task<IPaginate<GetTeacherTeachableResponse>> GetTeacherTeachablesBySubject(Guid subjectId, int page, int size)
         {
-            var teacherTeachables = await _unitOfWork.GetRepository<TeacherTeachable>().GetListAsync(
+            var teacherTeachables = await _unitOfWork.GetRepository<TeacherTeachable>().GetPagingListAsync(
                 selector: x => new GetTeacherTeachableResponse()
                 {
                     Id = x.Id,
@@ -123,24 +123,84 @@ namespace Bean_Mind.API.Service.Implement
 
 
 
-        public async Task<bool> UpdateTeacherTeachable(Guid teacherId, Guid subjectId, UpdateTeacherTeachableRequest request)
+        public async Task<bool> UpdateTeacherTeachable(Guid id, UpdateTeacherTeachableRequest request)
         {
+            if (id == Guid.Empty)
+            {
+                throw new BadHttpRequestException(TeacherTeachableMessage.NotFound);
+            }
+
             var teacherTeachable = await _unitOfWork.GetRepository<TeacherTeachable>().SingleOrDefaultAsync(
-                predicate: x => x.TeacherId.Equals(teacherId) && x.SubjectId.Equals(subjectId) && x.Teacher.DelFlg != true && x.Subject.DelFlg != true
+                predicate: x => x.Id.Equals(id) && x.DelFlg != true
             );
 
             if (teacherTeachable == null)
-                throw new BadHttpRequestException("Teacher-Teachable relationship not found");
+            {
+                throw new BadHttpRequestException(TeacherTeachableMessage.NotFound);
+            }
 
-            teacherTeachable.TeacherId = request.TeacherId;
-            teacherTeachable.SubjectId = request.SubjectId;
-            teacherTeachable.UpdDate =TimeUtils.GetCurrentSEATime();
+            if (request.TeacherId.HasValue && request.TeacherId != Guid.Empty && request.TeacherId != teacherTeachable.TeacherId)
+            {
+                var existingTeacherTeachable = await _unitOfWork.GetRepository<TeacherTeachable>().SingleOrDefaultAsync(
+                    predicate: x => x.TeacherId.Equals(request.TeacherId.Value) && x.SubjectId.Equals(teacherTeachable.SubjectId) && x.Id != id && x.DelFlg != true
+                );
+
+                if (existingTeacherTeachable != null)
+                {
+                    throw new BadHttpRequestException("Duplicate Teacher-Subject combination found");
+                }
+
+                var teacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
+                    predicate: t => t.Id.Equals(request.TeacherId.Value) && t.DelFlg != true 
+                );
+
+                if (teacher == null)
+                {
+                    throw new BadHttpRequestException(TeacherTeachableMessage.NotFound);
+                }
+
+                teacherTeachable.TeacherId = request.TeacherId.Value;
+            }
+
+            if (request.SubjectId.HasValue && request.SubjectId != Guid.Empty && request.SubjectId != teacherTeachable.SubjectId)
+            {
+                var existingTeacherTeachable = await _unitOfWork.GetRepository<TeacherTeachable>().SingleOrDefaultAsync(
+                    predicate: x => x.TeacherId.Equals(teacherTeachable.TeacherId) && x.SubjectId.Equals(request.SubjectId.Value) && x.Id != id && x.DelFlg != true
+                );
+
+                if (existingTeacherTeachable != null)
+                {
+                    throw new BadHttpRequestException("Duplicate Teacher-Subject combination found");
+                }
+
+                var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(
+                    predicate: s => s.Id.Equals(request.SubjectId.Value) && s.DelFlg != true 
+                );
+
+                if (subject == null)
+                {
+                    throw new BadHttpRequestException(TeacherTeachableMessage.NotFound);
+                }
+
+                teacherTeachable.SubjectId = request.SubjectId.Value;
+            }
+
+            teacherTeachable.UpdDate = TimeUtils.GetCurrentSEATime();
 
             _unitOfWork.GetRepository<TeacherTeachable>().UpdateAsync(teacherTeachable);
             var success = await _unitOfWork.CommitAsync() > 0;
 
+            if (!success)
+            {
+                throw new BadHttpRequestException(TeacherTeachableMessage.UpdateFailed);
+            }
+
             return success;
         }
+
+
+
+
 
         public async Task<bool> RemoveTeacherTeachable(Guid id)
         {

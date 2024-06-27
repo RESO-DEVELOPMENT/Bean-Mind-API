@@ -6,6 +6,7 @@ using Bean_Mind.API.Payload.Response.TeacherTeachables;
 using Bean_Mind_Data.Paginate;
 using Bean_Mind.API.Payload;
 using Bean_Mind.API.Utils;
+using static Bean_Mind.API.Constants.MessageConstant;
 
 
 namespace Bean_Mind.API.Controllers
@@ -70,11 +71,13 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.TeacherTeachable.GetTeacherTeachablesByTeacher)]
         [ProducesResponseType(typeof(IEnumerable<GetTeacherTeachableResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(NotFoundObjectResult))]
-        public async Task<IActionResult> GetTeacherTeachablesByTeacher([FromRoute] Guid teacherId)
+        public async Task<IActionResult> GetTeacherTeachablesByTeacher([FromRoute] Guid teacherId, [FromQuery] int? page, [FromQuery] int? size)
         {
             try
             {
-                var teacherTeachables = await _teacherTeachableService.GetTeacherTeachablesByTeacher(teacherId);
+                int pageNumber = page ?? 1;
+                int pageSize = size ?? 10;
+                var teacherTeachables = await _teacherTeachableService.GetTeacherTeachablesByTeacher(teacherId, pageNumber, pageSize);
                 return Ok(teacherTeachables);
             }
             catch (KeyNotFoundException ex)
@@ -91,11 +94,13 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.TeacherTeachable.GetTeacherTeachablesBySubject)]
         [ProducesResponseType(typeof(IEnumerable<GetTeacherTeachableResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(NotFoundObjectResult))]
-        public async Task<IActionResult> GetTeacherTeachablesBySubject([FromRoute] Guid subjectId)
+        public async Task<IActionResult> GetTeacherTeachablesBySubject([FromRoute] Guid subjectId, [FromQuery] int? page, [FromQuery] int? size)
         {
             try
             {
-                var teacherTeachables = await _teacherTeachableService.GetTeacherTeachablesBySubject(subjectId);
+                int pageNumber = page ?? 1;
+                int pageSize = size ?? 10;
+                var teacherTeachables = await _teacherTeachableService.GetTeacherTeachablesBySubject(subjectId, pageNumber, pageSize);
                 return Ok(teacherTeachables);
             }
             catch (KeyNotFoundException ex)
@@ -131,32 +136,32 @@ namespace Bean_Mind.API.Controllers
         [HttpPatch(ApiEndPointConstant.TeacherTeachable.UpdateTeacherTeachable)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
-        public async Task<IActionResult> UpdateTeacherTeachable([FromRoute] Guid teacherId, [FromRoute] Guid subjectId, [FromBody] UpdateTeacherTeachableRequest request)
+        public async Task<IActionResult> UpdateTeacherTeachable([FromRoute] Guid id, [FromBody] UpdateTeacherTeachableRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(new ErrorResponse()
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
-                    Error = MessageConstant.TeacherTeachableMessage.InvalidData,
+                    Error = TeacherTeachableMessage.InvalidData,
                     TimeStamp = TimeUtils.GetCurrentSEATime()
                 });
             }
 
             try
             {
-                var isSuccessful = await _teacherTeachableService.UpdateTeacherTeachable(teacherId, subjectId, request);
+                var isSuccessful = await _teacherTeachableService.UpdateTeacherTeachable(id, request);
                 if (!isSuccessful)
                 {
                     return BadRequest(new ErrorResponse()
                     {
                         StatusCode = StatusCodes.Status400BadRequest,
-                        Error = MessageConstant.TeacherTeachableMessage.UpdateFailed,
+                        Error = TeacherTeachableMessage.UpdateFailed,
                         TimeStamp = TimeUtils.GetCurrentSEATime()
                     });
                 }
 
-                return Ok(MessageConstant.TeacherTeachableMessage.UpdateSuccessful);
+                return Ok(TeacherTeachableMessage.UpdateSuccessful);
             }
             catch (BadHttpRequestException ex)
             {

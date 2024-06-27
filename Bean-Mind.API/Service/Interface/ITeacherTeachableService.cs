@@ -9,9 +9,9 @@ namespace Bean_Mind.API.Service.Interface
         Task<GetTeacherTeachableResponse> CreateTeacherTeachable(CreateNewTeacherTeachableRequest request);
 
         Task<IPaginate<GetTeacherTeachableResponse>> GetAllTeacherTeachables(int page, int size);
-        Task<ICollection<GetTeacherTeachableResponse>> GetTeacherTeachablesByTeacher(Guid teacherId);
-        Task<ICollection<GetTeacherTeachableResponse>> GetTeacherTeachablesBySubject(Guid subjectId);
-        Task<bool> UpdateTeacherTeachable(Guid teacherId, Guid subjectId, UpdateTeacherTeachableRequest request);
+        Task<IPaginate<GetTeacherTeachableResponse>> GetTeacherTeachablesByTeacher(Guid teacherId, int page, int size);
+        Task<IPaginate<GetTeacherTeachableResponse>> GetTeacherTeachablesBySubject(Guid subjectId, int page, int size);
+        Task<bool> UpdateTeacherTeachable(Guid id, UpdateTeacherTeachableRequest request);
         Task<bool> RemoveTeacherTeachable(Guid id);
 
     }
