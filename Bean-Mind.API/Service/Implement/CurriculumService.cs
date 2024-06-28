@@ -31,10 +31,10 @@ namespace Bean_Mind.API.Service.Implement
                 throw new Exception("Account or SchoolId is null");
 
             // Validate StartDate and EndDate
-            if (createNewCurriculumRequest.StartDate < TimeUtils.GetCurrentSEATime())
+            if (createNewCurriculumRequest.StartDate < DateTime.UtcNow.Date)
                 throw new Exception("StartDate cannot be in the past");
 
-            if (createNewCurriculumRequest.EndDate < TimeUtils.GetCurrentSEATime())
+            if (createNewCurriculumRequest.EndDate < DateTime.UtcNow.Date)
                 throw new Exception("EndDate cannot be in the past");
 
             if (createNewCurriculumRequest.StartDate >= createNewCurriculumRequest.EndDate)
