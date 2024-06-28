@@ -180,6 +180,15 @@
             public const string QuestionLevelIsEmpty = "Không tìm thấy cấp độ câu hỏi";
             public const string UpdateQuestionLevelFailedMessage = "Cập nhật cấp độ câu hỏi thất bại.";
         }
+        public static class TeacherTeachableMessage
+        {
+            public const string InvalidInputData = "Dữ liệu đầu vào không hợp lệ";
+            public const string CreateFailed = "Tạo giáo viên giảng dạy thất bại do giáo viên đang dạy môn đó";
+            public const string NotFound = "Không tìm thấy giáo viên giảng dạy";
+            public const string InvalidData = "Dữ liệu không hợp lệ";
+            public const string UpdateFailed = "Cập nhật giáo viên giảng dạy thất bại";
+            public const string UpdateSuccessful = "Cập nhật giáo viên giảng dạy thành công";
+        }
 
     }
 }

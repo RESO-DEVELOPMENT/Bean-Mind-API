@@ -82,6 +82,8 @@ namespace Bean_Mind.API.Extensions
             services.AddScoped<GoogleDriveService>();
             //Azure DB
             services.AddScoped<AzureDatabaseService>();
+            //TeacherTeachable
+            services.AddScoped<ITeacherTeachableService, TeacherTeachableService>();
 
             return services;
         }
