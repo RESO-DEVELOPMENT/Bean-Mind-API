@@ -21,13 +21,25 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<CreateNewCurriculumResponse> CreateNewCurriculum(CreateNewCurriculumRequest createNewCurriculumRequest)
         {
             _logger.LogInformation($"Create new Curriculum with {createNewCurriculumRequest.Title}");
-            //Get AccountId of User curent from httpcontext 
+
+            // Get AccountId of the current user from HttpContext
             Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
             var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
                 predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
-                );
+            );
             if (account == null || account.SchoolId == null)
                 throw new Exception("Account or SchoolId is null");
+
+            // Validate StartDate and EndDate
+            if (createNewCurriculumRequest.StartDate < TimeUtils.GetCurrentSEATime())
+                throw new Exception("StartDate cannot be in the past");
+
+            if (createNewCurriculumRequest.EndDate < TimeUtils.GetCurrentSEATime())
+                throw new Exception("EndDate cannot be in the past");
+
+            if (createNewCurriculumRequest.StartDate >= createNewCurriculumRequest.EndDate)
+                throw new Exception("StartDate must be before EndDate");
+
             Curriculum newCurriculum = new Curriculum()
             {
                 Id = Guid.NewGuid(),
@@ -35,21 +47,18 @@ namespace Bean_Mind.API.Service.Implement
                 Description = createNewCurriculumRequest.Description,
                 StartDate = createNewCurriculumRequest.StartDate,
                 EndDate = createNewCurriculumRequest.EndDate,
-                SchoolId = account.SchoolId.Value,//Account Id for School in these Case not null and .value same as get real value for it  
+                SchoolId = account.SchoolId.Value, // Account Id for School in these cases is not null and .Value gets the real value for it
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false
-
             };
-
-
 
             await _unitOfWork.GetRepository<Curriculum>().InsertAsync(newCurriculum);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
-            CreateNewCurriculumResponse createNewCurriculumResponse = null;
+
             if (isSuccessful)
             {
-                createNewCurriculumResponse = new CreateNewCurriculumResponse()
+                return new CreateNewCurriculumResponse()
                 {
                     Id = newCurriculum.Id,
                     Title = newCurriculum.Title,
@@ -60,13 +69,12 @@ namespace Bean_Mind.API.Service.Implement
                     InsDate = newCurriculum.InsDate,
                     UpdDate = newCurriculum.UpdDate,
                     DelFlg = newCurriculum.DelFlg
-
-
                 };
             }
 
-            return createNewCurriculumResponse;
+            return null;
         }
+
 
         public async Task<bool> deleteCurriculum(Guid Id)
         {
@@ -126,9 +134,11 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
             }
-            var curriculums = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(
+
+             var curriculums = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(
                  predicate: x => x.Id == id && x.DelFlg != true
                  );
+            
             if (curriculums == null)
             {
                 throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
@@ -171,6 +181,10 @@ namespace Bean_Mind.API.Service.Implement
              },
              predicate: x => x.Id == Id && x.DelFlg != true
              );
+            if (curriculums == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumNotFound);
+            }
 
             return curriculums;
         }
@@ -190,7 +204,7 @@ namespace Bean_Mind.API.Service.Implement
               predicate: x => x.DelFlg == false,
               size: size,
               page: page);
-
+            
             return curriculums;
         }
 
