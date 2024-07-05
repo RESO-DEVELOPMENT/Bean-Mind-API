@@ -62,9 +62,9 @@ namespace Bean_Mind.API.Controllers
         [HttpGet(ApiEndPointConstant.Parent.GetById)]
         [ProducesResponseType(typeof(ParentResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(NotFoundObjectResult))]
-        public async Task<IActionResult> GetParentById([FromRoute] Guid parentId)
+        public async Task<IActionResult> GetParentById([FromRoute] Guid id)
         {
-            var parent = await _parentService.GetParentById(parentId);
+            var parent = await _parentService.GetParentById(id);
             if (parent == null)
             {
                 return NotFound(new ErrorResponse()
