@@ -43,5 +43,8 @@ public partial class Course
     public virtual Curriculum? Curriculum { get; set; }
 
     [InverseProperty("Course")]
+    public virtual ICollection<StudentInCourse> StudentInCourses { get; set; } = new List<StudentInCourse>();
+
+    [InverseProperty("Course")]
     public virtual ICollection<Subject> Subjects { get; set; } = new List<Subject>();
 }

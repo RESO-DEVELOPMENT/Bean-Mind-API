@@ -39,6 +39,8 @@ public partial class BeanMindContext : DbContext
 
     public virtual DbSet<Student> Students { get; set; }
 
+    public virtual DbSet<StudentInCourse> StudentInCourses { get; set; }
+
     public virtual DbSet<Subject> Subjects { get; set; }
 
     public virtual DbSet<Teacher> Teachers { get; set; }
@@ -192,6 +194,22 @@ public partial class BeanMindContext : DbContext
             entity.HasOne(d => d.Parent).WithMany(p => p.Students)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Student_Parent");
+        });
+
+        modelBuilder.Entity<StudentInCourse>(entity =>
+        {
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.DelFlg).HasDefaultValue(false);
+            entity.Property(e => e.InsDate).HasDefaultValueSql("(getdate())");
+            entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
+
+            entity.HasOne(d => d.Course).WithMany(p => p.StudentInCourses)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StudentInCourse_Course");
+
+            entity.HasOne(d => d.Student).WithMany(p => p.StudentInCourses)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StudentInCourse_Student");
         });
 
         modelBuilder.Entity<Subject>(entity =>
