@@ -106,6 +106,7 @@
             public const string UpdateCourse = CourseEndpoint + "/{id}";
             public const string DeleteCourse = CourseEndpoint + "/{id}";
             public const string GetSubjectsInCourse  = CourseEndpoint + "/{id}/subjects";
+            public const string GetCourseByTitle = CourseEndpoint + "/title";
 
         }
 

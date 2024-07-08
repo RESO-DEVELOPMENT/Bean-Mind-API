@@ -31,6 +31,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 Id = Guid.NewGuid(),
                 Title = createNewCourseRequest.Title,
+                CourseCode = createNewCourseRequest.CourseCode,
                 Description = createNewCourseRequest.Description,
                 StartDate = createNewCourseRequest.StartDate,
                 EndDate = createNewCourseRequest.EndDate,
@@ -66,6 +67,7 @@ namespace Bean_Mind.API.Service.Implement
                 {
                     Id = newCourse.Id,
                     Title = newCourse.Title,
+                    CourseCode = newCourse.CourseCode,
                     Description = newCourse.Description,
                     StartDate = newCourse.StartDate,
                     EndDate = newCourse.EndDate,
@@ -135,11 +137,18 @@ namespace Bean_Mind.API.Service.Implement
 
         public async Task<GetCourseResponse> GetCourseById(Guid Id)
         {
-            var curriculums = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+            var course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(
              selector: s => new GetCourseResponse
              {
                  Id = s.Id,
                  Title = s.Title,
+                 CourseCode = s.CourseCode,
                  Description = s.Description,
                  StartDate = s.StartDate,
                  EndDate = s.EndDate,
@@ -147,14 +156,14 @@ namespace Bean_Mind.API.Service.Implement
                  CurriculumId = s.CurriculumId,
                  SchoolId = s.SchoolId                 
              },
-             predicate: x => x.Id == Id && x.DelFlg != true
+             predicate: x => x.Id.Equals(Id) && x.DelFlg != true && x.SchoolId.Equals(account.SchoolId)
              );
 
-            if (curriculums == null)
+            if (course == null)
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseNotFound);
             }
-            return curriculums;
+            return course;
         }
 
         public async Task<IPaginate<GetCourseResponse>> GetListCourse(int page, int size)
@@ -166,11 +175,12 @@ namespace Bean_Mind.API.Service.Implement
             if (account == null || account.SchoolId == null)
                 throw new Exception("Account or SchoolId is null");
 
-            var curriculums = await _unitOfWork.GetRepository<Course>().GetPagingListAsync(
+            var courses = await _unitOfWork.GetRepository<Course>().GetPagingListAsync(
               selector: s => new GetCourseResponse
               {
                   Id = s.Id,
                   Title = s.Title,
+                  CourseCode = s.CourseCode,
                   Description = s.Description,
                   StartDate = s.StartDate,
                   EndDate = s.EndDate,
@@ -182,7 +192,7 @@ namespace Bean_Mind.API.Service.Implement
               size: size,
               page: page);
 
-            return curriculums;
+            return courses;
         }
 
         public async Task<bool> UpdateCourse(Guid Id, UpdateCourseRequest updateCourseRequest, Guid curriculumId)
@@ -233,7 +243,7 @@ namespace Bean_Mind.API.Service.Implement
             }
 
             var subjects = await _unitOfWork.GetRepository<Subject>().GetPagingListAsync(
-                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId, s.SchoolId),
+                selector: s => new GetSubjectResponse(s.Id, s.Title, s.SubjectCode, s.Description, s.CourseId, s.SchoolId),
                 predicate: s => s.CourseId.Equals(id) && s.DelFlg != true,
                 page: page,
                 size: size
@@ -245,6 +255,39 @@ namespace Bean_Mind.API.Service.Implement
             }
 
             return subjects;
+        }
+
+
+        public async Task<IPaginate<GetCourseResponse>> GetListCourseByTitle(string title, int page, int size)
+        {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+            var course = await _unitOfWork.GetRepository<Course>().GetPagingListAsync(
+                selector: c => new GetCourseResponse
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    CourseCode = c.CourseCode,
+                    Description = c.Description,
+                    StartDate = c.StartDate,
+                    EndDate = c.EndDate,
+                    Status = c.Status,
+                    CurriculumId = c.CurriculumId,
+                    SchoolId = c.SchoolId
+                },
+                predicate: c => c.Title.Contains(title) && c.DelFlg == false && c.SchoolId.Equals(account.SchoolId),
+                page: page,
+                size: size
+                );
+            if (course == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.CourseMessage.CoursesIsEmpty);
+            }
+            return course;
         }
     }
 }

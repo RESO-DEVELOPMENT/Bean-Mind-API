@@ -44,6 +44,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 Id = Guid.NewGuid(),
                 Title = createNewCurriculumRequest.Title,
+                CurriculumCode = createNewCurriculumRequest.CurriculumCode,
                 Description = createNewCurriculumRequest.Description,
                 StartDate = createNewCurriculumRequest.StartDate,
                 EndDate = createNewCurriculumRequest.EndDate,
@@ -62,6 +63,7 @@ namespace Bean_Mind.API.Service.Implement
                 {
                     Id = newCurriculum.Id,
                     Title = newCurriculum.Title,
+                    CurriculumCode= newCurriculum.CurriculumCode,
                     Description = newCurriculum.Description,
                     StartDate = newCurriculum.StartDate,
                     EndDate = newCurriculum.EndDate,
@@ -174,6 +176,7 @@ namespace Bean_Mind.API.Service.Implement
              {
                  Id = s.Id,
                  Title = s.Title,
+                 CurriculumCode = s.CurriculumCode,
                  Description = s.Description,
                  StartDate = s.StartDate,
                  EndDate = s.EndDate,
@@ -196,6 +199,7 @@ namespace Bean_Mind.API.Service.Implement
               {
                   Id = s.Id,
                   Title = s.Title,
+                  CurriculumCode= s.CurriculumCode,
                   Description = s.Description,
                   StartDate = s.StartDate,
                   EndDate = s.EndDate,

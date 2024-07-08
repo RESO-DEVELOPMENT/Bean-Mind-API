@@ -29,6 +29,9 @@ public partial class Subject
 
     public bool? DelFlg { get; set; }
 
+    [StringLength(50)]
+    public string? SubjectCode { get; set; }
+
     [InverseProperty("Subject")]
     public virtual ICollection<Chapter> Chapters { get; set; } = new List<Chapter>();
 

@@ -3,6 +3,7 @@
     public class CreateNewSubjectRequest
     {
         public string Title { get; set; } = null!;
+        public string SubjectCode { get; set; }
         public string Description { get; set; } = null!;
     }
 }

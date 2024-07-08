@@ -30,6 +30,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 Id = Guid.NewGuid(),
                 Title = request.Title,
+                SubjectCode = request.SubjectCode,
                 Description = request.Description,
                 SchoolId = account.SchoolId.Value,
                 DelFlg = false,
@@ -60,6 +61,7 @@ namespace Bean_Mind.API.Service.Implement
                 {
                     Id = newSubject.Id,
                     Title = newSubject.Title,
+                    SubjectCode= newSubject.SubjectCode,
                     Description = newSubject.Description,
                     CourseId = newSubject.CourseId,
                     SchoolId = account.SchoolId,
@@ -81,7 +83,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new Exception("Account or SchoolId is null");
 
             var subjects = await _unitOfWork.GetRepository<Subject>().GetPagingListAsync(
-                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId, s.SchoolId),
+                selector: s => new GetSubjectResponse(s.Id, s.Title, s.SubjectCode,s.Description, s.CourseId, s.SchoolId),
                 predicate: s => s.DelFlg != true && s.SchoolId.Equals(account.SchoolId),
                 page: page,
                 size: size
@@ -99,7 +101,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
             var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(
-                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId, s.SchoolId),
+                selector: s => new GetSubjectResponse(s.Id, s.Title, s.SubjectCode,s.Description, s.CourseId, s.SchoolId),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (subject == null)
             {
