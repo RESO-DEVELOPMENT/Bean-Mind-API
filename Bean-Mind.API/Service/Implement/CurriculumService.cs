@@ -37,7 +37,7 @@ namespace Bean_Mind.API.Service.Implement
             if (createNewCurriculumRequest.EndDate < DateTime.UtcNow.Date)
                 throw new Exception("EndDate cannot be in the past");
 
-            if (createNewCurriculumRequest.StartDate >= createNewCurriculumRequest.EndDate)
+            if (createNewCurriculumRequest.StartDate > createNewCurriculumRequest.EndDate)
                 throw new Exception("StartDate must be before EndDate");
 
             Curriculum newCurriculum = new Curriculum()
@@ -48,6 +48,7 @@ namespace Bean_Mind.API.Service.Implement
                 StartDate = createNewCurriculumRequest.StartDate,
                 EndDate = createNewCurriculumRequest.EndDate,
                 SchoolId = account.SchoolId.Value, // Account Id for School in these cases is not null and .Value gets the real value for it
+                CurriculumCode = createNewCurriculumRequest.CurriculumCode,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false
@@ -66,6 +67,7 @@ namespace Bean_Mind.API.Service.Implement
                     StartDate = newCurriculum.StartDate,
                     EndDate = newCurriculum.EndDate,
                     SchoolId = newCurriculum.SchoolId,
+                    CurriculumCode=newCurriculum.CurriculumCode,
                     InsDate = newCurriculum.InsDate,
                     UpdDate = newCurriculum.UpdDate,
                     DelFlg = newCurriculum.DelFlg
@@ -154,6 +156,7 @@ namespace Bean_Mind.API.Service.Implement
                     EndDate = s.EndDate,
                     CurriculumId = s.CurriculumId,
                     SchoolId = s.SchoolId,
+                    CourseCode = s.CourseCode,
                 },
                 predicate: s => s.CurriculumId.Equals(id) && s.DelFlg != true,
                 page: page,
@@ -177,7 +180,8 @@ namespace Bean_Mind.API.Service.Implement
                  Description = s.Description,
                  StartDate = s.StartDate,
                  EndDate = s.EndDate,
-                 SchoolId = s.SchoolId
+                 SchoolId = s.SchoolId,
+                 CurriculumCode = s.CurriculumCode,
              },
              predicate: x => x.Id == Id && x.DelFlg != true
              );
@@ -199,7 +203,8 @@ namespace Bean_Mind.API.Service.Implement
                   Description = s.Description,
                   StartDate = s.StartDate,
                   EndDate = s.EndDate,
-                  SchoolId = s.SchoolId
+                  SchoolId = s.SchoolId,
+                  CurriculumCode= s.CurriculumCode,
               },
               predicate: x => x.DelFlg == false,
               size: size,
@@ -232,7 +237,7 @@ namespace Bean_Mind.API.Service.Implement
             curriculum.Title = string.IsNullOrEmpty(updateCurriculumRequest.Title) ? curriculum.Title : updateCurriculumRequest.Title;
             curriculum.Description = string.IsNullOrEmpty(updateCurriculumRequest.Description) ? curriculum.Description : updateCurriculumRequest.Description;
 
-
+            curriculum.CurriculumCode = string.IsNullOrEmpty(updateCurriculumRequest.CurriculumCode) ? curriculum.CurriculumCode : updateCurriculumRequest.CurriculumCode;
             curriculum.StartDate = updateCurriculumRequest.StartDate ?? curriculum.StartDate;
             curriculum.EndDate = updateCurriculumRequest.EndDate ?? curriculum.EndDate;
             curriculum.UpdDate = TimeUtils.GetCurrentSEATime();

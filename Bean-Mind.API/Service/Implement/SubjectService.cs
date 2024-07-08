@@ -32,6 +32,7 @@ namespace Bean_Mind.API.Service.Implement
                 Title = request.Title,
                 Description = request.Description,
                 SchoolId = account.SchoolId.Value,
+                SubjectCode =request.SubjectCode,
                 DelFlg = false,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
@@ -61,6 +62,7 @@ namespace Bean_Mind.API.Service.Implement
                     Id = newSubject.Id,
                     Title = newSubject.Title,
                     Description = newSubject.Description,
+                    SubjectCode=newSubject.SubjectCode,
                     CourseId = newSubject.CourseId,
                     SchoolId = account.SchoolId,
                     DelFlg = newSubject.DelFlg,
@@ -81,7 +83,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new Exception("Account or SchoolId is null");
 
             var subjects = await _unitOfWork.GetRepository<Subject>().GetPagingListAsync(
-                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId, s.SchoolId),
+                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId, s.SchoolId, s.SubjectCode),
                 predicate: s => s.DelFlg != true && s.SchoolId.Equals(account.SchoolId),
                 page: page,
                 size: size
@@ -99,7 +101,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectNotFound);
             }
             var subject = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(
-                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId, s.SchoolId),
+                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId, s.SchoolId, s.SubjectCode),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (subject == null)
             {
@@ -132,6 +134,8 @@ namespace Bean_Mind.API.Service.Implement
 
             subject.Title = string.IsNullOrEmpty(request.Title) ? subject.Title : request.Title;
             subject.Description = string.IsNullOrEmpty(request.Description) ? subject.Description : request.Description;
+            subject.SubjectCode = string.IsNullOrEmpty(request.SubjectCode) ? subject.SubjectCode : request.SubjectCode;
+
             subject.UpdDate = TimeUtils.GetCurrentSEATime();
 
             _unitOfWork.GetRepository<Subject>().UpdateAsync(subject);

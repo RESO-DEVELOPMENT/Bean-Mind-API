@@ -7,6 +7,8 @@
         public string? Description { get; set; }
         public Guid? CourseId { get; set; }
         public Guid? SchoolId { get; set; }
+        public string? SubjectCode { get; set; }
+
         public bool? DelFlg { get; set; }
         public DateTime? InsDate { get; set; }
         public DateTime? UpdDate { get; set; }

@@ -38,6 +38,9 @@ public partial class Course
 
     public bool? DelFlg { get; set; }
 
+    [StringLength(50)]
+    public string? CourseCode { get; set; }
+
     [ForeignKey("CurriculumId")]
     [InverseProperty("Courses")]
     public virtual Curriculum? Curriculum { get; set; }

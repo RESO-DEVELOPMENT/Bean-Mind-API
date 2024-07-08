@@ -8,6 +8,8 @@ namespace Bean_Mind.API.Payload.Request.Curriculums
         public string Title { get; set; }
 
         [StringLength(50)]
+        public string? CurriculumCode { get; set; }
+        [StringLength(50)]
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

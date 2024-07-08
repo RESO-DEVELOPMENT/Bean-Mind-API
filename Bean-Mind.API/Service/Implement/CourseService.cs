@@ -36,6 +36,7 @@ namespace Bean_Mind.API.Service.Implement
                 EndDate = createNewCourseRequest.EndDate,
                 Status = (int)(createNewCourseRequest.Status),
                 SchoolId = account.SchoolId.Value,
+                CourseCode = createNewCourseRequest.CourseCode,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false
@@ -70,6 +71,7 @@ namespace Bean_Mind.API.Service.Implement
                     StartDate = newCourse.StartDate,
                     EndDate = newCourse.EndDate,
                     Status = newCourse.Status,
+                    CourseCode = newCourse.CourseCode,
                     CurriculumId = newCourse.CurriculumId,
                     SchoolId = newCourse.SchoolId,
                     InsDate = newCourse.InsDate,
@@ -144,6 +146,7 @@ namespace Bean_Mind.API.Service.Implement
                  StartDate = s.StartDate,
                  EndDate = s.EndDate,
                  Status = s.Status,
+                 CourseCode = s.CourseCode,
                  CurriculumId = s.CurriculumId,
                  SchoolId = s.SchoolId                 
              },
@@ -175,6 +178,7 @@ namespace Bean_Mind.API.Service.Implement
                   StartDate = s.StartDate,
                   EndDate = s.EndDate,
                   Status = s.Status,
+                  CourseCode= s.CourseCode,
                   CurriculumId = s.CurriculumId,
                   SchoolId = s.SchoolId,
               },
@@ -209,6 +213,7 @@ namespace Bean_Mind.API.Service.Implement
             course.Title = string.IsNullOrEmpty(updateCourseRequest.Title) ? course.Title : updateCourseRequest.Title;
             course.Description = string.IsNullOrEmpty(updateCourseRequest.Description) ? course.Description : updateCourseRequest.Description;
             course.Status = updateCourseRequest.Status.HasValue ? (int)updateCourseRequest.Status.Value : course.Status;
+            course.CourseCode = string.IsNullOrEmpty(updateCourseRequest.CourseCode) ? course.CourseCode : updateCourseRequest.CourseCode;
             course.StartDate = updateCourseRequest.StartDate ?? course.StartDate;
             course.EndDate = updateCourseRequest.EndDate ?? course.EndDate;
             course.UpdDate = TimeUtils.GetCurrentSEATime();
@@ -233,7 +238,7 @@ namespace Bean_Mind.API.Service.Implement
             }
 
             var subjects = await _unitOfWork.GetRepository<Subject>().GetPagingListAsync(
-                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId, s.SchoolId),
+                selector: s => new GetSubjectResponse(s.Id, s.Title, s.Description, s.CourseId, s.SchoolId,s.SubjectCode),
                 predicate: s => s.CourseId.Equals(id) && s.DelFlg != true,
                 page: page,
                 size: size

@@ -7,12 +7,14 @@ namespace Bean_Mind.API.Payload.Request.Courses
     {
         [Required]
         [StringLength(50)]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
+        [StringLength(50)]
+        public string? CourseCode { get; set; }
         [Required]
         public StatusEnum Status { get; set; }
 

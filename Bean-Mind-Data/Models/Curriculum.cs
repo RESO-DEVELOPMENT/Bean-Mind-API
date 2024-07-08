@@ -25,6 +25,9 @@ public partial class Curriculum
 
     public Guid SchoolId { get; set; }
 
+    [StringLength(50)]
+    public string? CurriculumCode { get; set; }
+
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
 
