@@ -266,7 +266,7 @@ namespace Bean_Mind.API.Service.Implement
                 );
             if (account == null || account.SchoolId == null)
                 throw new Exception("Account or SchoolId is null");
-            var course = await _unitOfWork.GetRepository<Course>().GetPagingListAsync(
+            var courses = await _unitOfWork.GetRepository<Course>().GetPagingListAsync(
                 selector: c => new GetCourseResponse
                 {
                     Id = c.Id,
@@ -283,11 +283,43 @@ namespace Bean_Mind.API.Service.Implement
                 page: page,
                 size: size
                 );
-            if (course == null)
+            if (courses == null)
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CoursesIsEmpty);
             }
-            return course;
+            return courses;
+        }
+
+        public async Task<IPaginate<GetCourseResponse>> GetListCourseByCode(string code, int page, int size)
+        {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+            var courses = await _unitOfWork.GetRepository<Course>().GetPagingListAsync(
+                selector: c => new GetCourseResponse
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    CourseCode = c.CourseCode,
+                    Description = c.Description,
+                    StartDate = c.StartDate,
+                    EndDate = c.EndDate,
+                    Status = c.Status,
+                    CurriculumId = c.CurriculumId,
+                    SchoolId = c.SchoolId
+                },
+                predicate: c => c.CourseCode.Contains(code) && c.DelFlg == false && c.SchoolId.Equals(account.SchoolId),
+                page: page,
+                size: size
+                );
+            if (courses == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.CourseMessage.CoursesIsEmpty);
+            }
+            return courses;
         }
     }
 }

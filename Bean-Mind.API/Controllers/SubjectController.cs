@@ -1,7 +1,9 @@
 ﻿using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Subjects;
 using Bean_Mind.API.Payload.Response.Chapters;
+using Bean_Mind.API.Payload.Response.Curriculums;
 using Bean_Mind.API.Payload.Response.Subjects;
+using Bean_Mind.API.Service.Implement;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
 using Microsoft.AspNetCore.Mvc;
@@ -90,6 +92,37 @@ namespace Bean_Mind.API.Controllers
             int pageNumber = page ?? 1;
             int pageSize = size ?? 10;
             var response = await _subjectService.GetListChapter(id, pageNumber, pageSize);
+
+            return Ok(response);
+        }
+        [HttpGet(ApiEndPointConstant.Subject.GetSubjectByTitle)]
+        [ProducesResponseType(typeof(IPaginate<GetSubjectResponse>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> GetSubjectByTitle([FromQuery] string title, [FromQuery] int? page, [FromQuery] int? size)
+        {
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _subjectService.GetListSubjectByTitle(title, pageNumber, pageSize);
+            if (response == null)
+            {
+                return Problem(MessageConstant.SubjectMessage.SubjectsIsEmpty);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet(ApiEndPointConstant.Subject.GetSubjectByCode)]
+        [ProducesResponseType(typeof(IPaginate<GetSubjectResponse>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> GetCourseByCode([FromQuery] string code, [FromQuery] int? page, [FromQuery] int? size)
+        {
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _subjectService.GetListSubjectByCode(code, pageNumber, pageSize);
+            if (response == null)
+            {
+                return Problem(MessageConstant.SubjectMessage.SubjectsIsEmpty);
+            }
 
             return Ok(response);
         }

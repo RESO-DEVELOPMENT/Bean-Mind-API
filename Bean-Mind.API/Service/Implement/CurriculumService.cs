@@ -245,6 +245,66 @@ namespace Bean_Mind.API.Service.Implement
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;
         }
+
+        public async Task<IPaginate<GetCurriculumResponse>> GetListCurriculumByTitle(string title, int page, int size)
+        {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+            var curriculums = await _unitOfWork.GetRepository<Curriculum>().GetPagingListAsync(
+                selector: c => new GetCurriculumResponse
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    CurriculumCode = c.CurriculumCode,
+                    Description = c.Description,
+                    StartDate = c.StartDate,
+                    EndDate = c.EndDate,
+                    SchoolId = c.SchoolId
+                },
+                predicate: c => c.Title.Contains(title) && c.DelFlg == false && c.SchoolId.Equals(account.SchoolId),
+                page: page,
+                size: size
+                );
+            if (curriculums == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumsIsEmpty);
+            }
+            return curriculums;
+        }
+
+        public async Task<IPaginate<GetCurriculumResponse>> GetListCurriculumByCode(string code, int page, int size)
+        {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+            var curriculums = await _unitOfWork.GetRepository<Curriculum>().GetPagingListAsync(
+                selector: c => new GetCurriculumResponse
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    CurriculumCode = c.CurriculumCode,
+                    Description = c.Description,
+                    StartDate = c.StartDate,
+                    EndDate = c.EndDate,
+                    SchoolId = c.SchoolId
+                },
+                predicate: c => c.CurriculumCode.Contains(code) && c.DelFlg == false && c.SchoolId.Equals(account.SchoolId),
+                page: page,
+                size: size
+                );
+            if (curriculums == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumsIsEmpty);
+            }
+            return curriculums;
+        }
     }
 }
 

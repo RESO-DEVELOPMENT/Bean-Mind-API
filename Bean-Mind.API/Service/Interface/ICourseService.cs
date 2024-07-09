@@ -14,6 +14,8 @@ namespace Bean_Mind.API.Service.Interface
         Task<bool> DeleteCourse(Guid id);
         public Task<IPaginate<GetSubjectResponse>> GetListSubjectsByCourseId(Guid id, int page, int size);
         public Task<IPaginate<GetCourseResponse>> GetListCourseByTitle(string title, int page, int size);
+        public Task<IPaginate<GetCourseResponse>> GetListCourseByCode(string code, int page, int size);
+
 
     }
 }

@@ -67,11 +67,27 @@ namespace Bean_Mind.API.Controllers
             [HttpGet(ApiEndPointConstant.Course.GetCourseByTitle)]
             [ProducesResponseType(typeof(IPaginate<GetCourseResponse>), StatusCodes.Status200OK)]
             [ProducesErrorResponseType(typeof(ProblemDetails))]
-            public async Task<IActionResult> GetCourse([FromQuery] string title, [FromQuery] int? page, [FromQuery] int? size)
+            public async Task<IActionResult> GetCourseByTitle([FromQuery] string title, [FromQuery] int? page, [FromQuery] int? size)
             {
                 int pageNumber = page ?? 1;
                 int pageSize = size ?? 10;
                 var response = await _courseService.GetListCourseByTitle(title, pageNumber, pageSize);
+                if (response == null)
+                {
+                    return Problem(MessageConstant.CourseMessage.CoursesIsEmpty);
+                }
+
+                return Ok(response);
+            }
+
+            [HttpGet(ApiEndPointConstant.Course.GetCourseByCode)]
+            [ProducesResponseType(typeof(IPaginate<GetCourseResponse>), StatusCodes.Status200OK)]
+            [ProducesErrorResponseType(typeof(ProblemDetails))]
+            public async Task<IActionResult> GetCourseByCode([FromQuery] string code, [FromQuery] int? page, [FromQuery] int? size)
+            {
+                int pageNumber = page ?? 1;
+                int pageSize = size ?? 10;
+                var response = await _courseService.GetListCourseByCode(code, pageNumber, pageSize);
                 if (response == null)
                 {
                     return Problem(MessageConstant.CourseMessage.CoursesIsEmpty);
