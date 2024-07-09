@@ -8,6 +8,7 @@
         public string? Description { get; set; }
         public Guid? CourseId { get; set; }
         public Guid? SchoolId { get; set; }
+
         public GetSubjectResponse(Guid id, string? title, string? subjectCode,string description, Guid? courseId, Guid? schoolId)
         {
             Id = id;
@@ -16,6 +17,7 @@
             Description = description;
             CourseId = courseId;
             SchoolId = schoolId;
+            SubjectCode = subjectCode;
         }
     }
 }

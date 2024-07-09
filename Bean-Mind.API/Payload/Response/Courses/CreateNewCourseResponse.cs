@@ -11,6 +11,8 @@
         public int? Status { get; set; }
         public Guid? CurriculumId { get; set; }
         public Guid? SchoolId { get; set; }
+        public string? CourseCode { get; set; }
+
         public DateTime? InsDate { get; set; }
         public DateTime? UpdDate { get; set; }
         public bool? DelFlg { get; set; }

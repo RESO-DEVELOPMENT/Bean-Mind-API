@@ -1,4 +1,6 @@
-﻿namespace Bean_Mind.API.Payload.Response.Curriculums
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Bean_Mind.API.Payload.Response.Curriculums
 {
     public class CreateNewCurriculumResponse
     {
@@ -9,6 +11,7 @@
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public Guid? SchoolId { get; set; }
+        public string? CurriculumCode { get; set; }
         public DateTime? InsDate { get; set; }
         public DateTime? UpdDate { get; set; }
         public bool? DelFlg { get; set; }

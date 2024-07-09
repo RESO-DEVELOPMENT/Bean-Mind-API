@@ -9,7 +9,7 @@ namespace Bean_Mind.API.Payload.Request.Curriculums
 
         [StringLength(50)]
         public string CurriculumCode { get; set; }
-
+      
         [StringLength(50)]
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
