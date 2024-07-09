@@ -2,6 +2,7 @@
 using Bean_Mind.API.Payload.Request.Curriculums;
 using Bean_Mind.API.Payload.Response.Courses;
 using Bean_Mind.API.Payload.Response.Curriculums;
+using Bean_Mind.API.Service.Implement;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
 using Microsoft.AspNetCore.Mvc;
@@ -81,6 +82,37 @@ namespace Bean_Mind.API.Controllers
             int pageNumber = page ?? 1;
             int pageSize = size ?? 10;
             var response = await _curriculumService.GetListCourses(id, pageNumber, pageSize);
+
+            return Ok(response);
+        }
+        [HttpGet(ApiEndPointConstant.Curriculum.GetCurriculumByTitle)]
+        [ProducesResponseType(typeof(IPaginate<GetCurriculumResponse>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> GetCurriculumByTitle([FromQuery] string title, [FromQuery] int? page, [FromQuery] int? size)
+        {
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _curriculumService.GetListCurriculumByTitle(title, pageNumber, pageSize);
+            if (response == null)
+            {
+                return Problem(MessageConstant.CurriculumMessage.CurriculumsIsEmpty);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet(ApiEndPointConstant.Curriculum.GetCurriculumByCode)]
+        [ProducesResponseType(typeof(IPaginate<GetCurriculumResponse>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> GetCurriculumByCode([FromQuery] string code, [FromQuery] int? page, [FromQuery] int? size)
+        {
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _curriculumService.GetListCurriculumByCode(code, pageNumber, pageSize);
+            if (response == null)
+            {
+                return Problem(MessageConstant.CurriculumMessage.CurriculumsIsEmpty);
+            }
 
             return Ok(response);
         }

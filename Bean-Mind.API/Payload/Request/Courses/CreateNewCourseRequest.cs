@@ -11,7 +11,11 @@ namespace Bean_Mind.API.Payload.Request.Courses
 
         [Required]
         [StringLength(50)]
-        public string? Description { get; set; }
+        public string CourseCode { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string Description { get; set; }
 
         [StringLength(50)]
         public string? CourseCode { get; set; }

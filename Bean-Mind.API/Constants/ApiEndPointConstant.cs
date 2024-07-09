@@ -73,7 +73,8 @@
             public const string UpdateSubject = SubjectEndpoint + "/{id}";
             public const string DeleteSubject = SubjectEndpoint + "/{id}";
             public const string GetChapterInSubject = SubjectEndpoint + "/{id}/chapters";
-
+            public const string GetSubjectByTitle = SubjectEndpoint + "/title";
+            public const string GetSubjectByCode = SubjectEndpoint + "/code";
         }
 
         public static class Chapter
@@ -106,6 +107,8 @@
             public const string UpdateCourse = CourseEndpoint + "/{id}";
             public const string DeleteCourse = CourseEndpoint + "/{id}";
             public const string GetSubjectsInCourse  = CourseEndpoint + "/{id}/subjects";
+            public const string GetCourseByTitle = CourseEndpoint + "/title";
+            public const string GetCourseByCode = CourseEndpoint + "/code";
 
         }
 
@@ -118,6 +121,8 @@
             public const string DeleteCurriculum = CurriculumEndpoint + "/{id}";
             public const string UpdateCurriculum = CurriculumEndpoint + "/{id}";
             public const string GetCourseInCurriculum = CurriculumEndpoint + "/{id}/courses";
+            public const string GetCurriculumByTitle = CurriculumEndpoint + "/title";
+            public const string GetCurriculumByCode = CurriculumEndpoint + "/code";
         }
 
         public static class Activity

@@ -15,5 +15,7 @@ namespace Bean_Mind.API.Service.Interface
         public Task<bool> updateCurriculum(Guid Id,UpdateCurriculumRequest updateCurriculumRequest
             , Guid SchoolId);
         public Task<IPaginate<GetCourseResponse>> GetListCourses(Guid id, int page, int size);
+        public Task<IPaginate<GetCurriculumResponse>> GetListCurriculumByTitle(string title, int page, int size);
+        public Task<IPaginate<GetCurriculumResponse>> GetListCurriculumByCode(string code, int page, int size);
     }
 }
