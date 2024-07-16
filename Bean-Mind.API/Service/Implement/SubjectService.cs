@@ -34,7 +34,6 @@ namespace Bean_Mind.API.Service.Implement
                 SubjectCode = request.SubjectCode,
                 Description = request.Description,
                 SchoolId = account.SchoolId.Value,
-                SubjectCode =request.SubjectCode,
                 DelFlg = false,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
@@ -63,9 +62,8 @@ namespace Bean_Mind.API.Service.Implement
                 {
                     Id = newSubject.Id,
                     Title = newSubject.Title,
-                    SubjectCode= newSubject.SubjectCode,
+                    SubjectCode = newSubject.SubjectCode,
                     Description = newSubject.Description,
-                    SubjectCode=newSubject.SubjectCode,
                     CourseId = newSubject.CourseId,
                     SchoolId = account.SchoolId,
                     DelFlg = newSubject.DelFlg,

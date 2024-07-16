@@ -49,7 +49,6 @@ namespace Bean_Mind.API.Service.Implement
                 StartDate = createNewCurriculumRequest.StartDate,
                 EndDate = createNewCurriculumRequest.EndDate,
                 SchoolId = account.SchoolId.Value, // Account Id for School in these cases is not null and .Value gets the real value for it
-                CurriculumCode = createNewCurriculumRequest.CurriculumCode,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false
@@ -69,7 +68,6 @@ namespace Bean_Mind.API.Service.Implement
                     StartDate = newCurriculum.StartDate,
                     EndDate = newCurriculum.EndDate,
                     SchoolId = newCurriculum.SchoolId,
-                    CurriculumCode=newCurriculum.CurriculumCode,
                     InsDate = newCurriculum.InsDate,
                     UpdDate = newCurriculum.UpdDate,
                     DelFlg = newCurriculum.DelFlg
@@ -184,7 +182,6 @@ namespace Bean_Mind.API.Service.Implement
                  StartDate = s.StartDate,
                  EndDate = s.EndDate,
                  SchoolId = s.SchoolId,
-                 CurriculumCode = s.CurriculumCode,
              },
              predicate: x => x.Id == Id && x.DelFlg != true
              );
@@ -208,7 +205,6 @@ namespace Bean_Mind.API.Service.Implement
                   StartDate = s.StartDate,
                   EndDate = s.EndDate,
                   SchoolId = s.SchoolId,
-                  CurriculumCode= s.CurriculumCode,
               },
               predicate: x => x.DelFlg == false,
               size: size,

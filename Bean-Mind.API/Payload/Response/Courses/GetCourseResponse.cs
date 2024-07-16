@@ -11,7 +11,5 @@
         public int? Status {  get; set; }
         public Guid? CurriculumId { get; set; }
         public Guid? SchoolId { get; set; }
-        public string? CourseCode { get; set; }
-
     }
 }

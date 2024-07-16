@@ -17,7 +17,6 @@
             Description = description;
             CourseId = courseId;
             SchoolId = schoolId;
-            SubjectCode = subjectCode;
         }
     }
 }
