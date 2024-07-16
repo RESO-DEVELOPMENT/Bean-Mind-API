@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Courses;
+using Bean_Mind.API.Payload.Request.Curriculums;
 using Bean_Mind.API.Payload.Response.Courses;
 using Bean_Mind.API.Payload.Response.Subjects;
 using Bean_Mind.API.Service.Interface;
@@ -26,7 +27,14 @@ namespace Bean_Mind.API.Service.Implement
                 );
             if (account == null || account.SchoolId == null)
                 throw new Exception("Account or SchoolId is null");
+            if (createNewCourseRequest.StartDate < DateTime.UtcNow.Date)
+                throw new Exception("StartDate cannot be in the past");
 
+            if (createNewCourseRequest.EndDate < DateTime.UtcNow.Date)
+                throw new Exception("EndDate cannot be in the past");
+
+            if (createNewCourseRequest.StartDate > createNewCourseRequest.EndDate)
+                throw new Exception("StartDate must be before EndDate");
             var newCourse = new Course
             {
                 Id = Guid.NewGuid(),
