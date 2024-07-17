@@ -208,6 +208,18 @@
             public const string DeleteTeacherTeachable = TeacherTeachableEndpoint + "/{id}";
             public const string UpdateTeacherTeachable = TeacherTeachableEndpoint + "/{id}";
         }
+
+        public static class StudentInCourse
+        {
+            public const string StudentInCourseEndPoint = ApiEndpoint + "/studentincourse";
+            public const string Create = StudentInCourseEndPoint;
+            public const string GetAll = StudentInCourseEndPoint;
+
+            public const string GetTeacherTeachablesByTeacher = StudentInCourseEndPoint + "teacher/{teacherId}";
+            public const string GetTeacherTeachablesBySubject = StudentInCourseEndPoint + "subject/{subjectId}";
+            public const string DeleteTeacherTeachable = StudentInCourseEndPoint + "/{id}";
+            public const string UpdateTeacherTeachable = StudentInCourseEndPoint + "/{id}";
+        }
     }
 }
     

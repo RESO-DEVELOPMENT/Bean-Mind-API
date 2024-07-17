@@ -190,5 +190,14 @@
             public const string UpdateSuccessful = "Cập nhật giáo viên giảng dạy thành công";
         }
 
+        public static class StudentInCourseMessage
+        {
+            public const string CreateFailed = "Tạo học sinh trong khóa học thất bại";
+            public const string NotFound = "Không tìm thấy giáo viên giảng dạy";
+            public const string InvalidData = "Dữ liệu không hợp lệ";
+            public const string UpdateFailed = "Cập nhật giáo viên giảng dạy thất bại";
+            public const string UpdateSuccessful = "Cập nhật giáo viên giảng dạy thành công";
+        }
+
     }
 }

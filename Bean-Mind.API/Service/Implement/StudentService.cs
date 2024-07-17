@@ -82,16 +82,6 @@ namespace Bean_Mind.API.Service.Implement
                 AccountId = account.Id,
             };
             await _unitOfWork.GetRepository<Student>().InsertAsync(newStudent);
-            StudentInCourse studentInCourse = new StudentInCourse()
-            {
-                Id = Guid.NewGuid(),
-                StudentId = newStudent.Id,
-                CourseId = courseId,
-                InsDate = TimeUtils.GetCurrentSEATime(),
-                UpdDate = TimeUtils.GetCurrentSEATime(),
-                DelFlg = false
-            };
-            await _unitOfWork.GetRepository<StudentInCourse>().InsertAsync(studentInCourse);
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             CreateNewStudentResponse createNewStudentResponse = null;
             if (isSuccessful)

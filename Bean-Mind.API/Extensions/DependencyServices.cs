@@ -84,6 +84,8 @@ namespace Bean_Mind.API.Extensions
             services.AddScoped<AzureDatabaseService>();
             //TeacherTeachable
             services.AddScoped<ITeacherTeachableService, TeacherTeachableService>();
+            //StudentInCourse
+            services.AddScoped<IStudentInCourseService, StudentInCourseService>();
 
             return services;
         }
