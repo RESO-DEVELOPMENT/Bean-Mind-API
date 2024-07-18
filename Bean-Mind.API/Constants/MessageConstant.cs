@@ -70,6 +70,7 @@
         {
             public const string CreateNewParentFailedMessage = "Tạo mới phụ huynh thất bại";
             public const string ParentNotFound = "Không tìm thấy phụ huynh.";
+            public const string ParentPhoneExisted = "Số điện thoại này đã được đăng ký.";
             public const string ParentIdEmpty = "Parent Id bị trống.";
             public const string UpdateParentFailedMessage = "Update thông tin phụ huynh thất bại";
 

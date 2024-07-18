@@ -35,6 +35,11 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.AccountMessage.UsernameExisted);
             }
 
+            Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Phone.Equals(newParentRequest.Phone) && p.DelFlg != true);
+            if (parent != null)
+            {
+                throw new BadHttpRequestException(MessageConstant.ParentMessage.ParentPhoneExisted);
+            }
 
             Account account = new Account()
             {

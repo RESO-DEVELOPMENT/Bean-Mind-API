@@ -19,7 +19,7 @@ namespace Bean_Mind.API.Service.Implement
         {
         }
 
-        public async Task<CreateNewStudentResponse> CreateNewStudent(CreateNewStudentRequest request, Guid parentId)
+        public async Task<CreateNewStudentResponse> CreateNewStudent(CreateNewStudentRequest request, String parentPhone)
         {
             _logger.LogInformation($"Create new Student with {request.FirstName}  {request.LastName}");
 
@@ -31,7 +31,7 @@ namespace Bean_Mind.API.Service.Implement
             if (accountExist == null)
                 throw new Exception("Account or SchoolId is null");
 
-            Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Id.Equals(parentId) && p.DelFlg != true);
+            Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Phone.Equals(parentPhone) && p.DelFlg != true);
             if (parent == null)
             {
                 throw new BadHttpRequestException(MessageConstant.ParentMessage.ParentNotFound);
@@ -74,7 +74,7 @@ namespace Bean_Mind.API.Service.Implement
                 DelFlg = false,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
-                ParentId = parentId,
+                ParentId = parent.Id,
                 AccountId = account.Id,
             };
             await _unitOfWork.GetRepository<Student>().InsertAsync(newStudent);
