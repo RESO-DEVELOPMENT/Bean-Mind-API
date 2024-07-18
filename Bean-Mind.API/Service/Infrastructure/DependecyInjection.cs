@@ -22,8 +22,7 @@ namespace Bean_Mind_Business.Infrastructure
                     .AddJob<BackupJob>(jobKey)
                     .AddTrigger(trigger => trigger
                                 .ForJob(jobKey)
-                                .WithSimpleSchedule(schedule =>
-                                    schedule.WithIntervalInHours(720).RepeatForever()));
+                                .WithCronSchedule("0 0 0 L * ?"));
             });
 
             services.AddQuartzHostedService();

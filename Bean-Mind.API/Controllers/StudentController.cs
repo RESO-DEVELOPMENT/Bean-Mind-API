@@ -23,9 +23,9 @@ namespace Bean_Mind.API.Controllers
         [HttpPost(ApiEndPointConstant.Student.Create)]
         [ProducesResponseType(typeof(CreateNewStudentResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> CreateStudent([FromBody] CreateNewStudentRequest createNewStudentRequest, [FromQuery] Guid parentId)
+        public async Task<IActionResult> CreateStudent([FromBody] CreateNewStudentRequest createNewStudentRequest, [FromQuery] String parentPhone)
         {
-            CreateNewStudentResponse response = await _studentService.CreateNewStudent(createNewStudentRequest, parentId);
+            CreateNewStudentResponse response = await _studentService.CreateNewStudent(createNewStudentRequest, parentPhone);
             if (response == null)
             {
                 return Problem(MessageConstant.StudentMessage.CreateNewStudentFailedMessage);
@@ -34,14 +34,15 @@ namespace Bean_Mind.API.Controllers
             return CreatedAtAction(nameof(CreateStudent), response);
         }
 
-            [HttpGet(ApiEndPointConstant.Student.GetAll)]
-            [ProducesResponseType(typeof(IPaginate<GetStudentResponse>), StatusCodes.Status200OK)]
-            [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> GetListStudent([FromQuery] int? page, [FromQuery] int? size) {
+        [HttpGet(ApiEndPointConstant.Student.GetAll)]
+        [ProducesResponseType(typeof(IPaginate<GetStudentResponse>), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> GetListStudent([FromQuery] int? page, [FromQuery] int? size)
+        {
             int pageNumber = page ?? 1;
             int pageSize = size ?? 10;
             var response = await _studentService.getListStudent(pageNumber, pageSize);
-            if(response == null)
+            if (response == null)
             {
                 return Problem(MessageConstant.StudentMessage.StudentsIsEmpty);
             }
@@ -55,7 +56,7 @@ namespace Bean_Mind.API.Controllers
         public async Task<IActionResult> GetStudent([FromRoute] Guid id)
         {
             var response = await _studentService.getStudentById(id);
-            
+
             return Ok(response);
         }
 
@@ -85,7 +86,7 @@ namespace Bean_Mind.API.Controllers
             int pageNumber = page ?? 1;
             int pageSize = size ?? 10;
             var response = await _studentService.GetStudentInCourseByStudent(id, pageNumber, pageSize);
-            if(response == null)
+            if (response == null)
             {
                 return Problem(MessageConstant.StudentInCourseMessage.IsEmpty);
             }
