@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Curriculums;
 using Bean_Mind.API.Payload.Response.StudentInCourse;
 using Bean_Mind.API.Payload.Response.Students;
@@ -7,6 +8,9 @@ using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
+using System.Drawing;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -25,19 +29,15 @@ namespace Bean_Mind.API.Service.Implement
             if (account == null || account.SchoolId == null)
                 throw new Exception("Account or SchoolId is null");
             var student = await _unitOfWork.GetRepository<Student>().SingleOrDefaultAsync(
-                predicate: s => s.Id.Equals(StudentId) && s.DelFlg != true
+                predicate: s => s.Id.Equals(StudentId) && s.Account.SchoolId.Equals(account.SchoolId) && s.DelFlg != true
             );
             if(student == null)
                 throw new Exception("Student does not exist");
-            //Guid accountStudentId = student.AccountId;
-            //var AccountStudentId = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
-            //    predicate: a => a.SchoolId.Equals(account.SchoolId));
-
 
             foreach (var CourseId in CourseIds)
             {
                 var course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(
-                    predicate: c => c.Id.Equals(CourseIds) && c.DelFlg != true);
+                    predicate: c => c.Id.Equals(CourseIds) && c.SchoolId.Equals(account.SchoolId) && c.DelFlg != true);
                 var studentInCourse = new StudentInCourse
                 {
                     Id = Guid.NewGuid(),
@@ -63,29 +63,78 @@ namespace Bean_Mind.API.Service.Implement
             return createNewStudentInCourseResponse;
         }
 
-        public Task<bool> DeleteStudentInCourse(Guid id)
+        public async Task<bool> DeleteStudentInCourse(Guid id)
         {
-            throw new NotImplementedException();
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
+            var studentInCourse = await _unitOfWork.GetRepository<StudentInCourse>().SingleOrDefaultAsync(
+                predicate: s => s.DelFlg != true && s.Course.SchoolId.Equals(account.SchoolId) && s.Id.Equals(id)
+                );
+            if(studentInCourse == null)
+                throw new BadHttpRequestException(MessageConstant.StudentInCourseMessage.NotFound);
+            studentInCourse.DelFlg = true;
+            studentInCourse.UpdDate = TimeUtils.GetCurrentSEATime();
+            _unitOfWork.GetRepository<StudentInCourse>().UpdateAsync(studentInCourse);
+            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+            return isSuccessful;
         }
 
-        public Task<IPaginate<GetStudentInCourseResponse>> GetAllStudentInCourses(int page, int size)
+        public async Task<IPaginate<GetStudentInCourseResponse>> GetAllStudentInCourses(int page, int size)
         {
-            throw new NotImplementedException();
-        }
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
 
-        public Task<IPaginate<GetStudentInCourseResponse>> GetStudentInCourseByCourse(Guid courseId, int page, int size)
-        {
-            throw new NotImplementedException();
+            var studentInCourses = await _unitOfWork.GetRepository<StudentInCourse>().GetPagingListAsync(
+                selector: s => new GetStudentInCourseResponse
+                {
+                    Id = s.Id,
+                    StudentId = s.StudentId,
+                    CourseId = s.CourseId
+                },
+                predicate: s => s.DelFlg != true && s.Course.SchoolId.Equals(account.SchoolId),
+                page: page,
+                size: size
+                );
+            return studentInCourses;
         }
-
-        public Task<IPaginate<GetStudentInCourseResponse>> GetStudentInCourseByStudent(Guid studentId, int page, int size)
+        public async Task<bool> UpdateStudentInCourse(Guid id, Guid StudentId, Guid CourseId)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> UpdateStudentInCourse(Guid id, Guid StudentId, List<Guid> CourseId)
-        {
-            throw new NotImplementedException();
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+            var studentInCourse = await _unitOfWork.GetRepository<StudentInCourse>().SingleOrDefaultAsync(
+                predicate: s => s.DelFlg != true && s.Course.SchoolId.Equals(account.SchoolId) && s.Id.Equals(id)
+                );
+            if (studentInCourse == null)
+                throw new BadHttpRequestException(MessageConstant.StudentInCourseMessage.NotFound);
+            var student = await _unitOfWork.GetRepository<Student>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(StudentId) && s.Account.SchoolId.Equals(account.SchoolId) && s.DelFlg != true
+            );
+            if (student == null)
+                throw new Exception("Student does not exist");
+            var course = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(
+                predicate: c => c.Id.Equals(CourseId) && c.SchoolId.Equals(account.SchoolId) && c.DelFlg != true
+            );
+            if(course == null)
+                throw new Exception("Course does not exist");
+            studentInCourse.UpdDate = TimeUtils.GetCurrentSEATime();
+            studentInCourse.StudentId = student.Id;
+            studentInCourse.CourseId = course.Id;
+            _unitOfWork.GetRepository<StudentInCourse>().UpdateAsync(studentInCourse);
+            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+            return isSuccessful;
         }
     }
 }

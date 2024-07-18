@@ -10,9 +10,7 @@ namespace Bean_Mind.API.Service.Interface
         Task<CreateNewStudentInCourseResponse> CreateStudentInCourse(Guid StudentId, List<Guid> CourseIds);
 
         Task<IPaginate<GetStudentInCourseResponse>> GetAllStudentInCourses(int page, int size);
-        Task<IPaginate<GetStudentInCourseResponse>> GetStudentInCourseByStudent(Guid studentId, int page, int size);
-        Task<IPaginate<GetStudentInCourseResponse>> GetStudentInCourseByCourse(Guid courseId, int page, int size);
-        Task<bool> UpdateStudentInCourse(Guid id, Guid StudentId, List<Guid> CourseId);
+        Task<bool> UpdateStudentInCourse(Guid id, Guid StudentId, Guid CourseId);
         Task<bool> DeleteStudentInCourse(Guid id);
     }
 }

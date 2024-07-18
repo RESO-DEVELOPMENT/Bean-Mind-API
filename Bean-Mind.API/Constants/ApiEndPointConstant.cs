@@ -52,6 +52,7 @@
             public const string GetById = StudentEndpoint + "/{id}";
             public const string DeleteStudent = StudentEndpoint + "/{id}";
             public const string UpdateStudent = StudentEndpoint + "/{id}";
+            public const string GetStudentInCourseByStudent = StudentEndpoint + "/{id}/studentincourse";
         }
 
         public static class Parent
@@ -109,6 +110,7 @@
             public const string GetSubjectsInCourse  = CourseEndpoint + "/{id}/subjects";
             public const string GetCourseByTitle = CourseEndpoint + "/title";
             public const string GetCourseByCode = CourseEndpoint + "/code";
+            public const string GetStudentInCourseByCourse = CourseEndpoint + "/{id}/studentincourse";
 
         }
 
@@ -214,11 +216,8 @@
             public const string StudentInCourseEndPoint = ApiEndpoint + "/studentincourse";
             public const string Create = StudentInCourseEndPoint;
             public const string GetAll = StudentInCourseEndPoint;
-
-            public const string GetTeacherTeachablesByTeacher = StudentInCourseEndPoint + "teacher/{teacherId}";
-            public const string GetTeacherTeachablesBySubject = StudentInCourseEndPoint + "subject/{subjectId}";
-            public const string DeleteTeacherTeachable = StudentInCourseEndPoint + "/{id}";
-            public const string UpdateTeacherTeachable = StudentInCourseEndPoint + "/{id}";
+            public const string DeleteStudentInCourse = StudentInCourseEndPoint + "/{id}";
+            public const string UpdateStudentInCourse = StudentInCourseEndPoint + "/{id}";
         }
     }
 }

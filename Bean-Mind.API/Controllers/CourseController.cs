@@ -5,6 +5,8 @@ using Bean_Mind.API.Payload.Request.Courses;
 using Bean_Mind.API.Payload.Response.Courses;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Payload.Response.Subjects;
+using Bean_Mind.API.Payload.Response.StudentInCourse;
+using Bean_Mind.API.Service.Implement;
 
 namespace Bean_Mind.API.Controllers
     {
@@ -113,6 +115,21 @@ namespace Bean_Mind.API.Controllers
                 var response = await _courseService.GetListSubjectsByCourseId(id, page, size);
                 return Ok(response);
 
+            }
+
+            [HttpGet(ApiEndPointConstant.Course.GetStudentInCourseByCourse)]
+            [ProducesResponseType(typeof(IPaginate<GetStudentInCourseResponse>), StatusCodes.Status200OK)]
+            [ProducesErrorResponseType(typeof(ProblemDetails))]
+            public async Task<IActionResult> GetStudentInCourseByStudent([FromRoute] Guid id, [FromQuery] int? page, [FromQuery] int? size)
+            {
+                int pageNumber = page ?? 1;
+                int pageSize = size ?? 10;
+                var response = await _courseService.GetStudentInCourseByCourse(id, pageNumber, pageSize);
+                if (response == null)
+                {
+                    return Problem(MessageConstant.StudentInCourseMessage.IsEmpty);
+                }
+                return Ok(response);
             }
 
     }

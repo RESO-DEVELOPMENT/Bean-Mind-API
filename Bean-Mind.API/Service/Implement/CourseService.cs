@@ -3,6 +3,7 @@ using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Courses;
 using Bean_Mind.API.Payload.Request.Curriculums;
 using Bean_Mind.API.Payload.Response.Courses;
+using Bean_Mind.API.Payload.Response.StudentInCourse;
 using Bean_Mind.API.Payload.Response.Subjects;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
@@ -329,6 +330,27 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CoursesIsEmpty);
             }
             return courses;
+        }
+
+        public async Task<IPaginate<GetStudentInCourseResponse>> GetStudentInCourseByCourse(Guid id, int page, int size)
+        {
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+            var studentInCourses = await _unitOfWork.GetRepository<StudentInCourse>().GetPagingListAsync(
+                selector: s => new GetStudentInCourseResponse
+                {
+                    Id = s.Id,
+                    StudentId = s.StudentId,
+                    CourseId = s.CourseId
+                },
+                predicate: s => s.CourseId.Equals(id) && s.DelFlg != true && s.Student.Account.SchoolId.Equals(account.SchoolId),
+                page: page,
+                size: size);
+            return studentInCourses;
         }
     }
 }
