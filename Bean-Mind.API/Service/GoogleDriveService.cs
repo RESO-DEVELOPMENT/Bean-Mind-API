@@ -58,6 +58,21 @@ namespace Bean_Mind.API.Service
                     ApplicationName = "Google Drive Upload Console App"
                 });
 
+                // Kiểm tra xem tệp có tồn tại trong thư mục Google Drive không
+                var listRequest = service.Files.List();
+                listRequest.Q = $"name='{fileToUpload.FileName}' and '{_configuration["Authentication:GoogleDrive:FolderId"]}' in parents and trashed=false";
+                listRequest.Fields = "files(id, name)";
+
+                var fileList = await listRequest.ExecuteAsync();
+
+                if (fileList.Files.Count > 0)
+                {
+                    // Nếu tệp đã tồn tại, trả về liên kết của tệp hiện có
+                    string existingFileId = fileList.Files.First().Id;
+                    string existingFileUrl = $"https://drive.google.com/file/d/{existingFileId}/view?usp=sharing";
+                    return existingFileUrl;
+                }
+
                 // Tạo metadata cho tệp
                 var fileMetaData = new Google.Apis.Drive.v3.Data.File()
                 {
