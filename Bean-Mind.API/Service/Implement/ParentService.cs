@@ -9,6 +9,7 @@ using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -35,10 +36,29 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.AccountMessage.UsernameExisted);
             }
 
+            string phonePattern = @"^0\d{9}$";
+            if (!Regex.IsMatch(newParentRequest.Phone, phonePattern))
+            {
+                throw new BadHttpRequestException(MessageConstant.PatternMessage.PhoneIncorrect);
+            }
+
             Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Phone.Equals(newParentRequest.Phone) && p.DelFlg != true);
             if (parent != null)
             {
                 throw new BadHttpRequestException(MessageConstant.ParentMessage.ParentPhoneExisted);
+            }
+
+            string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            if (!Regex.IsMatch(newParentRequest.Email, emailPattern))
+            {
+                throw new BadHttpRequestException(MessageConstant.PatternMessage.EmailIncorrect);
+            }
+
+            Parent parentExist = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(
+                predicate: p => p.Email.Equals(newParentRequest.Email) && p.DelFlg != true);
+            if (parentExist != null)
+            {
+                throw new BadHttpRequestException(MessageConstant.ParentMessage.ParentEmailExisted);
             }
 
             Account account = new Account()
@@ -59,7 +79,6 @@ namespace Bean_Mind.API.Service.Implement
             {
                 return null; // Hoặc trả về phản hồi lỗi phù hợp
             }
-
 
             Parent newParent = new Parent()
             {

@@ -54,7 +54,14 @@
             public const string SchoolNotFound = "Không tìm thấy trường.";
             public const string SchoolIdEmpty = "School Id bị trống o.";
             public const string UpdateSchoolFailedMessage = "Update trường học thất bại";
+            public const string SchoolPhoneExisted = "Số điện thoại đã tồn tại";
+            public const string SchoolEmailExisted = "Email đã tồn tại";
+        }
 
+        public static class PatternMessage
+        {
+            public const string PhoneIncorrect = "Số điện thoại không đúng định dạng";
+            public const string EmailIncorrect = "Email không đúng định dạng";
         }
 
         public static class TeacherMessage
@@ -64,6 +71,8 @@
             public const string TeacherNotFound = "Teacher not found.";
             public const string UpdateTeacherFailedMessage = "Failed to update teacher information.";
             public const string UpdateTeacherSuccessfulMessage = "Teacher information updated successfully.";
+            public const string TeacherPhoneExisted = "Số điện thoại đã tồn tại";
+            public const string TeacherEmailExisted = "Email đã tồn tại";
             // Thêm các thông điệp khác liên quan đến Teacher tại đây
         }
         public static class ParentMessage
@@ -73,7 +82,7 @@
             public const string ParentPhoneExisted = "Số điện thoại này đã được đăng ký.";
             public const string ParentIdEmpty = "Parent Id bị trống.";
             public const string UpdateParentFailedMessage = "Update thông tin phụ huynh thất bại";
-
+            public const string ParentEmailExisted = "Email đã tồn tại";
             // Thêm các thông điệp khác liên quan đến phụ huynh tại đây
         }
         public static class StudentMessage
