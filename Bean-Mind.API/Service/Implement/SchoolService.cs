@@ -11,6 +11,7 @@ using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -23,6 +24,33 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<CreateNewSchoolResponse> CreateNewSchool(CreateNewSchoolRequest createNewSchoolRequest)
         {
             _logger.LogInformation($"Create new School with {createNewSchoolRequest.Name}");
+
+            string phonePattern = @"^0\d{9}$";
+            if (!Regex.IsMatch(createNewSchoolRequest.Phone, phonePattern))
+            {
+                throw new BadHttpRequestException(MessageConstant.PatternMessage.PhoneIncorrect);
+            }
+
+            string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            if (!Regex.IsMatch(createNewSchoolRequest.Email, emailPattern))
+            {
+                throw new BadHttpRequestException(MessageConstant.PatternMessage.EmailIncorrect);
+            }
+
+            School phoneSchool = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(
+                predicate: s => s.Phone.Equals(createNewSchoolRequest.Phone) && s.DelFlg != true);
+            if (phoneSchool != null)
+            {
+                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolPhoneExisted);
+            }
+
+            School emailSchool = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(
+                predicate: s => s.Email.Equals(createNewSchoolRequest.Email) && s.DelFlg != true);
+            if (emailSchool != null)
+            {
+                throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolEmailExisted);
+            }
+
             School newSchool = new School()
             {
                 Id = Guid.NewGuid(),

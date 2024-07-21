@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Bean_Mind.API.Constants;
+using Bean_Mind.API.Payload.Request.Schools;
 using Bean_Mind.API.Payload.Request.Teachers;
 using Bean_Mind.API.Payload.Response.Teachers;
 using Bean_Mind.API.Service.Interface;
@@ -9,6 +10,7 @@ using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 namespace Bean_Mind.API.Service.Implement
 {
     public class TeacherService : BaseService<TeacherService>, ITeacherService
@@ -29,6 +31,32 @@ namespace Bean_Mind.API.Service.Implement
                 );
             if (accountExist == null)
                 throw new Exception("Account or SchoolId is null");
+
+            string phonePattern = @"^0\d{9}$";
+            if (!Regex.IsMatch(newTeacherRequest.Phone, phonePattern))
+            {
+                throw new BadHttpRequestException(MessageConstant.PatternMessage.PhoneIncorrect);
+            }
+
+            string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            if (!Regex.IsMatch(newTeacherRequest.Email, emailPattern))
+            {
+                throw new BadHttpRequestException(MessageConstant.PatternMessage.EmailIncorrect);
+            }
+
+            Teacher phoneTeacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
+                predicate: t => t.Phone.Equals(newTeacherRequest.Phone) && t.DelFlg != true);
+            if(phoneTeacher != null)
+            {
+                throw new BadHttpRequestException(MessageConstant.TeacherMessage.TeacherPhoneExisted);
+            }
+
+            Teacher emailTeacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
+                predicate: t => t.Email.Equals(newTeacherRequest.Email) && t.DelFlg != true);
+            if (emailTeacher != null)
+            {
+                throw new BadHttpRequestException(MessageConstant.TeacherMessage.TeacherEmailExisted);
+            }
 
             var accountS = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
                 predicate: account => account.UserName.Equals(newTeacherRequest.UserName) && account.DelFlg != true
