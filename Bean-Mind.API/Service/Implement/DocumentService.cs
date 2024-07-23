@@ -55,6 +55,9 @@ namespace Bean_Mind.API.Service.Implement
             }
 
             string url = await _driveService.UploadToGoogleDriveAsync(request.Url);
+            if (url.Equals("File đã tồn tại.")) {
+                throw new BadHttpRequestException(url);
+            }
             newDocument.Url = url;
 
             await _unitOfWork.GetRepository<Document>().InsertAsync(newDocument);
