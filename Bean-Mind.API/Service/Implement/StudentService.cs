@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Bean_Mind.API.Constants;
+using Bean_Mind.API.Payload.Request.Schools;
 using Bean_Mind.API.Payload.Request.Students;
 using Bean_Mind.API.Payload.Response.StudentInCourse;
 using Bean_Mind.API.Payload.Response.Students;
@@ -10,6 +11,7 @@ using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace Bean_Mind.API.Service.Implement
 {
@@ -30,6 +32,12 @@ namespace Bean_Mind.API.Service.Implement
                 );
             if (accountExist == null)
                 throw new Exception("Account or SchoolId is null");
+
+            string phonePattern = @"^0\d{9}$";
+            if (!Regex.IsMatch(parentPhone, phonePattern))
+            {
+                throw new BadHttpRequestException(MessageConstant.PatternMessage.PhoneIncorrect);
+            }
 
             Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Phone.Equals(parentPhone) && p.DelFlg != true);
             if (parent == null)

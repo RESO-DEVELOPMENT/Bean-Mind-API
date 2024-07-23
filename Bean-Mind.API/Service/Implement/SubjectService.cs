@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Bean_Mind.API.Constants;
+using Bean_Mind.API.Payload.Request.Courses;
 using Bean_Mind.API.Payload.Request.Subjects;
 using Bean_Mind.API.Payload.Response.Chapters;
 using Bean_Mind.API.Payload.Response.Courses;
@@ -27,6 +28,21 @@ namespace Bean_Mind.API.Service.Implement
                 );
             if (account == null || account.SchoolId == null)
                 throw new Exception("Account or SchoolId is null");
+
+            var subjectTitle = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(
+                predicate: s => s.Title.Equals(request.Title) && s.DelFlg != true);
+            if (subjectTitle != null)
+            {
+                throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectTitleExisted);
+            }
+
+            var subjectCode = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(
+                predicate: s => s.SubjectCode.Equals(request.SubjectCode) && s.DelFlg != true);
+            if (subjectCode != null)
+            {
+                throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectCodeExisted);
+            }
+
             var  newSubject = new Subject
             {
                 Id = Guid.NewGuid(),
