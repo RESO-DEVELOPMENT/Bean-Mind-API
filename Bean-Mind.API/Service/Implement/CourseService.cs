@@ -38,14 +38,14 @@ namespace Bean_Mind.API.Service.Implement
                 throw new Exception("StartDate must be before EndDate");
 
             var courseTitle = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(
-                predicate: c => c.Title.Equals(createNewCourseRequest.Title) && c.DelFlg != true);
+                predicate: c => c.Title.Equals(createNewCourseRequest.Title) && c.DelFlg != true && c.SchoolId.Equals(account.SchoolId));
             if (courseTitle != null)
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseTitleExisted);
             }
 
             var courseCode = await _unitOfWork.GetRepository<Course>().SingleOrDefaultAsync(
-                predicate: c => c.CourseCode.Equals(createNewCourseRequest.CourseCode) && c.DelFlg != true);
+                predicate: c => c.CourseCode.Equals(createNewCourseRequest.CourseCode) && c.DelFlg != true && c.SchoolId.Equals(account.SchoolId));
             if (courseCode != null)
             {
                 throw new BadHttpRequestException(MessageConstant.CourseMessage.CourseCodeExisted);

@@ -30,14 +30,14 @@ namespace Bean_Mind.API.Service.Implement
                 throw new Exception("Account or SchoolId is null");
 
             var subjectTitle = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(
-                predicate: s => s.Title.Equals(request.Title) && s.DelFlg != true);
+                predicate: s => s.Title.Equals(request.Title) && s.DelFlg != true && s.SchoolId.Equals(account.SchoolId));
             if (subjectTitle != null)
             {
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectTitleExisted);
             }
 
             var subjectCode = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(
-                predicate: s => s.SubjectCode.Equals(request.SubjectCode) && s.DelFlg != true);
+                predicate: s => s.SubjectCode.Equals(request.SubjectCode) && s.DelFlg != true && s.SchoolId.Equals(account.SchoolId));
             if (subjectCode != null)
             {
                 throw new BadHttpRequestException(MessageConstant.SubjectMessage.SubjectCodeExisted);
