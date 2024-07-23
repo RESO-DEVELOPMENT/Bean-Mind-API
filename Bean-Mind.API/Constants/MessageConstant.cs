@@ -98,6 +98,8 @@
             public const string SubjectsIsEmpty = "Không có môn học nào.";
             public const string CreateNewSubjectFailedMessage = "Tạo mới môn thất bại";
             public const string UpdateSubjectFailedMessage = "Update thông tin môn thất bại";
+            public const string SubjectCodeExisted = "Tiêu đề này của môn học đã tồn tại";
+            public const string SubjectTitleExisted = "Mã này của môn học đã tồn tại";
         }
 
         public static class ChapterMessage
@@ -121,7 +123,8 @@
             public const string CreateNewCurriculumFailedMessage = "Thêm chương trình học mới thất bại";
             public const string CurriculumsIsEmpty = "Không có chương trình học nào.";
             public const string CurriculumNotFound = "Không tìm thấy chương trình học";
-
+            public const string CurriculumTitleExisted = "Tiêu đề này của chương trình học đã tồn tại";
+            public const string CurriculumCodeExisted = "Mã này của chương trình học đã tồn tại";
         }
 
         public static class CourseMessage
@@ -129,6 +132,8 @@
             public const string CreateNewCourseFailedMessage = "Tạo mới khóa học thất bại";
             public const string CoursesIsEmpty = "Không có khóa học nào.";
             public const string CourseNotFound = "Không tìm thấy khóa học";
+            public const string CourseTitleExisted = "Tiêu đề này của khóa học đã tồn tại";
+            public const string CourseCodeExisted = "Mã này của khóa học đã tồn tại";
         }
 
         public static class VideoMessage

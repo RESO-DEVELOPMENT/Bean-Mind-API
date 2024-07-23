@@ -40,6 +40,20 @@ namespace Bean_Mind.API.Service.Implement
             if (createNewCurriculumRequest.StartDate > createNewCurriculumRequest.EndDate)
                 throw new Exception("StartDate must be before EndDate");
 
+            var curriculumTitle = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(
+                predicate: c => c.Title.Equals(createNewCurriculumRequest.Title) && c.DelFlg != true);
+            if(curriculumTitle != null)
+            {
+                throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumTitleExisted);
+            }
+
+            var curriculumCode = await _unitOfWork.GetRepository<Curriculum>().SingleOrDefaultAsync(
+                predicate: c => c.CurriculumCode.Equals(createNewCurriculumRequest.CurriculumCode) && c.DelFlg != true);
+            if (curriculumCode != null)
+            {
+                throw new BadHttpRequestException(MessageConstant.CurriculumMessage.CurriculumCodeExisted);
+            }
+
             Curriculum newCurriculum = new Curriculum()
             {
                 Id = Guid.NewGuid(),
