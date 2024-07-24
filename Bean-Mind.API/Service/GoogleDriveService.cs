@@ -67,10 +67,10 @@ namespace Bean_Mind.API.Service
 
                 if (fileList.Files.Count > 0)
                 {
-                    // Nếu tệp đã tồn tại, trả về liên kết của tệp hiện có
-                    string existingFileId = fileList.Files.First().Id;
-                    string existingFileUrl = $"https://drive.google.com/file/d/{existingFileId}/view?usp=sharing";
-                    return existingFileUrl;
+                    //// Nếu tệp đã tồn tại, trả về liên kết của tệp hiện có
+                    //string existingFileId = fileList.Files.First().Id;
+                    //string existingFileUrl = $"https://drive.google.com/file/d/{existingFileId}/view?usp=sharing";
+                    return "File đã tồn tại.";
                 }
 
                 // Tạo metadata cho tệp

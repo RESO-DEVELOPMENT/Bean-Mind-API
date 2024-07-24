@@ -54,6 +54,8 @@ namespace Bean_Mind.API.Service.Implement
                 Id = Guid.NewGuid(),
                 TeacherId = request.TeacherId,
                 SubjectId = request.SubjectId,
+                TeacherFirstName = teacherExist.FirstName,
+                TeacherLastname = teacherExist.LastName,
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false,
@@ -160,6 +162,8 @@ namespace Bean_Mind.API.Service.Implement
                 }
 
                 teacherTeachable.TeacherId = request.TeacherId.Value;
+                teacherTeachable.TeacherFirstName = teacher.FirstName;
+                teacherTeachable.TeacherLastname = teacher.LastName;
             }
 
             if (request.SubjectId.HasValue && request.SubjectId != Guid.Empty && request.SubjectId != teacherTeachable.SubjectId)
