@@ -109,10 +109,11 @@ namespace Bean_Mind.API.Controllers
             [HttpGet(ApiEndPointConstant.Course.GetSubjectsInCourse)]
             [ProducesResponseType(typeof(IPaginate<GetSubjectResponse>), StatusCodes.Status200OK)]
             [ProducesErrorResponseType(typeof(ProblemDetails))]
-            public async Task<IActionResult> GetSubjectsByCourseId([FromRoute] Guid id, [FromQuery] int page, [FromQuery] int size)
+            public async Task<IActionResult> GetSubjectsByCourseId([FromRoute] Guid id, [FromQuery] int? page, [FromQuery] int? size)
             {
-
-                var response = await _courseService.GetListSubjectsByCourseId(id, page, size);
+            int pageNumber = page ?? 1;
+            int pageSize = size ?? 10;
+            var response = await _courseService.GetListSubjectsByCourseId(id, pageNumber, pageSize);
                 return Ok(response);
 
             }
