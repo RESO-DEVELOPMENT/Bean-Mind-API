@@ -54,8 +54,6 @@ namespace Bean_Mind.API.Service.Implement
                 Id = Guid.NewGuid(),
                 TeacherId = request.TeacherId,
                 SubjectId = request.SubjectId,
-                TeacherFirstName = teacherExist.FirstName,
-                TeacherLastname = teacherExist.LastName,
                 UpdDate = TimeUtils.GetCurrentSEATime(),
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 DelFlg = false,
@@ -73,6 +71,7 @@ namespace Bean_Mind.API.Service.Implement
                 Id = teacherTeachable.Id,
                 TeacherId = teacherTeachable.TeacherId,
                 SubjectId = teacherTeachable.SubjectId,
+                TeacherName = teacherExist.FirstName + " " + teacherExist.LastName,
             };
         }
 
@@ -84,7 +83,8 @@ namespace Bean_Mind.API.Service.Implement
                 { 
                     Id = x.Id,
                     TeacherId = x.TeacherId,
-                    SubjectId = x.SubjectId
+                    SubjectId = x.SubjectId,
+                    TeacherName = x.Teacher.FirstName + " " + x.Teacher.LastName
                 },
                 predicate: x => x.Teacher.DelFlg == false && x.Subject.DelFlg == false,
                 size: size,
@@ -100,7 +100,8 @@ namespace Bean_Mind.API.Service.Implement
                 {
                     Id = x.Id,
                     TeacherId = x.TeacherId,
-                    SubjectId = x.SubjectId
+                    SubjectId = x.SubjectId,
+                    TeacherName = x.Teacher.FirstName + " " + x.Teacher.LastName
                 },
                 predicate: x => x.TeacherId.Equals(teacherId) && x.Teacher.DelFlg != true && x.Subject.DelFlg != true
             );
@@ -115,7 +116,8 @@ namespace Bean_Mind.API.Service.Implement
                 {
                     Id = x.Id,
                     TeacherId = x.TeacherId,
-                    SubjectId = x.SubjectId
+                    SubjectId = x.SubjectId,
+                    TeacherName = x.Teacher.FirstName + " " + x.Teacher.LastName
                 },
                 predicate: x => x.SubjectId.Equals(subjectId) && x.Teacher.DelFlg != true && x.Subject.DelFlg != true
             );
@@ -162,8 +164,6 @@ namespace Bean_Mind.API.Service.Implement
                 }
 
                 teacherTeachable.TeacherId = request.TeacherId.Value;
-                teacherTeachable.TeacherFirstName = teacher.FirstName;
-                teacherTeachable.TeacherLastname = teacher.LastName;
             }
 
             if (request.SubjectId.HasValue && request.SubjectId != Guid.Empty && request.SubjectId != teacherTeachable.SubjectId)
