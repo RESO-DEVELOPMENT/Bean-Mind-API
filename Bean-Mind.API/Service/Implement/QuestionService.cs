@@ -163,6 +163,55 @@ namespace Bean_Mind.API.Service.Implement
 
             return questionAnswerResponses;
         }
+        public async Task<bool> RemoveQuestion(Guid Id)
+        {
+            if (Id == Guid.Empty)
+            {
+                throw new BadHttpRequestException(MessageConstant.QuestionMessage.QuestionNotFound);
+            }
+
+            var question = await _unitOfWork.GetRepository<Question>().SingleOrDefaultAsync(predicate: q => q.Id.Equals(Id) && q.DelFlg != true);
+            if (question == null)
+            {
+                throw new BadHttpRequestException(MessageConstant.QuestionMessage.QuestionNotFound);
+            }
+
+            // Lấy danh sách các câu trả lời liên quan đến câu hỏi này
+            var questionAnswers = await _unitOfWork.GetRepository<QuestionAnswer>().GetListAsync(
+                predicate: qa => qa.QuestionId.Equals(Id) && qa.DelFlg != true
+            );
+
+            // Đánh dấu xóa các câu trả lời liên quan
+            foreach (var answer in questionAnswers)
+            {
+                answer.UpdDate = TimeUtils.GetCurrentSEATime();
+                answer.DelFlg = true;
+                _unitOfWork.GetRepository<QuestionAnswer>().UpdateAsync(answer);
+            }
+
+            // Lấy danh sách các WorksheetQuestion liên quan đến câu hỏi này
+            var worksheetQuestions = await _unitOfWork.GetRepository<WorksheetQuestion>().GetListAsync(
+                predicate: wq => wq.QuestionId.Equals(Id) && wq.DelFlg != true
+            );
+
+            // Đánh dấu xóa các WorksheetQuestion liên quan
+            foreach (var worksheetQuestion in worksheetQuestions)
+            {
+                worksheetQuestion.UpdDate = TimeUtils.GetCurrentSEATime();
+                worksheetQuestion.DelFlg = true;
+                _unitOfWork.GetRepository<WorksheetQuestion>().UpdateAsync(worksheetQuestion);
+            }
+
+            // Đánh dấu xóa câu hỏi
+            question.UpdDate = TimeUtils.GetCurrentSEATime();
+            question.DelFlg = true;
+            _unitOfWork.GetRepository<Question>().UpdateAsync(question);
+
+            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+            return isSuccessful;
+        }
+
+
     }
 }
 

@@ -11,6 +11,7 @@ using Bean_Mind_Data.Models;
 using Bean_Mind.API.Payload.Request.QuestionAnswers;
 using Bean_Mind_Data.Enums;
 using Newtonsoft.Json;
+using Bean_Mind.API.Service.Implement;
 
 namespace Bean_Mind.API.Controllers
 {
@@ -65,7 +66,15 @@ namespace Bean_Mind.API.Controllers
             }
             return Ok(questionAnswers);
         }
+        [HttpDelete(ApiEndPointConstant.Question.DeleteQuestion)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> DeleteWorkSheetTemplate([FromRoute] Guid id)
+        {
+            var response = await _questionService.RemoveQuestion(id);
 
+            return Ok(response);
+        }
 
     }
 }

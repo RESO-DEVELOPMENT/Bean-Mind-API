@@ -13,6 +13,6 @@ namespace Bean_Mind.API.Service.Interface
         Task<List<GetQuestionResponse>> GetAllQuestion(int page , int size);
         Task<List<GetQuestionAnswerResponse>> GetQuestionAnswersByQuestionId(Guid id);
         //Task<bool> UpdateQuestion(Guid id, UpdateQuestionRequest request, Guid questionLevelId);
-        //Task<bool> RemoveQuestion(Guid id);
+        Task<bool> RemoveQuestion(Guid id);
     }
 }

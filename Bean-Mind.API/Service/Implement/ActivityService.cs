@@ -111,7 +111,7 @@ namespace Bean_Mind.API.Service.Implement
                     worksheetQuestion.UpdDate = TimeUtils.GetCurrentSEATime();
                     _unitOfWork.GetRepository<WorksheetQuestion>().UpdateAsync(worksheetQuestion);
                 }
-                workSheet.DelFlg = false;
+                workSheet.DelFlg = true;
                 workSheet.UpdDate= TimeUtils.GetCurrentSEATime();
                 _unitOfWork.GetRepository<WorkSheet>().UpdateAsync(workSheet);
             }
