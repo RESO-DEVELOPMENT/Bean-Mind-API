@@ -12,7 +12,7 @@ using Bean_Mind_Data.Paginate;
 
 namespace Bean_Mind.API.Service.Implement
 {
-   
+
     public class DocumentService : BaseService<DocumentService>, IDocumentService
     {
         private readonly GoogleDriveService _driveService;
@@ -81,7 +81,8 @@ namespace Bean_Mind.API.Service.Implement
                         Url = newDocument.Url,
                     };
                 }
-            } else
+            }
+            else
             {
                 var document = await _unitOfWork.GetRepository<Document>().SingleOrDefaultAsync(predicate: s => s.Url.Equals(googleDriverResponce.Url));
 
@@ -105,7 +106,7 @@ namespace Bean_Mind.API.Service.Implement
                         Url = document.Url,
                     };
                 }
-            }                     
+            }
 
             return createNewDocumentResponse;
         }
@@ -138,7 +139,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.DocumentMessage.DocumentNotFound);
             }
             var document = await _unitOfWork.GetRepository<Document>().SingleOrDefaultAsync(
-                selector: s => new GetDocumentResponse(s.Id, s.Title, s.Description,s.Url, s.ActivityId, s.SchoolId),
+                selector: s => new GetDocumentResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId, s.SchoolId),
                 predicate: s => s.Id.Equals(id) && s.DelFlg != true);
             if (document == null)
             {
@@ -171,7 +172,7 @@ namespace Bean_Mind.API.Service.Implement
             document.Title = string.IsNullOrEmpty(request.Title) ? document.Title : request.Title;
             document.Description = string.IsNullOrEmpty(request.Description) ? document.Description : request.Description;
 
-            if (request.Url != null )
+            if (request.Url != null)
             {
                 try
                 {
@@ -195,7 +196,7 @@ namespace Bean_Mind.API.Service.Implement
             return isSuccessful;
         }
 
-        
+
         public async Task<bool> RemoveDocument(Guid id)
         {
             if (id == Guid.Empty)
@@ -208,7 +209,7 @@ namespace Bean_Mind.API.Service.Implement
 
                 throw new BadHttpRequestException(MessageConstant.DocumentMessage.DocumentNotFound);
             }
-           
+
             document.UpdDate = TimeUtils.GetCurrentSEATime();
             document.DelFlg = true;
 

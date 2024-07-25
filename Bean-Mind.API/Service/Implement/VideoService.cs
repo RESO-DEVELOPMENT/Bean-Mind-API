@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Videos;
+using Bean_Mind.API.Payload.Response.GoogleDrivers;
 using Bean_Mind.API.Payload.Response.Videos;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
@@ -28,11 +29,14 @@ namespace Bean_Mind.API.Service.Implement
             if (account == null || account.SchoolId == null)
                 throw new Exception("Account or SchoolId is null");
 
+            GoogleDriverResponce googleDriverResponce = await _driveService.UploadToGoogleDriveAsync(request.Url);
+
             var newVideo = new Video()
             {
                 Id = Guid.NewGuid(),
                 Title = request.Title,
                 Description = request.Description,
+                Url = googleDriverResponce.Url,
                 SchoolId = account.SchoolId.Value,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
@@ -52,27 +56,54 @@ namespace Bean_Mind.API.Service.Implement
                 newVideo.ActivityId = activityId;
             }
 
-            string url = await _driveService.UploadToGoogleDriveAsync(request.Url);
-            newVideo.Url = url;
-
-            await _unitOfWork.GetRepository<Video>().InsertAsync(newVideo);
-            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
-
             CreateNewVideoResponse createNewVideoResponse = null;
-            if (isSuccessful)
+
+            if (!googleDriverResponce.Existed)
             {
-                createNewVideoResponse = new CreateNewVideoResponse()
+                await _unitOfWork.GetRepository<Video>().InsertAsync(newVideo);
+                bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+
+                if (isSuccessful)
                 {
-                    Id = newVideo.Id,
-                    Title = newVideo.Title,
-                    Description = newVideo.Description,
-                    Url = newVideo.Url,
-                    ActivityId = newVideo.ActivityId,
-                    SchoolId = account.SchoolId,
-                    InsDate = newVideo.InsDate,
-                    UpdDate = newVideo.UpdDate,
-                    DelFlg = newVideo.DelFlg
-                };
+                    createNewVideoResponse = new CreateNewVideoResponse()
+                    {
+                        Id = newVideo.Id,
+                        Title = newVideo.Title,
+                        Description = newVideo.Description,
+                        Url = newVideo.Url,
+                        ActivityId = newVideo.ActivityId,
+                        SchoolId = account.SchoolId,
+                        InsDate = newVideo.InsDate,
+                        UpdDate = newVideo.UpdDate,
+                        DelFlg = newVideo.DelFlg
+                    };
+                }
+            }
+            else
+            {
+                var video = await _unitOfWork.GetRepository<Video>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(googleDriverResponce.Url));
+       
+                video.DelFlg = true;
+                video.UpdDate = TimeUtils.GetCurrentSEATime();
+
+                _unitOfWork.GetRepository<Video>().UpdateAsync(video);
+                bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+
+                if (isSuccessful)
+                {
+                    createNewVideoResponse = new CreateNewVideoResponse()
+                    {
+                        Id = video.Id,
+                        Title = video.Title,
+                        Description = video.Description,
+                        Url = video.Url,
+                        ActivityId = video.ActivityId,
+                        SchoolId = account.SchoolId,
+                        InsDate = video.InsDate,
+                        UpdDate = video.UpdDate,
+                        DelFlg = video.DelFlg
+                    };
+                }
             }
 
             return createNewVideoResponse;
