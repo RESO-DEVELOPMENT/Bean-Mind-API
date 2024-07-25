@@ -1,4 +1,5 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using Bean_Mind.API.Payload.Response.GoogleDrivers;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
 
@@ -13,7 +14,7 @@ namespace Bean_Mind.API.Service
             _configuration = configuration;
         }
 
-        public async Task<string> UploadToGoogleDriveAsync(IFormFile fileToUpload)
+        public async Task<GoogleDriverResponce> UploadToGoogleDriveAsync(IFormFile fileToUpload)
         {
             var allowedExtensions = new List<string> { ".docx", ".pdf", ".mov", ".xlsx", ".mp4", ".pdf" };
 
@@ -65,12 +66,14 @@ namespace Bean_Mind.API.Service
 
                 var fileList = await listRequest.ExecuteAsync();
 
+
                 if (fileList.Files.Count > 0)
                 {
-                    //// Nếu tệp đã tồn tại, trả về liên kết của tệp hiện có
-                    //string existingFileId = fileList.Files.First().Id;
-                    //string existingFileUrl = $"https://drive.google.com/file/d/{existingFileId}/view?usp=sharing";
-                    return "File đã tồn tại.";
+                    // Nếu tệp đã tồn tại, trả về liên kết của tệp hiện có
+                    string existingFileId = fileList.Files.First().Id;
+                    string existingFileUrl = $"https://drive.google.com/file/d/{existingFileId}/view?usp=sharing";
+                    GoogleDriverResponce googleDriverResponce = new GoogleDriverResponce{Url = existingFileUrl, Existed = true };
+                    return googleDriverResponce;
                 }
 
                 // Tạo metadata cho tệp
@@ -92,7 +95,8 @@ namespace Bean_Mind.API.Service
                 // Lấy thông tin tệp đã tải lên
                 var file = request.ResponseBody;
                 string fileUrl = $"https://drive.google.com/file/d/{file.Id}/view?usp=sharing";
-                return fileUrl;
+                GoogleDriverResponce googleDriverResponce1 = new GoogleDriverResponce { Url = fileUrl, Existed = false };
+                return googleDriverResponce1;
             }
             catch (Exception ex)
             {
