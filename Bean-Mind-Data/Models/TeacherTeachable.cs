@@ -16,12 +16,6 @@ public partial class TeacherTeachable
 
     public Guid SubjectId { get; set; }
 
-    [StringLength(50)]
-    public string TeacherFirstName { get; set; } = null!;
-
-    [StringLength(50)]
-    public string TeacherLastname { get; set; } = null!;
-
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
 
