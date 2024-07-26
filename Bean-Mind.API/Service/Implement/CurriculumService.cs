@@ -121,6 +121,36 @@ namespace Bean_Mind.API.Service.Implement
                             predicate: t => t.ChapterId.Equals(chapter.Id) && t.DelFlg == false);
                         foreach (var topic in topics)
                         {
+                            foreach (var activity in topic.Activities)
+                            {
+                                foreach (var video in activity.Videos)
+                                {
+                                    video.DelFlg = true;
+                                    video.UpdDate = TimeUtils.GetCurrentSEATime();
+                                    _unitOfWork.GetRepository<Video>().UpdateAsync(video);
+                                }
+                                foreach (var document in activity.Documents)
+                                {
+                                    document.DelFlg = true;
+                                    document.UpdDate = TimeUtils.GetCurrentSEATime();
+                                    _unitOfWork.GetRepository<Document>().UpdateAsync(document);
+                                }
+                                foreach (var workSheet in activity.WorkSheets)
+                                {
+                                    foreach (var worksheetQuestion in workSheet.WorksheetQuestions)
+                                    {
+                                        worksheetQuestion.DelFlg = true;
+                                        worksheetQuestion.UpdDate = TimeUtils.GetCurrentSEATime();
+                                        _unitOfWork.GetRepository<WorksheetQuestion>().UpdateAsync(worksheetQuestion);
+                                    }
+                                    workSheet.DelFlg = true;
+                                    workSheet.UpdDate = TimeUtils.GetCurrentSEATime();
+                                    _unitOfWork.GetRepository<WorkSheet>().UpdateAsync(workSheet);
+                                }
+                                activity.DelFlg = true;
+                                activity.UpdDate = TimeUtils.GetCurrentSEATime();
+                                _unitOfWork.GetRepository<Activity>().UpdateAsync(activity);
+                            }
                             topic.DelFlg = true;
                             topic.UpdDate = TimeUtils.GetCurrentSEATime();
                             _unitOfWork.GetRepository<Topic>().UpdateAsync(topic);
@@ -128,6 +158,23 @@ namespace Bean_Mind.API.Service.Implement
                         chapter.DelFlg = true;
                         chapter.UpdDate = TimeUtils.GetCurrentSEATime();
                         _unitOfWork.GetRepository<Chapter>().UpdateAsync(chapter);
+                    }
+                    var teacherTechables = await _unitOfWork.GetRepository<TeacherTeachable>().GetListAsync(
+                        predicate: t => t.SubjectId.Equals(subject.Id) && t.DelFlg != true);
+                    foreach (var teacherTechable in teacherTechables)
+                    {
+                        teacherTechable.DelFlg = true;
+                        teacherTechable.UpdDate = TimeUtils.GetCurrentSEATime();
+                        _unitOfWork.GetRepository<TeacherTeachable>().UpdateAsync(teacherTechable);
+                    }
+
+                    var worksheetTemplates = await _unitOfWork.GetRepository<WorksheetTemplate>().GetListAsync(
+                        predicate: w => w.SubjectId.Equals(subject.Id) && w.DelFlg != true);
+                    foreach (var worksheetTemplate in worksheetTemplates)
+                    {
+                        worksheetTemplate.DelFlg = true;
+                        worksheetTemplate.UpdDate = TimeUtils.GetCurrentSEATime();
+                        _unitOfWork.GetRepository<WorksheetTemplate>().UpdateAsync(worksheetTemplate);
                     }
                     subject.DelFlg = true;
                     subject.UpdDate = TimeUtils.GetCurrentSEATime();

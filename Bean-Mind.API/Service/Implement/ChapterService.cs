@@ -163,6 +163,38 @@ namespace Bean_Mind.API.Service.Implement
             var topics = await _unitOfWork.GetRepository<Topic>().GetListAsync(predicate: c => c.ChapterId.Equals(id) && c.DelFlg != true);
             foreach (var topic in topics)
             {
+                var activities = await _unitOfWork.GetRepository<Activity>().GetListAsync(
+                    predicate: a => a.TopicId.Equals(topic.Id) && a.DelFlg != true);
+                foreach (var activity in activities)
+                {
+                    foreach (var video in activity.Videos)
+                    {
+                        video.DelFlg = true;
+                        video.UpdDate = TimeUtils.GetCurrentSEATime();
+                        _unitOfWork.GetRepository<Video>().UpdateAsync(video);
+                    }
+                    foreach (var document in activity.Documents)
+                    {
+                        document.DelFlg = true;
+                        document.UpdDate = TimeUtils.GetCurrentSEATime();
+                        _unitOfWork.GetRepository<Document>().UpdateAsync(document);
+                    }
+                    foreach (var workSheet in activity.WorkSheets)
+                    {
+                        foreach (var worksheetQuestion in workSheet.WorksheetQuestions)
+                        {
+                            worksheetQuestion.DelFlg = true;
+                            worksheetQuestion.UpdDate = TimeUtils.GetCurrentSEATime();
+                            _unitOfWork.GetRepository<WorksheetQuestion>().UpdateAsync(worksheetQuestion);
+                        }
+                        workSheet.DelFlg = true;
+                        workSheet.UpdDate = TimeUtils.GetCurrentSEATime();
+                        _unitOfWork.GetRepository<WorkSheet>().UpdateAsync(workSheet);
+                    }
+                    activity.DelFlg = true;
+                    activity.UpdDate = TimeUtils.GetCurrentSEATime();
+                    _unitOfWork.GetRepository<Activity>().UpdateAsync(activity);
+                }
                 topic.DelFlg = true;
                 topic.UpdDate = TimeUtils.GetCurrentSEATime();
                 _unitOfWork.GetRepository<Topic>().UpdateAsync(topic);
