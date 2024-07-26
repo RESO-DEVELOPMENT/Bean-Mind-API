@@ -2,6 +2,7 @@
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.QuestionAnswers;
 using Bean_Mind.API.Payload.Request.Questions;
+using Bean_Mind.API.Payload.Response.GoogleDrivers;
 using Bean_Mind.API.Payload.Response.Question;
 using Bean_Mind.API.Payload.Response.QuestionAnswers;
 using Bean_Mind.API.Payload.Response.Questions;
@@ -43,10 +44,11 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.QuestionMessage.QuestionLevelNotFound);
             }
             string url = null;
-            if(img != null)
+            if (img != null)
             {
-                url = await _driveService.UploadToGoogleDriveAsync(img);
-               
+
+                GoogleDriverResponce googleDriverResponce = await _driveService.UploadToGoogleDriveAsync(img);
+                url = googleDriverResponce.Url;
             }
             Question newQuestion = new Question
             {

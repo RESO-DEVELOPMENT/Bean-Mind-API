@@ -82,8 +82,8 @@ namespace Bean_Mind.API.Service.Implement
             else
             {
                 var video = await _unitOfWork.GetRepository<Video>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(googleDriverResponce.Url));
-       
-                video.DelFlg = true;
+
+                video.DelFlg = false;
                 video.UpdDate = TimeUtils.GetCurrentSEATime();
 
                 _unitOfWork.GetRepository<Video>().UpdateAsync(video);
@@ -198,8 +198,8 @@ namespace Bean_Mind.API.Service.Implement
             {
                 try
                 {
-                    string newUrl = await _driveService.UploadToGoogleDriveAsync(request.Url);
-                    video.Url = newUrl;
+                    GoogleDriverResponce googleDriverResponce = await _driveService.UploadToGoogleDriveAsync(request.Url);
+                    video.Url = googleDriverResponce.Url;
                 }
                 catch (Exception ex)
                 {
