@@ -5,7 +5,6 @@
         public Guid? Id { get; set; }
         public Guid? StudentId { get; set; }
         public Guid? CourseId { get; set; }
-        public string FristName {  get; set; }
-        public string LastName { get; set; }
+        public string? StudentName {  get; set; }
     }
 }

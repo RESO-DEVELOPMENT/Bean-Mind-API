@@ -99,9 +99,7 @@ namespace Bean_Mind.API.Service.Implement
                     Id = s.Id,
                     StudentId = s.StudentId,
                     CourseId = s.CourseId,
-                    FristName = s.Student.FirstName,
-                    LastName = s.Student.LastName
-                },
+                    StudentName = s.Student.FirstName + " " + s.Student.LastName                },
                 predicate: s => s.DelFlg != true && s.Course.SchoolId.Equals(account.SchoolId),
                 page: page,
                 size: size
