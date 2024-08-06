@@ -7,6 +7,8 @@ using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Payload.Response.Subjects;
 using Bean_Mind.API.Payload.Response.StudentInCourse;
 using Bean_Mind.API.Service.Implement;
+using Microsoft.AspNetCore.Authorization;
+using Bean_Mind_Data.Enums;
 
 namespace Bean_Mind.API.Controllers
     {
@@ -17,6 +19,8 @@ namespace Bean_Mind.API.Controllers
             {
             _courseService = courseService;
             }
+
+            [Authorize(Roles = "SysSchool")]    
             [HttpPost(ApiEndPointConstant.Course.Create)]
             [ProducesResponseType(typeof(CreateNewCourseResponse), StatusCodes.Status200OK)]
             [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -57,6 +61,7 @@ namespace Bean_Mind.API.Controllers
                 return Ok(response);
             }
 
+            [Authorize(Roles = "SysSchool")]
             [HttpDelete(ApiEndPointConstant.Course.DeleteCourse)]
             [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
             [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -98,6 +103,7 @@ namespace Bean_Mind.API.Controllers
                 return Ok(response);
             }
 
+            [Authorize(Roles = "SysSchool")]
             [HttpPatch(ApiEndPointConstant.Course.UpdateCourse)]
             [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
             [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -118,6 +124,7 @@ namespace Bean_Mind.API.Controllers
 
             }
 
+            [Authorize(Roles = "SysSchool")]
             [HttpGet(ApiEndPointConstant.Course.GetStudentInCourseByCourse)]
             [ProducesResponseType(typeof(IPaginate<GetStudentInCourseResponse>), StatusCodes.Status200OK)]
             [ProducesErrorResponseType(typeof(ProblemDetails))]
