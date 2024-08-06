@@ -39,7 +39,9 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.PatternMessage.PhoneIncorrect);
             }
 
-            Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Phone.Equals(parentPhone) && p.DelFlg != true);
+            Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(
+                predicate: p => p.Phone.Equals(parentPhone)
+                && p.DelFlg != true);
             if (parent == null)
             {
                 throw new BadHttpRequestException(MessageConstant.ParentMessage.ParentNotFound);
@@ -47,7 +49,9 @@ namespace Bean_Mind.API.Service.Implement
 
             //Create Account
             var accountS = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
-                predicate: account => account.UserName.Equals(request.UserName) && account.DelFlg != true
+                predicate: account => account.UserName.Equals(request.UserName) 
+                && account.SchoolId.Equals(accountExist.SchoolId) 
+                && account.DelFlg != true
                 );
             if (accountS != null)
             {

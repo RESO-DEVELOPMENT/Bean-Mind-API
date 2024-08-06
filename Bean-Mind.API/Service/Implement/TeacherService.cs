@@ -45,21 +45,27 @@ namespace Bean_Mind.API.Service.Implement
             }
 
             Teacher phoneTeacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
-                predicate: t => t.Phone.Equals(newTeacherRequest.Phone) && t.DelFlg != true);
+                predicate: t => t.Phone.Equals(newTeacherRequest.Phone) 
+                && t.Account.SchoolId.Equals(accountExist.SchoolId) 
+                && t.DelFlg != true);
             if(phoneTeacher != null)
             {
                 throw new BadHttpRequestException(MessageConstant.TeacherMessage.TeacherPhoneExisted);
             }
 
             Teacher emailTeacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
-                predicate: t => t.Email.Equals(newTeacherRequest.Email) && t.DelFlg != true);
+                predicate: t => t.Email.Equals(newTeacherRequest.Email) 
+                && t.Account.SchoolId.Equals(accountExist.SchoolId)
+                && t.DelFlg != true);
             if (emailTeacher != null)
             {
                 throw new BadHttpRequestException(MessageConstant.TeacherMessage.TeacherEmailExisted);
             }
 
             var accountS = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
-                predicate: account => account.UserName.Equals(newTeacherRequest.UserName) && account.DelFlg != true
+                predicate: account => account.UserName.Equals(newTeacherRequest.UserName) 
+                && account.SchoolId.Equals(accountExist.SchoolId)
+                && account.DelFlg != true
                 );
             if (accountS != null)
             {

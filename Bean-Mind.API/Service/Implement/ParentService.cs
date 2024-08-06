@@ -30,7 +30,10 @@ namespace Bean_Mind.API.Service.Implement
             if (accountExist == null)
                 throw new Exception("Account or SchoolId is null");
 
-            var accounts = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(predicate: account => account.UserName.Equals(newParentRequest.UserName) && account.DelFlg != true);
+            var accounts = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: account => account.UserName.Equals(newParentRequest.UserName) 
+                && account.SchoolId.Equals(accountExist.SchoolId) 
+                && account.DelFlg != true);
             if (accounts != null)
             {
                 throw new BadHttpRequestException(MessageConstant.AccountMessage.UsernameExisted);
@@ -42,7 +45,10 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.PatternMessage.PhoneIncorrect);
             }
 
-            Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(predicate: p => p.Phone.Equals(newParentRequest.Phone) && p.DelFlg != true);
+            Parent parent = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(
+                predicate: p => p.Phone.Equals(newParentRequest.Phone) 
+                && p.Account.SchoolId.Equals(accountExist.SchoolId) 
+                && p.DelFlg != true);
             if (parent != null)
             {
                 throw new BadHttpRequestException(MessageConstant.ParentMessage.ParentPhoneExisted);
@@ -55,7 +61,9 @@ namespace Bean_Mind.API.Service.Implement
             }
 
             Parent parentExist = await _unitOfWork.GetRepository<Parent>().SingleOrDefaultAsync(
-                predicate: p => p.Email.Equals(newParentRequest.Email) && p.DelFlg != true);
+                predicate: p => p.Email.Equals(newParentRequest.Email) 
+                && p.Account.SchoolId.Equals(accountExist.SchoolId) 
+                && p.DelFlg != true);
             if (parentExist != null)
             {
                 throw new BadHttpRequestException(MessageConstant.ParentMessage.ParentEmailExisted);
