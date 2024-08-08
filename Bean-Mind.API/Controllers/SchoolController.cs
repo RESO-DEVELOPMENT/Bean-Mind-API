@@ -21,11 +21,9 @@ namespace Bean_Mind.API.Controllers
         [HttpPost(ApiEndPointConstant.School.CreateSchool)]
         [ProducesResponseType(typeof(CreateNewSchoolResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> CreateSchool([FromBody] CreateNewSchoolRequest createNewSchoolRequest)
+        public async Task<IActionResult> CreateSchool([FromForm] CreateNewSchoolRequest createNewSchoolRequest)
         {
-
-            CreateNewSchoolResponse response =
-                await _schoolService.CreateNewSchool(createNewSchoolRequest);
+            CreateNewSchoolResponse response = await _schoolService.CreateNewSchool(createNewSchoolRequest);
             if (response == null)
             {
                 return Problem(MessageConstant.SchoolMessage.CreateNewSchoolFailedMessage);
@@ -33,6 +31,7 @@ namespace Bean_Mind.API.Controllers
 
             return CreatedAtAction(nameof(CreateSchool), response);
         }
+
 
         [HttpGet(ApiEndPointConstant.School.GetListSchool)]
         [ProducesResponseType(typeof(IPaginate<GetSchoolResponse>), StatusCodes.Status200OK)]

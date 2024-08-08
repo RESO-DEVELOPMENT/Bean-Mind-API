@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Schools;
 using Bean_Mind.API.Payload.Response.Curriculums;
+using Bean_Mind.API.Payload.Response.GoogleDrivers;
 using Bean_Mind.API.Payload.Response.QuestionLevels;
 using Bean_Mind.API.Payload.Response.Schools;
 using Bean_Mind.API.Service.Interface;
@@ -10,6 +12,7 @@ using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
+using Google.Apis.Drive.v3;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 
@@ -17,26 +20,32 @@ namespace Bean_Mind.API.Service.Implement
 {
     public class SchoolService : BaseService<SchoolService>, ISchoolService
     {
-        public SchoolService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<SchoolService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, logger, mapper, httpContextAccessor)
+        private readonly GoogleDriveService _driveService;
+
+        public SchoolService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<SchoolService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor, GoogleDriveService driveService) : base(unitOfWork, logger, mapper, httpContextAccessor)
         {
+            _driveService = driveService;
         }
 
         public async Task<CreateNewSchoolResponse> CreateNewSchool(CreateNewSchoolRequest createNewSchoolRequest)
         {
             _logger.LogInformation($"Create new School with {createNewSchoolRequest.Name}");
 
+            // Kiểm tra định dạng số điện thoại
             string phonePattern = @"^0\d{9}$";
             if (!Regex.IsMatch(createNewSchoolRequest.Phone, phonePattern))
             {
                 throw new BadHttpRequestException(MessageConstant.PatternMessage.PhoneIncorrect);
             }
 
+            // Kiểm tra định dạng email
             string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             if (!Regex.IsMatch(createNewSchoolRequest.Email, emailPattern))
             {
                 throw new BadHttpRequestException(MessageConstant.PatternMessage.EmailIncorrect);
             }
 
+            // Kiểm tra số điện thoại đã tồn tại
             School phoneSchool = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(
                 predicate: s => s.Phone.Equals(createNewSchoolRequest.Phone) && s.DelFlg != true);
             if (phoneSchool != null)
@@ -44,6 +53,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolPhoneExisted);
             }
 
+            // Kiểm tra email đã tồn tại
             School emailSchool = await _unitOfWork.GetRepository<School>().SingleOrDefaultAsync(
                 predicate: s => s.Email.Equals(createNewSchoolRequest.Email) && s.DelFlg != true);
             if (emailSchool != null)
@@ -51,13 +61,17 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.SchoolMessage.SchoolEmailExisted);
             }
 
+            // Tải lên Google Drive và lấy URL
+            GoogleDriverResponce googleDriverResponce = await _driveService.UploadToGoogleDriveAsync(createNewSchoolRequest.Logo);
+
+            // Tạo đối tượng School mới
             School newSchool = new School()
             {
                 Id = Guid.NewGuid(),
                 Name = createNewSchoolRequest.Name,
                 Address = createNewSchoolRequest.Address,
                 Phone = createNewSchoolRequest.Phone,
-                Logo = createNewSchoolRequest.Logo,
+                Logo = googleDriverResponce.Url,
                 Description = createNewSchoolRequest.Description,
                 Email = createNewSchoolRequest.Email,
                 InsDate = TimeUtils.GetCurrentSEATime(),
@@ -66,16 +80,17 @@ namespace Bean_Mind.API.Service.Implement
             };
 
             await _unitOfWork.GetRepository<School>().InsertAsync(newSchool);
-            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+            bool isSchoolCreated = await _unitOfWork.CommitAsync() > 0;
 
+            // Kiểm tra tên tài khoản đã tồn tại
             var accountS = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
-                predicate: account => account.UserName.Equals(createNewSchoolRequest.UserName) && account.DelFlg != true
-                );
+                predicate: account => account.UserName.Equals(createNewSchoolRequest.UserName) && account.DelFlg != true);
             if (accountS != null)
             {
                 throw new BadHttpRequestException(MessageConstant.AccountMessage.UsernameExisted);
             }
 
+            // Tạo đối tượng Account mới
             Account account = new Account()
             {
                 Id = Guid.NewGuid(),
@@ -87,10 +102,13 @@ namespace Bean_Mind.API.Service.Implement
                 Role = RoleEnum.SysSchool.GetDescriptionFromEnum(),
                 SchoolId = newSchool.Id,
             };
+
             await _unitOfWork.GetRepository<Account>().InsertAsync(account);
             await _unitOfWork.CommitAsync();
+
             CreateNewSchoolResponse createNewSchoolResponse = null;
-            if (isSuccessful)
+
+            if (isSchoolCreated)
             {
                 createNewSchoolResponse = new CreateNewSchoolResponse()
                 {
@@ -108,6 +126,8 @@ namespace Bean_Mind.API.Service.Implement
 
             return createNewSchoolResponse;
         }
+
+
 
         public async Task<bool> deleteSchool(Guid Id)
         {

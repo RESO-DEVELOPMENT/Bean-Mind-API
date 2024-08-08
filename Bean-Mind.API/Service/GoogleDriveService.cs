@@ -16,7 +16,7 @@ namespace Bean_Mind.API.Service
 
         public async Task<GoogleDriverResponce> UploadToGoogleDriveAsync(IFormFile fileToUpload)
         {
-            var allowedExtensions = new List<string> { ".docx", ".pdf", ".mov", ".xlsx", ".mp4", ".pdf" };
+            var allowedExtensions = new List<string> { ".docx", ".pdf", ".mov", ".xlsx", ".mp4", ".jpg" };
 
             // Lấy đuôi file từ file được tải lên
             var fileExtension = Path.GetExtension(fileToUpload.FileName).ToLower();
