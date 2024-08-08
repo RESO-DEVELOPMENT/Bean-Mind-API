@@ -29,7 +29,7 @@ namespace Bean_Mind.API.Service.Implement
             var accountExist = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
                 predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
                 );
-            if (accountExist == null)
+            if (accountExist.SchoolId == null || accountExist == null)
                 throw new Exception("Account or SchoolId is null");
 
             string phonePattern = @"^0\d{9}$";

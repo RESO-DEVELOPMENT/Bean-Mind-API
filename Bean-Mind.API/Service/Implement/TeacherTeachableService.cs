@@ -22,7 +22,13 @@ namespace Bean_Mind.API.Service.Implement
         {
             _logger.LogInformation($"Create new teacher-teachable relationship with TeacherID: {request.TeacherId} and SubjectID: {request.SubjectId}");
 
-            
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
             var subjectExist = await _unitOfWork.GetRepository<Subject>().SingleOrDefaultAsync(
                 predicate: s => s.Id.Equals(request.SubjectId) && s.DelFlg != true
             );
