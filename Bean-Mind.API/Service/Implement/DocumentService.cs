@@ -2,7 +2,6 @@
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Documents;
 using Bean_Mind.API.Payload.Response.Documents;
-using Bean_Mind.API.Payload.Response.GoogleDrivers;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
 using Bean_Mind_Business.Repository.Interface;
@@ -31,14 +30,14 @@ namespace Bean_Mind.API.Service.Implement
 
             _logger.LogInformation($"Creating new Document with title: {request.Title}");
 
-            GoogleDriverResponce googleDriverResponce = await _driveService.UploadToGoogleDriveAsync(request.Url);
+            string url = await _driveService.UploadToGoogleDriveAsync(request.Url);
 
             var newDocument = new Document()
             {
                 Id = Guid.NewGuid(),
                 Title = request.Title,
                 Description = request.Description,
-                Url = googleDriverResponce.Url,
+                Url = url,
                 SchoolId = account.SchoolId.Value,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
@@ -60,52 +59,23 @@ namespace Bean_Mind.API.Service.Implement
 
             CreateNewDocumentResponse createNewDocumentResponse = null;
 
-            if (!googleDriverResponce.Existed)
+            await _unitOfWork.GetRepository<Document>().InsertAsync(newDocument);
+            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+
+            if (isSuccessful)
             {
-
-                await _unitOfWork.GetRepository<Document>().InsertAsync(newDocument);
-                bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
-
-                if (isSuccessful)
+                createNewDocumentResponse = new CreateNewDocumentResponse()
                 {
-                    createNewDocumentResponse = new CreateNewDocumentResponse()
-                    {
-                        Id = newDocument.Id,
-                        Title = newDocument.Title,
-                        Description = newDocument.Description,
-                        ActivityId = newDocument.ActivityId,
-                        SchoolId = newDocument.SchoolId,
-                        DelFlg = newDocument.DelFlg,
-                        InsDate = newDocument.InsDate,
-                        UpdDate = newDocument.UpdDate,
-                        Url = newDocument.Url,
-                    };
-                }
-            }
-            else
-            {
-                var document = await _unitOfWork.GetRepository<Document>().SingleOrDefaultAsync(predicate: s => s.Url.Equals(googleDriverResponce.Url));
-
-                document.UpdDate = TimeUtils.GetCurrentSEATime();
-                document.DelFlg = false;
-
-                _unitOfWork.GetRepository<Document>().UpdateAsync(document);
-                bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
-                if (isSuccessful)
-                {
-                    createNewDocumentResponse = new CreateNewDocumentResponse()
-                    {
-                        Id = document.Id,
-                        Title = document.Title,
-                        Description = document.Description,
-                        ActivityId = document.ActivityId,
-                        SchoolId = document.SchoolId,
-                        DelFlg = document.DelFlg,
-                        InsDate = document.InsDate,
-                        UpdDate = document.UpdDate,
-                        Url = document.Url,
-                    };
-                }
+                    Id = newDocument.Id,
+                    Title = newDocument.Title,
+                    Description = newDocument.Description,
+                    ActivityId = newDocument.ActivityId,
+                    SchoolId = newDocument.SchoolId,
+                    DelFlg = newDocument.DelFlg,
+                    InsDate = newDocument.InsDate,
+                    UpdDate = newDocument.UpdDate,
+                    Url = newDocument.Url,
+                };
             }
 
             return createNewDocumentResponse;
@@ -177,9 +147,7 @@ namespace Bean_Mind.API.Service.Implement
                 try
                 {
                     // Assuming request.Url is the new file to be uploaded
-                    GoogleDriverResponce googleDriverResponce = await _driveService.UploadToGoogleDriveAsync(request.Url);
-                    string newUrl = googleDriverResponce.Url;
-                    document.Url = newUrl;
+                    document.Url = await _driveService.UploadToGoogleDriveAsync(request.Url);
                 }
                 catch (Exception ex)
                 {

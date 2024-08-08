@@ -3,7 +3,6 @@ using Azure.Core;
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Schools;
 using Bean_Mind.API.Payload.Response.Curriculums;
-using Bean_Mind.API.Payload.Response.GoogleDrivers;
 using Bean_Mind.API.Payload.Response.QuestionLevels;
 using Bean_Mind.API.Payload.Response.Schools;
 using Bean_Mind.API.Service.Interface;
@@ -62,7 +61,7 @@ namespace Bean_Mind.API.Service.Implement
             }
 
             // Tải lên Google Drive và lấy URL
-            GoogleDriverResponce googleDriverResponce = await _driveService.UploadToGoogleDriveAsync(createNewSchoolRequest.Logo);
+            string url   = await _driveService.UploadToGoogleDriveAsync(createNewSchoolRequest.Logo);
 
             // Tạo đối tượng School mới
             School newSchool = new School()
@@ -71,7 +70,7 @@ namespace Bean_Mind.API.Service.Implement
                 Name = createNewSchoolRequest.Name,
                 Address = createNewSchoolRequest.Address,
                 Phone = createNewSchoolRequest.Phone,
-                Logo = googleDriverResponce.Url,
+                Logo = url,
                 Description = createNewSchoolRequest.Description,
                 Email = createNewSchoolRequest.Email,
                 InsDate = TimeUtils.GetCurrentSEATime(),

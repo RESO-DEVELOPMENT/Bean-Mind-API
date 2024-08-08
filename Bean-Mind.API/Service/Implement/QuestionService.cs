@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.QuestionAnswers;
-using Bean_Mind.API.Payload.Request.Questions;
-using Bean_Mind.API.Payload.Response.GoogleDrivers;
 using Bean_Mind.API.Payload.Response.Question;
 using Bean_Mind.API.Payload.Response.QuestionAnswers;
 using Bean_Mind.API.Payload.Response.Questions;
@@ -46,9 +44,7 @@ namespace Bean_Mind.API.Service.Implement
             string url = null;
             if (img != null)
             {
-
-                GoogleDriverResponce googleDriverResponce = await _driveService.UploadToGoogleDriveAsync(img);
-                url = googleDriverResponce.Url;
+                url = await _driveService.UploadToGoogleDriveAsync(img);
             }
             Question newQuestion = new Question
             {

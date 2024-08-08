@@ -6,6 +6,7 @@ using Bean_Mind.API.Payload.Response.Teachers;
 using Bean_Mind_Data.Paginate;
 using Bean_Mind.API.Payload;
 using Bean_Mind.API.Utils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bean_Mind.API.Controllers
 {
@@ -23,7 +24,7 @@ namespace Bean_Mind.API.Controllers
             _teacherService = teacherService;
         }
 
-
+        [Authorize(Roles = "SysSchool")]
         [HttpPost(ApiEndPointConstant.Teacher.Create)]
         [ProducesResponseType(typeof(CreateNewTeacherResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
@@ -52,6 +53,8 @@ namespace Bean_Mind.API.Controllers
 
             return Ok(response);
         }
+
+        [Authorize(Roles = "SysSchool")]
         [HttpGet(ApiEndPointConstant.Teacher.GetAll)]
         [ProducesResponseType(typeof(IPaginate<GetTeacherResponse>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllTeachers([FromQuery] int? page, [FromQuery] int? size)
