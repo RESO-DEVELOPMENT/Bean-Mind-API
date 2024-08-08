@@ -34,6 +34,7 @@ namespace Bean_Mind.API.Utils
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.NameId, account.Id.ToString()),
             new Claim(ClaimTypes.Role, account.Role),
+            new Claim(ClaimTypes.Name, account.UserName)
         };
             if (guidClaim != null) claims.Add(new Claim(guidClaim.Item1, guidClaim.Item2.ToString()));
             var expires = account.Role.Equals(RoleEnum.Teacher.GetDescriptionFromEnum())

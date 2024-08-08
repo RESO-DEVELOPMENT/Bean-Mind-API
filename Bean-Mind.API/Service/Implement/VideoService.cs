@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Bean_Mind.API.Constants;
 using Bean_Mind.API.Payload.Request.Videos;
-using Bean_Mind.API.Payload.Response.GoogleDrivers;
 using Bean_Mind.API.Payload.Response.Videos;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind.API.Utils;
@@ -29,14 +28,14 @@ namespace Bean_Mind.API.Service.Implement
             if (account == null || account.SchoolId == null)
                 throw new Exception("Account or SchoolId is null");
 
-            GoogleDriverResponce googleDriverResponce = await _driveService.UploadToGoogleDriveAsync(request.Url);
+            string url = await _driveService.UploadToGoogleDriveAsync(request.Url);
 
             var newVideo = new Video()
             {
                 Id = Guid.NewGuid(),
                 Title = request.Title,
                 Description = request.Description,
-                Url = googleDriverResponce.Url,
+                Url = url,
                 SchoolId = account.SchoolId.Value,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
@@ -58,52 +57,24 @@ namespace Bean_Mind.API.Service.Implement
 
             CreateNewVideoResponse createNewVideoResponse = null;
 
-            if (!googleDriverResponce.Existed)
+            await _unitOfWork.GetRepository<Video>().InsertAsync(newVideo);
+            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+
+            if (isSuccessful)
             {
-                await _unitOfWork.GetRepository<Video>().InsertAsync(newVideo);
-                bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
-
-                if (isSuccessful)
+                createNewVideoResponse = new CreateNewVideoResponse()
                 {
-                    createNewVideoResponse = new CreateNewVideoResponse()
-                    {
-                        Id = newVideo.Id,
-                        Title = newVideo.Title,
-                        Description = newVideo.Description,
-                        Url = newVideo.Url,
-                        ActivityId = newVideo.ActivityId,
-                        SchoolId = account.SchoolId,
-                        InsDate = newVideo.InsDate,
-                        UpdDate = newVideo.UpdDate,
-                        DelFlg = newVideo.DelFlg
-                    };
-                }
-            }
-            else
-            {
-                var video = await _unitOfWork.GetRepository<Video>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(googleDriverResponce.Url));
+                    Id = newVideo.Id,
+                    Title = newVideo.Title,
+                    Description = newVideo.Description,
+                    Url = newVideo.Url,
+                    ActivityId = newVideo.ActivityId,
+                    SchoolId = account.SchoolId,
+                    InsDate = newVideo.InsDate,
+                    UpdDate = newVideo.UpdDate,
+                    DelFlg = newVideo.DelFlg
+                };
 
-                video.DelFlg = false;
-                video.UpdDate = TimeUtils.GetCurrentSEATime();
-
-                _unitOfWork.GetRepository<Video>().UpdateAsync(video);
-                bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
-
-                if (isSuccessful)
-                {
-                    createNewVideoResponse = new CreateNewVideoResponse()
-                    {
-                        Id = video.Id,
-                        Title = video.Title,
-                        Description = video.Description,
-                        Url = video.Url,
-                        ActivityId = video.ActivityId,
-                        SchoolId = account.SchoolId,
-                        InsDate = video.InsDate,
-                        UpdDate = video.UpdDate,
-                        DelFlg = video.DelFlg
-                    };
-                }
             }
 
             return createNewVideoResponse;
@@ -198,8 +169,7 @@ namespace Bean_Mind.API.Service.Implement
             {
                 try
                 {
-                    GoogleDriverResponce googleDriverResponce = await _driveService.UploadToGoogleDriveAsync(request.Url);
-                    video.Url = googleDriverResponce.Url;
+                    video.Url = await _driveService.UploadToGoogleDriveAsync(request.Url);
                 }
                 catch (Exception ex)
                 {

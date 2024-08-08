@@ -1,5 +1,4 @@
-﻿using Bean_Mind.API.Payload.Response.GoogleDrivers;
-using Google.Apis.Auth.OAuth2;
+﻿using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
 
@@ -14,9 +13,9 @@ namespace Bean_Mind.API.Service
             _configuration = configuration;
         }
 
-        public async Task<GoogleDriverResponce> UploadToGoogleDriveAsync(IFormFile fileToUpload)
+        public async Task<string> UploadToGoogleDriveAsync(IFormFile fileToUpload)
         {
-            var allowedExtensions = new List<string> { ".docx", ".pdf", ".mov", ".xlsx", ".mp4", ".pdf" };
+            var allowedExtensions = new List<string> { ".docx", ".pdf", ".mov", ".xlsx", ".mp4", ".jpg", ".txt" };
 
             // Lấy đuôi file từ file được tải lên
             var fileExtension = Path.GetExtension(fileToUpload.FileName).ToLower();
@@ -24,7 +23,7 @@ namespace Bean_Mind.API.Service
             // Kiểm tra xem đuôi file có trong danh sách được phép không
             if (!allowedExtensions.Contains(fileExtension))
             {
-                throw new InvalidOperationException("Chỉ các định dạng tệp .docx, .pdf, và .mov được phép tải lên.");
+                throw new InvalidOperationException("Chỉ các định dạng tệp .docx, .pdf, .xlsx, .mp4, .jpg, .txt và .mov được phép tải lên.");
             }
 
             GoogleCredential credential;
@@ -59,23 +58,6 @@ namespace Bean_Mind.API.Service
                     ApplicationName = "Google Drive Upload Console App"
                 });
 
-                // Kiểm tra xem tệp có tồn tại trong thư mục Google Drive không
-                var listRequest = service.Files.List();
-                listRequest.Q = $"name='{fileToUpload.FileName}' and '{_configuration["Authentication:GoogleDrive:FolderId"]}' in parents and trashed=false";
-                listRequest.Fields = "files(id, name)";
-
-                var fileList = await listRequest.ExecuteAsync();
-
-
-                if (fileList.Files.Count > 0)
-                {
-                    // Nếu tệp đã tồn tại, trả về liên kết của tệp hiện có
-                    string existingFileId = fileList.Files.First().Id;
-                    string existingFileUrl = $"https://drive.google.com/file/d/{existingFileId}/view?usp=sharing";
-                    GoogleDriverResponce googleDriverResponce = new GoogleDriverResponce{Url = existingFileUrl, Existed = true };
-                    return googleDriverResponce;
-                }
-
                 // Tạo metadata cho tệp
                 var fileMetaData = new Google.Apis.Drive.v3.Data.File()
                 {
@@ -95,8 +77,7 @@ namespace Bean_Mind.API.Service
                 // Lấy thông tin tệp đã tải lên
                 var file = request.ResponseBody;
                 string fileUrl = $"https://drive.google.com/file/d/{file.Id}/view?usp=sharing";
-                GoogleDriverResponce googleDriverResponce1 = new GoogleDriverResponce { Url = fileUrl, Existed = false };
-                return googleDriverResponce1;
+                return fileUrl;
             }
             catch (Exception ex)
             {

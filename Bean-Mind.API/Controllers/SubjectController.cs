@@ -6,6 +6,7 @@ using Bean_Mind.API.Payload.Response.Subjects;
 using Bean_Mind.API.Service.Implement;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bean_Mind.API.Controllers
@@ -19,6 +20,7 @@ namespace Bean_Mind.API.Controllers
             _subjectService = subjectService;
         }
 
+        [Authorize(Roles = "SysSchool")]
         [HttpPost(ApiEndPointConstant.Subject.Create)]
         [ProducesResponseType(typeof(CreateNewSubjectResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -57,6 +59,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "SysSchool")]
         [HttpDelete(ApiEndPointConstant.Subject.DeleteSubject)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -69,6 +72,7 @@ namespace Bean_Mind.API.Controllers
 
         }
 
+        [Authorize(Roles = "SysSchool")]
         [HttpPatch(ApiEndPointConstant.Subject.UpdateSubject)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
