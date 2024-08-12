@@ -3,6 +3,7 @@ using Bean_Mind.API.Payload.Request.Documents;
 using Bean_Mind.API.Payload.Response.Documents;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bean_Mind.API.Controllers
@@ -14,6 +15,8 @@ namespace Bean_Mind.API.Controllers
         {
             _documentService = documentService;
         }
+
+        [Authorize(Roles = "Teacher")]
         [HttpPost(ApiEndPointConstant.Document.Create)]
         [ProducesResponseType(typeof(CreateNewDocumentResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -53,6 +56,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpDelete(ApiEndPointConstant.Document.DeleteDocument)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -65,6 +69,7 @@ namespace Bean_Mind.API.Controllers
 
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpPatch(ApiEndPointConstant.Document.UpdateDocument)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]

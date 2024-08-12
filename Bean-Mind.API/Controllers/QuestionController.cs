@@ -12,6 +12,7 @@ using Bean_Mind.API.Payload.Request.QuestionAnswers;
 using Bean_Mind_Data.Enums;
 using Newtonsoft.Json;
 using Bean_Mind.API.Service.Implement;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bean_Mind.API.Controllers
 {
@@ -25,6 +26,7 @@ namespace Bean_Mind.API.Controllers
             _questionService = questionService;
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpPost(ApiEndPointConstant.Question.Create)]
         [ProducesResponseType(typeof(CreateNewQuestionResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -66,6 +68,8 @@ namespace Bean_Mind.API.Controllers
             }
             return Ok(questionAnswers);
         }
+
+        [Authorize(Roles = "Teacher")]
         [HttpDelete(ApiEndPointConstant.Question.DeleteQuestion)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]

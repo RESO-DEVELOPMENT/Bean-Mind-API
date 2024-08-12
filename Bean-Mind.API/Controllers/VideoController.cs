@@ -3,6 +3,7 @@ using Bean_Mind.API.Payload.Request.Videos;
 using Bean_Mind.API.Payload.Response.Videos;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bean_Mind.API.Controllers
@@ -16,6 +17,7 @@ namespace Bean_Mind.API.Controllers
             _videoService = videoService;
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpPost(ApiEndPointConstant.Video.Create)]
         [ProducesResponseType(typeof(CreateNewVideoResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -54,6 +56,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpDelete(ApiEndPointConstant.Video.DeleteVideo)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -64,6 +67,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpPatch(ApiEndPointConstant.Video.UpdateVideo)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]

@@ -5,6 +5,7 @@ using Bean_Mind.API.Payload.Response.Curriculums;
 using Bean_Mind.API.Service.Implement;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bean_Mind.API.Controllers
@@ -16,6 +17,8 @@ namespace Bean_Mind.API.Controllers
         {
             _curriculumService = curriculumService;
         }
+
+        [Authorize(Roles = "SysSchool")]
         [HttpPost(ApiEndPointConstant.Curriculum.Create)]
         [ProducesResponseType(typeof(CreateNewCurriculumResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -56,6 +59,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "SysSchool")]
         [HttpDelete(ApiEndPointConstant.Curriculum.DeleteCurriculum)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -65,6 +69,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "SysSchool")]
         [HttpPatch(ApiEndPointConstant.Curriculum.GetById)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]

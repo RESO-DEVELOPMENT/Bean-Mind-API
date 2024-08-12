@@ -4,6 +4,7 @@ using Bean_Mind.API.Payload.Response.Chapters;
 using Bean_Mind.API.Payload.Response.Topics;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bean_Mind.API.Controllers
@@ -17,6 +18,7 @@ namespace Bean_Mind.API.Controllers
             _chapterService = chapterService;
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpPost(ApiEndPointConstant.Chapter.Create)]
         [ProducesResponseType(typeof(CreateNewChapterResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -56,6 +58,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpDelete(ApiEndPointConstant.Chapter.DeleteChapter)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -68,6 +71,7 @@ namespace Bean_Mind.API.Controllers
 
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpPatch(ApiEndPointConstant.Chapter.UpdateChapter)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]

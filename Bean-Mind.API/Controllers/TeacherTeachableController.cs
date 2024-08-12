@@ -7,6 +7,7 @@ using Bean_Mind_Data.Paginate;
 using Bean_Mind.API.Payload;
 using Bean_Mind.API.Utils;
 using static Bean_Mind.API.Constants.MessageConstant;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Bean_Mind.API.Controllers
@@ -22,6 +23,7 @@ namespace Bean_Mind.API.Controllers
             _teacherTeachableService = teacherTeachableService;
         }
 
+        [Authorize(Roles = "SysSchool")]
         [HttpPost(ApiEndPointConstant.TeacherTeachable.Create + "/{TeacherId}/{SubjectId}")]
         [ProducesResponseType(typeof(GetTeacherTeachableResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
@@ -114,6 +116,7 @@ namespace Bean_Mind.API.Controllers
             }
         }
 
+        [Authorize(Roles = "SysSchool")]
         [HttpDelete(ApiEndPointConstant.TeacherTeachable.DeleteTeacherTeachable)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(NotFoundObjectResult))]
@@ -133,6 +136,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(isDeleted);
         }
 
+        [Authorize(Roles = "SysSchool")]
         [HttpPatch(ApiEndPointConstant.TeacherTeachable.UpdateTeacherTeachable)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]

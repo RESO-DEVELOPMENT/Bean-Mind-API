@@ -5,6 +5,7 @@ using Bean_Mind.API.Payload.Response.QuestionLevels;
 using Bean_Mind.API.Payload.Response.Schools;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bean_Mind.API.Controllers
@@ -18,6 +19,7 @@ namespace Bean_Mind.API.Controllers
             _schoolService = schoolService;
         }
 
+        [Authorize(Roles = "SysAdmin")]
         [HttpPost(ApiEndPointConstant.School.CreateSchool)]
         [ProducesResponseType(typeof(CreateNewSchoolResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -65,6 +67,7 @@ namespace Bean_Mind.API.Controllers
 
         }
 
+        [Authorize(Roles = "SysAdmin")]
         [HttpDelete(ApiEndPointConstant.School.DeleteSchool)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -77,6 +80,7 @@ namespace Bean_Mind.API.Controllers
 
         }
 
+        [Authorize(Roles = "SysAdmin")]
         [HttpPatch(ApiEndPointConstant.School.UpdateSchool)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -104,6 +108,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Teacher,SysSchool")]
         [HttpGet(ApiEndPointConstant.School.GetQuestionLevelInSchool)]
         [ProducesResponseType(typeof(IPaginate<GetQuestionLevelResponse>), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
