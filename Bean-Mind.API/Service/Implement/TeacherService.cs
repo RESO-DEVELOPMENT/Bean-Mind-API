@@ -9,14 +9,18 @@ using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
+using Google.Apis.Drive.v3;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 namespace Bean_Mind.API.Service.Implement
 {
     public class TeacherService : BaseService<TeacherService>, ITeacherService
     {
-        public TeacherService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<TeacherService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, logger, mapper, httpContextAccessor)
+        private readonly GoogleDriveService _driveService;
+
+        public TeacherService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<TeacherService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor, GoogleDriveService driveService) : base(unitOfWork, logger, mapper, httpContextAccessor)
         {
+            _driveService = driveService;
         }
 
 
@@ -89,14 +93,14 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.AccountMessage.CreateTeacherAccountFailMessage);
             }
-
+            string url = await _driveService.UploadToGoogleDriveAsync(newTeacherRequest.ImgUrl);
             Teacher newTeacher = new Teacher()
             {
                 Id = Guid.NewGuid(),
                 FirstName = newTeacherRequest.FirstName,
                 LastName = newTeacherRequest.LastName,
                 DateOfBirth = newTeacherRequest.DateOfBirth,
-                ImgUrl = newTeacherRequest.ImgUrl,
+                ImgUrl = url,
                 Email = newTeacherRequest.Email,
                 Phone = newTeacherRequest.Phone,
                 AccountId = account.Id,
@@ -229,6 +233,11 @@ namespace Bean_Mind.API.Service.Implement
             teacher.DateOfBirth = request.DateOfBirth ?? teacher.DateOfBirth;
             teacher.Email = string.IsNullOrEmpty(request.Email) ? teacher.Email : request.Email;
             teacher.Phone = string.IsNullOrEmpty(request.Phone) ? teacher.Phone : request.Phone;
+            if (request.ImgUrl != null)
+            {
+                string imgUrl = await _driveService.UploadToGoogleDriveAsync(request.ImgUrl);
+                teacher.ImgUrl = imgUrl;
+            }
             teacher.UpdDate = TimeUtils.GetCurrentSEATime();
 
             _unitOfWork.GetRepository<Teacher>().UpdateAsync(teacher);

@@ -10,6 +10,7 @@ using Bean_Mind_Business.Repository.Interface;
 using Bean_Mind_Data.Enums;
 using Bean_Mind_Data.Models;
 using Bean_Mind_Data.Paginate;
+using Google.Apis.Drive.v3;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 
@@ -17,8 +18,11 @@ namespace Bean_Mind.API.Service.Implement
 {
     public class StudentService : BaseService<StudentService>, IStudentService
     {
-        public StudentService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<StudentService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(unitOfWork, logger, mapper, httpContextAccessor)
+        private readonly GoogleDriveService _driveService;
+
+        public StudentService(IUnitOfWork<BeanMindContext> unitOfWork, ILogger<StudentService> logger, IMapper mapper, IHttpContextAccessor httpContextAccessor, GoogleDriveService driveService) : base(unitOfWork, logger, mapper, httpContextAccessor)
         {
+            _driveService = driveService;
         }
 
         public async Task<CreateNewStudentResponse> CreateNewStudent(CreateNewStudentRequest request, String parentPhone)
@@ -75,6 +79,7 @@ namespace Bean_Mind.API.Service.Implement
                 throw new BadHttpRequestException(MessageConstant.AccountMessage.CreateStudentAccountFailMessage);
             }
 
+            string url = await _driveService.UploadToGoogleDriveAsync(request.ImgUrl);
             //Create Student
             Student newStudent = new Student()
             {
@@ -82,7 +87,7 @@ namespace Bean_Mind.API.Service.Implement
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 DateOfBirth = request.DateOfBirth,
-                ImgUrl = request.ImgUrl,
+                ImgUrl = url,
                 DelFlg = false,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
@@ -227,7 +232,11 @@ namespace Bean_Mind.API.Service.Implement
             student.DateOfBirth = request.DateOfBirth ?? student.DateOfBirth;
             student.FirstName = string.IsNullOrEmpty(request.FirstName) ? student.FirstName : request.FirstName;
             student.LastName = string.IsNullOrEmpty(request.LastName) ? student.LastName : request.LastName;
-            student.ImgUrl = string.IsNullOrEmpty(request.ImgUrl) ? student.ImgUrl : request.ImgUrl;
+            if (request.ImgUrl != null)
+            {
+                string imgUrl = await _driveService.UploadToGoogleDriveAsync(request.ImgUrl);
+                student.ImgUrl = imgUrl;
+            }
             student.UpdDate = TimeUtils.GetCurrentSEATime();
 
             _unitOfWork.GetRepository<Student>().UpdateAsync(student);

@@ -25,7 +25,7 @@ namespace Bean_Mind.API.Controllers
         [HttpPost(ApiEndPointConstant.Student.Create)]
         [ProducesResponseType(typeof(CreateNewStudentResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> CreateStudent([FromBody] CreateNewStudentRequest createNewStudentRequest, [FromQuery] String parentPhone)
+        public async Task<IActionResult> CreateStudent([FromForm] CreateNewStudentRequest createNewStudentRequest, [FromQuery] String parentPhone)
         {
             CreateNewStudentResponse response = await _studentService.CreateNewStudent(createNewStudentRequest, parentPhone);
             if (response == null)
@@ -76,7 +76,7 @@ namespace Bean_Mind.API.Controllers
         [HttpPatch(ApiEndPointConstant.Student.UpdateStudent)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
-        public async Task<IActionResult> UpdateStudent([FromRoute] Guid id, [FromBody] UpdateStudentRequest request, [FromQuery] Guid parentId)
+        public async Task<IActionResult> UpdateStudent([FromRoute] Guid id, [FromForm] UpdateStudentRequest request, [FromQuery] Guid parentId)
         {
             var response = await _studentService.UpdateStudent(id, request, parentId);
             return Ok(response);

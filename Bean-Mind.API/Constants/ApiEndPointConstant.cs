@@ -167,6 +167,9 @@
             public const string UpdateQuestion = QuestionEndpoint + "/{id}";
             public const string DeleteQuestion = QuestionEndpoint + "/{id}";
             public const string GetAnswerInQuestion = QuestionEndpoint + "/{id}/answers";
+            public const string UpdateAnswers = QuestionEndpoint + "/{id}/answers"; 
+
+
         }
 
 

@@ -10,7 +10,7 @@ namespace Bean_Mind.API.Payload.Request.Students
 
         public DateTime DateOfBirth { get; set; }
 
-        public string ImgUrl { get; set; }
+        public IFormFile ImgUrl { get; set; }
         [Required(ErrorMessage = "Username is missing")]
         public string UserName { get; set; }
         [Required(ErrorMessage = "Name is missing")]
