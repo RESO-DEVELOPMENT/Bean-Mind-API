@@ -54,7 +54,6 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
-        [Authorize(Roles = "SysSchool")]
         [HttpGet(ApiEndPointConstant.Teacher.GetAll)]
         [ProducesResponseType(typeof(IPaginate<GetTeacherResponse>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllTeachers([FromQuery] int? page, [FromQuery] int? size)
@@ -84,6 +83,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(teacher);
         }
 
+        [Authorize(Roles = "SysSchool")]
         [HttpDelete(ApiEndPointConstant.Teacher.DeleteTeacher)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(NotFoundObjectResult))]
@@ -103,7 +103,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(teacher);
         }
 
-
+        [Authorize(Roles = "SysSchool")]
         [HttpPatch(ApiEndPointConstant.Teacher.UpdateTeacher)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]

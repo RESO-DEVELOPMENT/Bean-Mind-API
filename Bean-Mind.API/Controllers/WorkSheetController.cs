@@ -3,6 +3,7 @@ using Bean_Mind.API.Payload.Request.WorkSheets;
 using Bean_Mind.API.Payload.Response.WorkSheets;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bean_Mind.API.Controllers
@@ -15,6 +16,7 @@ namespace Bean_Mind.API.Controllers
             _workSheetService = workSheetService;
         }
 
+        [Authorize(Roles = "Teacher,SysSchool")]
         [HttpPost(ApiEndPointConstant.WorkSheet.Create)]
         [ProducesResponseType(typeof(CreateNewWorkSheetResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -52,6 +54,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Teacher,SysSchool")]
         [HttpDelete(ApiEndPointConstant.WorkSheet.DeleteWorkSheet)]
         [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -61,6 +64,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Teacher,SysSchool")]
         [HttpPatch(ApiEndPointConstant.WorkSheet.UpdateWorkSheet)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
