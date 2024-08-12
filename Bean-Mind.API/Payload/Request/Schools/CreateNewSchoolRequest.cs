@@ -10,7 +10,7 @@ namespace Bean_Mind.API.Payload.Request.Schools
 
         public string Phone { get; set; }
 
-        public string Logo { get; set; }
+        public IFormFile Logo { get; set; }
 
         public string Description { get; set; }
 
