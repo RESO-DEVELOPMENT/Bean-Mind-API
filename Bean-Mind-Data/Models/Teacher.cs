@@ -44,5 +44,11 @@ public partial class Teacher
     public virtual Account Account { get; set; } = null!;
 
     [InverseProperty("Teacher")]
+    public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
+
+    [InverseProperty("Teacher")]
     public virtual ICollection<TeacherTeachable> TeacherTeachables { get; set; } = new List<TeacherTeachable>();
+
+    [InverseProperty("Teacher")]
+    public virtual ICollection<Video> Videos { get; set; } = new List<Video>();
 }

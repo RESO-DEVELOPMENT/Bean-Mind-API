@@ -23,6 +23,8 @@ public partial class Video
 
     public Guid SchoolId { get; set; }
 
+    public Guid TeacherId { get; set; }
+
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
 
@@ -34,4 +36,8 @@ public partial class Video
     [ForeignKey("ActivityId")]
     [InverseProperty("Videos")]
     public virtual Activity? Activity { get; set; }
+
+    [ForeignKey("TeacherId")]
+    [InverseProperty("Videos")]
+    public virtual Teacher Teacher { get; set; } = null!;
 }

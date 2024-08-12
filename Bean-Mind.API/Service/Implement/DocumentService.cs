@@ -30,6 +30,9 @@ namespace Bean_Mind.API.Service.Implement
 
             _logger.LogInformation($"Creating new Document with title: {request.Title}");
 
+            var teacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
+                predicate: t => t.AccountId.Equals(accountId) && t.DelFlg == false);
+
             string url = await _driveService.UploadToGoogleDriveAsync(request.Url);
 
             var newDocument = new Document()
@@ -41,6 +44,7 @@ namespace Bean_Mind.API.Service.Implement
                 SchoolId = account.SchoolId.Value,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
+                TeacherId = teacher.Id,
                 DelFlg = false
             };
 
@@ -90,9 +94,12 @@ namespace Bean_Mind.API.Service.Implement
             if (account == null || account.SchoolId == null)
                 throw new Exception("Account or SchoolId is null");
 
+            var teacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
+                predicate: t => t.AccountId.Equals(accountId) && t.DelFlg == false);
+
             var documents = await _unitOfWork.GetRepository<Document>().GetPagingListAsync(
                 selector: s => new GetDocumentResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId, s.SchoolId),
-                predicate: s => s.DelFlg != true && s.SchoolId.Equals(account.SchoolId),
+                predicate: s => s.DelFlg != true && s.SchoolId.Equals(account.SchoolId) && s.TeacherId.Equals(teacher.Id),
                 page: page,
                 size: size
                 );
@@ -108,9 +115,20 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.DocumentMessage.DocumentNotFound);
             }
+
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
+            var teacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
+                predicate: t => t.AccountId.Equals(accountId) && t.DelFlg == false);
+
             var document = await _unitOfWork.GetRepository<Document>().SingleOrDefaultAsync(
                 selector: s => new GetDocumentResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId, s.SchoolId),
-                predicate: s => s.Id.Equals(id) && s.DelFlg != true);
+                predicate: s => s.Id.Equals(id) && s.DelFlg != true && s.TeacherId.Equals(teacher.Id));
             if (document == null)
             {
                 throw new BadHttpRequestException(MessageConstant.DocumentMessage.DocumentNotFound);
@@ -123,7 +141,18 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.DocumentMessage.DocumentNotFound);
             }
-            var document = await _unitOfWork.GetRepository<Document>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true);
+
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
+            var teacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
+                predicate: t => t.AccountId.Equals(accountId) && t.DelFlg == false);
+
+            var document = await _unitOfWork.GetRepository<Document>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true && s.TeacherId.Equals(teacher.Id));
             if (document == null)
             {
                 throw new BadHttpRequestException(MessageConstant.DocumentMessage.DocumentNotFound);
@@ -171,7 +200,18 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.DocumentMessage.DocumentNotFound);
             }
-            var document = await _unitOfWork.GetRepository<Document>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true);
+
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
+            var teacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
+                predicate: t => t.AccountId.Equals(accountId) && t.DelFlg == false);
+
+            var document = await _unitOfWork.GetRepository<Document>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true && s.TeacherId.Equals(teacher.Id));
             if (document == null)
             {
 

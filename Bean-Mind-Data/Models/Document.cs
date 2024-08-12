@@ -23,6 +23,8 @@ public partial class Document
 
     public Guid SchoolId { get; set; }
 
+    public Guid TeacherId { get; set; }
+
     [Column(TypeName = "datetime")]
     public DateTime? InsDate { get; set; }
 
@@ -34,4 +36,8 @@ public partial class Document
     [ForeignKey("ActivityId")]
     [InverseProperty("Documents")]
     public virtual Activity? Activity { get; set; }
+
+    [ForeignKey("TeacherId")]
+    [InverseProperty("Documents")]
+    public virtual Teacher Teacher { get; set; } = null!;
 }

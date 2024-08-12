@@ -122,6 +122,10 @@ public partial class BeanMindContext : DbContext
             entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
 
             entity.HasOne(d => d.Activity).WithMany(p => p.Documents).HasConstraintName("FK_Document_Activity");
+
+            entity.HasOne(d => d.Teacher).WithMany(p => p.Documents)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Document_Teacher");
         });
 
         modelBuilder.Entity<Parent>(entity =>
@@ -271,6 +275,10 @@ public partial class BeanMindContext : DbContext
             entity.Property(e => e.UpdDate).HasDefaultValueSql("(getdate())");
 
             entity.HasOne(d => d.Activity).WithMany(p => p.Videos).HasConstraintName("FK_Video_Activity");
+
+            entity.HasOne(d => d.Teacher).WithMany(p => p.Videos)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Video_Teacher");
         });
 
         modelBuilder.Entity<WorkSheet>(entity =>

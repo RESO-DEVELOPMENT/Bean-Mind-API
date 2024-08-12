@@ -28,6 +28,9 @@ namespace Bean_Mind.API.Service.Implement
             if (account == null || account.SchoolId == null)
                 throw new Exception("Account or SchoolId is null");
 
+            var teacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
+                predicate: t => t.AccountId.Equals(accountId) && t.DelFlg == false);
+
             string url = await _driveService.UploadToGoogleDriveAsync(request.Url);
 
             var newVideo = new Video()
@@ -39,6 +42,7 @@ namespace Bean_Mind.API.Service.Implement
                 SchoolId = account.SchoolId.Value,
                 InsDate = TimeUtils.GetCurrentSEATime(),
                 UpdDate = TimeUtils.GetCurrentSEATime(),
+                TeacherId = teacher.Id,
                 DelFlg = false
             };
 
@@ -90,9 +94,12 @@ namespace Bean_Mind.API.Service.Implement
             if (account == null || account.SchoolId == null)
                 throw new Exception("Account or SchoolId is null");
 
+            var teacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
+                predicate: t => t.AccountId.Equals(accountId) && t.DelFlg == false);
+
             var videos = await _unitOfWork.GetRepository<Video>().GetPagingListAsync(
                 selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId, s.SchoolId),
-                predicate: s => s.DelFlg != true && s.SchoolId.Equals(account.SchoolId),
+                predicate: s => s.DelFlg != true && s.SchoolId.Equals(account.SchoolId) && s.TeacherId.Equals(teacher.Id),
                 page: page,
                 size: size
                 );
@@ -109,9 +116,20 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.VideoMessage.VideoNotFound);
             }
+
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
+            var teacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
+                predicate: t => t.AccountId.Equals(accountId) && t.DelFlg == false);
+
             var video = await _unitOfWork.GetRepository<Video>().SingleOrDefaultAsync(
                 selector: s => new GetVideoResponse(s.Id, s.Title, s.Description, s.Url, s.ActivityId, s.SchoolId),
-                predicate: s => s.Id.Equals(id) && s.DelFlg != true
+                predicate: s => s.Id.Equals(id) && s.DelFlg != true && s.TeacherId.Equals(teacher.Id)
                 );
             if (video == null)
             {
@@ -126,7 +144,18 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.VideoMessage.VideoNotFound);
             }
-            var video = await _unitOfWork.GetRepository<Video>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true);
+
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
+            var teacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
+                predicate: t => t.AccountId.Equals(accountId) && t.DelFlg == false);
+
+            var video = await _unitOfWork.GetRepository<Video>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(id) && s.DelFlg != true && s.TeacherId.Equals(teacher.Id));
             if (video == null)
             {
                 throw new BadHttpRequestException(MessageConstant.VideoMessage.VideoNotFound);
@@ -146,7 +175,18 @@ namespace Bean_Mind.API.Service.Implement
             {
                 throw new BadHttpRequestException(MessageConstant.VideoMessage.VideoNotFound);
             }
-            var video = await _unitOfWork.GetRepository<Video>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(videoId) && s.DelFlg != true);
+
+            Guid? accountId = UserUtil.GetAccountId(_httpContextAccessor.HttpContext);
+            var account = await _unitOfWork.GetRepository<Account>().SingleOrDefaultAsync(
+                predicate: s => s.Id.Equals(accountId) && s.DelFlg != true
+                );
+            if (account == null || account.SchoolId == null)
+                throw new Exception("Account or SchoolId is null");
+
+            var teacher = await _unitOfWork.GetRepository<Teacher>().SingleOrDefaultAsync(
+                predicate: t => t.AccountId.Equals(accountId) && t.DelFlg == false);
+
+            var video = await _unitOfWork.GetRepository<Video>().SingleOrDefaultAsync(predicate: s => s.Id.Equals(videoId) && s.DelFlg != true && s.TeacherId.Equals(teacher.Id));
             if (video == null)
             {
                 throw new BadHttpRequestException(MessageConstant.VideoMessage.VideoNotFound);
