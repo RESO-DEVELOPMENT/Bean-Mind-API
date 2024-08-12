@@ -28,7 +28,7 @@ namespace Bean_Mind.API.Controllers
         [HttpPost(ApiEndPointConstant.Teacher.Create)]
         [ProducesResponseType(typeof(CreateNewTeacherResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
-        public async Task<IActionResult> CreateTeacher([FromBody] CreateNewTeacherResquest newTeacherRequest)
+        public async Task<IActionResult> CreateTeacher([FromForm] CreateNewTeacherResquest newTeacherRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -107,7 +107,7 @@ namespace Bean_Mind.API.Controllers
         [HttpPatch(ApiEndPointConstant.Teacher.UpdateTeacher)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
-        public async Task<IActionResult> UpdateTeacherInformation([FromRoute]Guid id, [FromBody] UpdateTecherRequest updateTeacherRequest)
+        public async Task<IActionResult> UpdateTeacherInformation([FromRoute]Guid id, [FromForm] UpdateTecherRequest updateTeacherRequest)
         {
             if (!ModelState.IsValid)
             {

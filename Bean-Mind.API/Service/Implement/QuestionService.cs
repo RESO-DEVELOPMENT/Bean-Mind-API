@@ -148,7 +148,7 @@ namespace Bean_Mind.API.Service.Implement
         public async Task<List<GetQuestionAnswerResponse>> GetQuestionAnswersByQuestionId(Guid id)
         {
             var questionAnswers = await _unitOfWork.GetRepository<QuestionAnswer>().GetListAsync(
-                predicate: q => q.QuestionId == id
+                predicate: q => q.QuestionId == id && q.DelFlg == false
             );
 
 
@@ -208,6 +208,95 @@ namespace Bean_Mind.API.Service.Implement
             bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
             return isSuccessful;
         }
+        public async Task<Question> UpdateQuestionDetails(Guid questionId, IFormFile img, string text, int orderIndex, QuestionType questionType, Guid questionLevelId)
+        {
+            _logger.LogInformation($"Updating Question details with ID: {questionId}");
+
+            var existingQuestion = await _unitOfWork.GetRepository<Question>().SingleOrDefaultAsync(
+                predicate: q => q.Id == questionId && q.DelFlg != true
+            );
+            if (existingQuestion == null)
+                throw new BadHttpRequestException(MessageConstant.QuestionMessage.QuestionNotFound);
+
+            if (questionLevelId == Guid.Empty)
+                throw new BadHttpRequestException(MessageConstant.QuestionMessage.EmptyQuestion);
+
+            var questionLevel = await _unitOfWork.GetRepository<QuestionLevel>().SingleOrDefaultAsync(predicate: q => q.Id == questionLevelId);
+            if (questionLevel == null)
+                throw new BadHttpRequestException(MessageConstant.QuestionMessage.QuestionLevelNotFound);
+
+            // Update image if provided
+            string url = existingQuestion.Image;
+            if (img != null)
+            {
+                url = await _driveService.UploadToGoogleDriveAsync(img);
+            }
+
+            // Update question details
+            existingQuestion.Text = text;
+            existingQuestion.Image = url;
+            existingQuestion.OrderIndex = orderIndex;
+            existingQuestion.QuestionType = (int)questionType;
+            existingQuestion.QuestionLevelId = questionLevelId;
+            existingQuestion.UpdDate = TimeUtils.GetCurrentSEATime();
+            _unitOfWork.GetRepository<Question>().UpdateAsync(existingQuestion);
+
+            // Save changes
+            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+            if (!isSuccessful)
+                throw new Exception("Failed to update the question details");
+
+            return existingQuestion;
+        }
+        public async Task UpdateQuestionAnswers(Guid questionId, List<UpdateQuestionAnswerRequest> answerRequests)
+        {
+            _logger.LogInformation($"Updating Question Answers for Question ID: {questionId}");
+
+            var existingAnswers = await _unitOfWork.GetRepository<QuestionAnswer>().GetListAsync(
+                predicate: a => a.QuestionId == questionId && a.DelFlg != true
+            );
+
+            var answerRequestsDict = answerRequests.ToDictionary(a => a.Text, a => a); 
+
+            foreach (var existingAnswer in existingAnswers)
+            {
+                if (answerRequestsDict.TryGetValue(existingAnswer.Text, out var requestAnswer))
+                {
+                    existingAnswer.IsCorrect = requestAnswer.IsCorrect;
+                    existingAnswer.UpdDate = TimeUtils.GetCurrentSEATime();
+                    _unitOfWork.GetRepository<QuestionAnswer>().UpdateAsync(existingAnswer);
+                    answerRequestsDict.Remove(existingAnswer.Text); // Xóa câu trả lời đã cập nhật khỏi từ điển
+                }
+                else
+                {
+                    existingAnswer.DelFlg = true;
+                    existingAnswer.UpdDate = TimeUtils.GetCurrentSEATime();
+                    _unitOfWork.GetRepository<QuestionAnswer>().UpdateAsync(existingAnswer);
+                }
+            }
+
+            foreach (var newAnswerRequest in answerRequestsDict.Values)
+            {
+                var newAnswerEntity = new QuestionAnswer()
+                {
+                    Id = Guid.NewGuid(),
+                    Text = newAnswerRequest.Text,
+                    QuestionId = questionId,
+                    IsCorrect = newAnswerRequest.IsCorrect,
+                    IndDate = TimeUtils.GetCurrentSEATime(),
+                    UpdDate = TimeUtils.GetCurrentSEATime(),
+                    DelFlg = false
+                };
+                await _unitOfWork.GetRepository<QuestionAnswer>().InsertAsync(newAnswerEntity);
+            }
+
+            bool isSuccessful = await _unitOfWork.CommitAsync() > 0;
+            if (!isSuccessful)
+                throw new Exception("Failed to update the question answers");
+        }
+
+
+
 
 
     }

@@ -169,6 +169,7 @@
             public const string EmptyQuestion = "Nội dung câu hỏi không được để trống.";
             public const string CreateQuestionFailed = "Tạo câu hỏi thất bại.";
             public const string NotAnswerForQuestion = "câu hỏi không có câu tar lời.";
+            public const string UpdateQuestionFailed = "Update câu hỏi thất bại.";
         }
 
 

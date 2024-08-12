@@ -9,7 +9,7 @@ namespace Bean_Mind.API.Payload.Request.Teachers
         public string? LastName { get; set; }
         [JsonConverter(typeof(NullableDateTimeConverter))]
         public DateTime? DateOfBirth { get; set; }
-        public string? ImgUrl { get; set; }
+        public IFormFile? ImgUrl { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public void TrimString()

@@ -12,6 +12,7 @@ using Bean_Mind.API.Payload.Request.QuestionAnswers;
 using Bean_Mind_Data.Enums;
 using Newtonsoft.Json;
 using Bean_Mind.API.Service.Implement;
+using Bean_Mind.API.Payload.Response.QuestionAnswers;
 
 namespace Bean_Mind.API.Controllers
 {
@@ -75,6 +76,48 @@ namespace Bean_Mind.API.Controllers
 
             return Ok(response);
         }
+        [HttpPut(ApiEndPointConstant.Question.UpdateQuestion)]
+        [ProducesResponseType(typeof(UpdateQuestionResponse), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> UpdateQuestionDetails([FromRoute] Guid id, [FromForm] UpdateQuestionRequest request, [FromQuery] Guid questionLevelId)
+        {
+            // Cập nhật chi tiết câu hỏi
+            var updatedQuestion = await _questionService.UpdateQuestionDetails(id, request.Image, request.Text, request.OrderIndex, request.QuestionType, questionLevelId);
+
+            if (updatedQuestion == null)
+            {
+                return Problem(MessageConstant.QuestionMessage.UpdateQuestionFailed);
+            }
+
+            // Chuyển đổi thành UpdateQuestionResponse (hoặc kiểu phản hồi tương ứng của bạn)
+            var response = new UpdateQuestionResponse
+            {
+                Id = updatedQuestion.Id,
+                Text = updatedQuestion.Text,
+                Image = updatedQuestion.Image,
+                OrderIndex = updatedQuestion.OrderIndex,
+                QuestionType = updatedQuestion.QuestionType,
+                QuestionLevelId = updatedQuestion.QuestionLevelId,
+                SchoolId = updatedQuestion.SchoolId,
+               
+            };
+
+            return Ok(response);
+        }
+        [HttpPut(ApiEndPointConstant.Question.UpdateAnswers)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<IActionResult> UpdateQuestionAnswers([FromRoute] Guid id, [FromBody] List<UpdateQuestionAnswerRequest> answerRequests)
+        {
+            // Cập nhật câu trả lời của câu hỏi
+            await _questionService.UpdateQuestionAnswers(id, answerRequests);
+
+            return Ok(); // Trả về thành công nếu không có lỗi xảy ra
+        }
+
+
+
+
 
     }
 }
