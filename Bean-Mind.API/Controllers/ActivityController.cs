@@ -4,6 +4,7 @@ using Bean_Mind.API.Payload.Response.Activities;
 using Bean_Mind.API.Payload.Response.Documents;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bean_Mind.API.Controllers
@@ -17,6 +18,7 @@ namespace Bean_Mind.API.Controllers
             _activityService = activityService;
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpPost(ApiEndPointConstant.Activity.Create)]
         [ProducesResponseType(typeof(CreateNewActivityResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -56,6 +58,7 @@ namespace Bean_Mind.API.Controllers
 
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpDelete(ApiEndPointConstant.Activity.DeleteActivity)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof (ProblemDetails))]
@@ -65,6 +68,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpPatch(ApiEndPointConstant.Activity.UpdateActivity)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]

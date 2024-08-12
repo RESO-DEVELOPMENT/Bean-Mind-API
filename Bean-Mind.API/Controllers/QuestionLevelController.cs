@@ -6,6 +6,7 @@ using Bean_Mind.API.Payload.Response.WorkSheets;
 using Bean_Mind.API.Service.Implement;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bean_Mind.API.Controllers
@@ -18,6 +19,7 @@ namespace Bean_Mind.API.Controllers
             _questionLevelService = questionLevelService;
         }
 
+        [Authorize(Roles = "SysSchool")]
         [HttpPost(ApiEndPointConstant.QuestionLevel.Create)]
         [ProducesResponseType(typeof(CreateNewQuestionLevelResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -55,6 +57,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "SysSchool")]
         [HttpDelete(ApiEndPointConstant.QuestionLevel.DeleteQuestionLevel)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -64,6 +67,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "SysSchool")]
         [HttpPatch(ApiEndPointConstant.QuestionLevel.UpdateQuestionLevel)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]

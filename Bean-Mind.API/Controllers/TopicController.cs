@@ -3,6 +3,7 @@ using Bean_Mind.API.Payload.Request.Topics;
 using Bean_Mind.API.Payload.Response.Topics;
 using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bean_Mind.API.Controllers
@@ -16,6 +17,7 @@ namespace Bean_Mind.API.Controllers
             _topicService = topicService;
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpPost(ApiEndPointConstant.Topic.Create)]
         [ProducesResponseType(typeof(CreateNewTopicResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -53,6 +55,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpDelete(ApiEndPointConstant.Topic.DeleteTopic)]
         [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]
@@ -62,6 +65,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpPatch(ApiEndPointConstant.Topic.UpdateTopic)]
         [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ProblemDetails))]

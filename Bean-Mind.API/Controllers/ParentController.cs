@@ -6,6 +6,7 @@ using Bean_Mind.API.Service.Interface;
 using Bean_Mind_Data.Paginate;
 using Microsoft.AspNetCore.Mvc;
 using Bean_Mind.API.Utils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bean_Mind.API.Controllers
 {
@@ -20,6 +21,7 @@ namespace Bean_Mind.API.Controllers
             _parentService = parentService;
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpPost(ApiEndPointConstant.Parent.Create)]
         [ProducesResponseType(typeof(CreateNewParentResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
@@ -78,6 +80,7 @@ namespace Bean_Mind.API.Controllers
             return Ok(parent);
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpDelete(ApiEndPointConstant.Parent.DeleteParent)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ActionResult))]
@@ -90,6 +93,7 @@ namespace Bean_Mind.API.Controllers
 
         }
 
+        [Authorize(Roles = "Teacher")]
         [HttpPatch(ApiEndPointConstant.Parent.UpdateParent)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
